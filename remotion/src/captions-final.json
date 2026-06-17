@@ -1,0 +1,137 @@
+[
+  {
+    "text": "Enterprises are about to launch thousands of AI pilots.",
+    "startFrame": 90,
+    "endFrame": 201
+  },
+  {
+    "text": "The failure mode is not demos \u2014 it is ungoverned spend with no proof of ROI.",
+    "startFrame": 201,
+    "endFrame": 398
+  },
+  {
+    "text": "Agent IC turns every pilot into an investment decision: should this agent get budget, tools, and production access?",
+    "startFrame": 398,
+    "endFrame": 621
+  },
+  {
+    "text": "Here is the live workbench.",
+    "startFrame": 621,
+    "endFrame": 682
+  },
+  {
+    "text": "I choose Atlas Freight, an autonomous RMA and claims copilot for late freight exceptions.",
+    "startFrame": 682,
+    "endFrame": 855
+  },
+  {
+    "text": "Hermes normalizes the messy proposal into a business, evidence, and governance schema.",
+    "startFrame": 855,
+    "endFrame": 1004
+  },
+  {
+    "text": "Nemotron-style evaluation scores viability, usefulness, risk, and ROI proof.",
+    "startFrame": 1004,
+    "endFrame": 1115
+  },
+  {
+    "text": "The committee does not return a vague yes or no.",
+    "startFrame": 1115,
+    "endFrame": 1238
+  },
+  {
+    "text": "It returns Continue, a one-hundred-eighty-five-thousand-dollar pilot budget, a roughly thirty-five-thousand-dollar autonomous spend cap, a thirty-eight-day payback estimate, and a risk register.",
+    "startFrame": 1238,
+    "endFrame": 1498
+  },
+  {
+    "text": "Now the agent asks to spend. The important part is the gate.",
+    "startFrame": 1498,
+    "endFrame": 1646
+  },
+  {
+    "text": "It cannot provision tools or move money without visible approval.",
+    "startFrame": 1646,
+    "endFrame": 1769
+  },
+  {
+    "text": "Stripe creates a bounded authorization with proposal metadata, policy, and spend cap.",
+    "startFrame": 1769,
+    "endFrame": 1918
+  },
+  {
+    "text": "Demo mode is safe; with a test key this same path becomes a hosted Checkout Session.",
+    "startFrame": 1918,
+    "endFrame": 2115
+  },
+  {
+    "text": "Funding is not the end of the workflow.",
+    "startFrame": 2115,
+    "endFrame": 2214
+  },
+  {
+    "text": "The pilot keeps capital only by producing evidence.",
+    "startFrame": 2214,
+    "endFrame": 2313
+  },
+  {
+    "text": "I advance the ROI timeline through week two, week four, week six, and week eight.",
+    "startFrame": 2313,
+    "endFrame": 2498
+  },
+  {
+    "text": "Agent IC tracks gross impact, spend consumed, net observed value, evidence grade, and kill criteria.",
+    "startFrame": 2498,
+    "endFrame": 2683
+  },
+  {
+    "text": "At week four it can stop the pilot if evidence is weak.",
+    "startFrame": 2683,
+    "endFrame": 2832
+  },
+  {
+    "text": "By week eight, Atlas has enough proof for a finance-readable Continue decision.",
+    "startFrame": 2832,
+    "endFrame": 2980
+  },
+  {
+    "text": "This is not model opinion; it is a decision backed by ledger values and the evidence timeline.",
+    "startFrame": 2980,
+    "endFrame": 3190
+  },
+  {
+    "text": "Governance is built into every step.",
+    "startFrame": 3190,
+    "endFrame": 3264
+  },
+  {
+    "text": "The policy envelope scopes model evaluation, Hermes workstreams, SaaS provisioning, Stripe spend, and evidence logging.",
+    "startFrame": 3264,
+    "endFrame": 3449
+  },
+  {
+    "text": "The audit log is the product: who acted, what was authorized, which constraint applied, and what evidence changed the decision.",
+    "startFrame": 3449,
+    "endFrame": 3696
+  },
+  {
+    "text": "This is useful because CFOs and operators need to decide which agents deserve money.",
+    "startFrame": 3696,
+    "endFrame": 3869
+  },
+  {
+    "text": "It is viable because it runs locally and upgrades to NVIDIA NIM and Stripe by adding environment variables.",
+    "startFrame": 3869,
+    "endFrame": 4091
+  },
+  {
+    "text": "It presents cleanly because the demo is one loop: evaluate, fund, govern, measure, decide.",
+    "startFrame": 4091,
+    "endFrame": 4264
+  },
+  {
+    "text": "Agent IC is the investment committee for autonomous agents.",
+    "startFrame": 4264,
+    "endFrame": 4376
+  }
+]

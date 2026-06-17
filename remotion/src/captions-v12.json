@@ -1,0 +1,257 @@
+[
+  {
+    "text": "Enterprises are about to launch thousands",
+    "startFrame": 149,
+    "endFrame": 259
+  },
+  {
+    "text": "of AI pilots. The failure mode is not the",
+    "startFrame": 260,
+    "endFrame": 346
+  },
+  {
+    "text": "demos \u2014 it is ungoverned spend with no",
+    "startFrame": 347,
+    "endFrame": 427
+  },
+  {
+    "text": "proof of return. Every agent wants a",
+    "startFrame": 430,
+    "endFrame": 491
+  },
+  {
+    "text": "budget, tools, and production access, but",
+    "startFrame": 493,
+    "endFrame": 588
+  },
+  {
+    "text": "most teams have no investment committee",
+    "startFrame": 589,
+    "endFrame": 655
+  },
+  {
+    "text": "for autonomous work. Agent IC is that",
+    "startFrame": 657,
+    "endFrame": 723
+  },
+  {
+    "text": "committee. We start by giving the agent a",
+    "startFrame": 724,
+    "endFrame": 876
+  },
+  {
+    "text": "safe home. NemoClaw installs a Hermes",
+    "startFrame": 878,
+    "endFrame": 952
+  },
+  {
+    "text": "sandbox, scopes its network policy, and",
+    "startFrame": 954,
+    "endFrame": 1047
+  },
+  {
+    "text": "names it for the Atlas Freight pilot.",
+    "startFrame": 1048,
+    "endFrame": 1107
+  },
+  {
+    "text": "Hermes normalizes the raw proposal into a",
+    "startFrame": 1111,
+    "endFrame": 1193
+  },
+  {
+    "text": "business, evidence, and governance schema",
+    "startFrame": 1196,
+    "endFrame": 1278
+  },
+  {
+    "text": "so the agent can be reviewed like any",
+    "startFrame": 1291,
+    "endFrame": 1347
+  },
+  {
+    "text": "other capital request. Agent IC evaluates",
+    "startFrame": 1349,
+    "endFrame": 1551
+  },
+  {
+    "text": "the pilot the same way a CFO would.",
+    "startFrame": 1552,
+    "endFrame": 1622
+  },
+  {
+    "text": "Nemotron scores usefulness, viability,",
+    "startFrame": 1628,
+    "endFrame": 1705
+  },
+  {
+    "text": "risk, and ROI proof. The verdict is not a",
+    "startFrame": 1714,
+    "endFrame": 1789
+  },
+  {
+    "text": "vague yes \u2014 it is Continue, with a",
+    "startFrame": 1790,
+    "endFrame": 1875
+  },
+  {
+    "text": "$185,000 pilot budget, a roughly $35,000",
+    "startFrame": 1879,
+    "endFrame": 2043
+  },
+  {
+    "text": "autonomous spend cap, 38-day payback, and",
+    "startFrame": 2046,
+    "endFrame": 2156
+  },
+  {
+    "text": "2.36x 90-day ROI. When the agent asks to",
+    "startFrame": 2157,
+    "endFrame": 2279
+  },
+  {
+    "text": "spend, Stripe authorizes a bounded",
+    "startFrame": 2280,
+    "endFrame": 2358
+  },
+  {
+    "text": "checkout session with the proposal",
+    "startFrame": 2361,
+    "endFrame": 2420
+  },
+  {
+    "text": "metadata and policy envelope baked in.",
+    "startFrame": 2421,
+    "endFrame": 2493
+  },
+  {
+    "text": "Demo mode is safe; with a test key this",
+    "startFrame": 2499,
+    "endFrame": 2579
+  },
+  {
+    "text": "becomes a real hosted Checkout Session.",
+    "startFrame": 2581,
+    "endFrame": 2676
+  },
+  {
+    "text": "Funding is conditional. The pilot keeps",
+    "startFrame": 2700,
+    "endFrame": 2803
+  },
+  {
+    "text": "capital only by producing evidence. We",
+    "startFrame": 2805,
+    "endFrame": 2879
+  },
+  {
+    "text": "advance the ROI timeline through week two,",
+    "startFrame": 2880,
+    "endFrame": 2952
+  },
+  {
+    "text": "week four, week six, and week eight. Agent",
+    "startFrame": 2966,
+    "endFrame": 3047
+  },
+  {
+    "text": "IC tracks gross impact, spend consumed,",
+    "startFrame": 3050,
+    "endFrame": 3138
+  },
+  {
+    "text": "net value, evidence grade, and kill",
+    "startFrame": 3150,
+    "endFrame": 3211
+  },
+  {
+    "text": "criteria. At week four a weak result would",
+    "startFrame": 3212,
+    "endFrame": 3291
+  },
+  {
+    "text": "trigger Kill. Here it holds. Now watch the",
+    "startFrame": 3293,
+    "endFrame": 3363
+  },
+  {
+    "text": "policy envelope block an out-of-policy",
+    "startFrame": 3365,
+    "endFrame": 3432
+  },
+  {
+    "text": "tool call \u2014 NemoClaw returns 403 Forbidden",
+    "startFrame": 3433,
+    "endFrame": 3545
+  },
+  {
+    "text": "before any money moves. By week eight",
+    "startFrame": 3550,
+    "endFrame": 3731
+  },
+  {
+    "text": "Atlas has enough proof for a",
+    "startFrame": 3734,
+    "endFrame": 3791
+  },
+  {
+    "text": "finance-readable Continue decision. The",
+    "startFrame": 3794,
+    "endFrame": 3862
+  },
+  {
+    "text": "committee saves a reusable Hermes playbook",
+    "startFrame": 3863,
+    "endFrame": 3941
+  },
+  {
+    "text": "so the next bounded capital experiment",
+    "startFrame": 3953,
+    "endFrame": 4016
+  },
+  {
+    "text": "runs the same way. This matters because",
+    "startFrame": 4020,
+    "endFrame": 4084
+  },
+  {
+    "text": "agents that earn, spend, and run",
+    "startFrame": 4088,
+    "endFrame": 4156
+  },
+  {
+    "text": "operations need governance, not just",
+    "startFrame": 4159,
+    "endFrame": 4226
+  },
+  {
+    "text": "prompts. Agent IC runs locally with",
+    "startFrame": 4228,
+    "endFrame": 4304
+  },
+  {
+    "text": "deterministic fallbacks, then upgrades to",
+    "startFrame": 4306,
+    "endFrame": 4386
+  },
+  {
+    "text": "NVIDIA NIM, Hermes, and Stripe by adding",
+    "startFrame": 4390,
+    "endFrame": 4502
+  },
+  {
+    "text": "environment variables. Open the live demo,",
+    "startFrame": 4504,
+    "endFrame": 4576
+  },
+  {
+    "text": "read the source, and see how every pilot",
+    "startFrame": 4590,
+    "endFrame": 4664
+  },
+  {
+    "text": "becomes an investment decision.",
+    "startFrame": 4666,
+    "endFrame": 4711
+  }
+]

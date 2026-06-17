@@ -1,0 +1,15 @@
+$ curl -sS -X POST "http://localhost:3000/api/gate-stub" -H "Content-Type: application/json" -d '{"targetUri":"https://unapproved-vendor.example/api/charge","method":"POST","amount":50000,"proposalId":"atlas-freight-rma-copilot"}'
+HTTP/1.1 403 Forbidden
+
+{
+  "error": "tool_scope_violation",
+  "status": 403,
+  "reason": "Premium market-rate lookup API (Unapproved external data vendor) is outside the approved SaaS list and the attempted amount exceeds the per-authorization cap.",
+  "attempted_amount": 50000,
+  "envelope_cap": 100,
+  "proposal_id": "atlas-freight-rma-copilot",
+  "policy": "NemoClaw / OpenShell-style operating envelope",
+  "timestamp": "2024-10-15T12:34:56.789Z"
+}
+
+Blocked by NemoClaw policy gate

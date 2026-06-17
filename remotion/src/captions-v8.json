@@ -1,0 +1,82 @@
+[
+  {
+    "startFrame": 0,
+    "endFrame": 14,
+    "text": "Agents can now spend money and provision tools."
+  },
+  {
+    "startFrame": 14,
+    "endFrame": 27,
+    "text": "That is powerful, and dangerous."
+  },
+  {
+    "startFrame": 27,
+    "endFrame": 69,
+    "text": "We drop a messy operations request into Agent IC: resolve one hundred late-freight tickets in seventy-two hours."
+  },
+  {
+    "startFrame": 69,
+    "endFrame": 144,
+    "text": "Agent IC gives them a governed capital account."
+  },
+  {
+    "startFrame": 144,
+    "endFrame": 177,
+    "text": "It creates a Stripe test Checkout Session capped at exactly one hundred dollars."
+  },
+  {
+    "startFrame": 177,
+    "endFrame": 190,
+    "text": "No session, no money moves."
+  },
+  {
+    "startFrame": 190,
+    "endFrame": 202,
+    "text": "No money moves."
+  },
+  {
+    "startFrame": 202,
+    "endFrame": 219,
+    "text": "Once compliant operations execute, the agent finishes the workflow."
+  },
+  {
+    "startFrame": 219,
+    "endFrame": 235,
+    "text": "Watch what happens live."
+  },
+  {
+    "startFrame": 235,
+    "endFrame": 294,
+    "text": "The system dispatches a Hermes Agent task, then calls NVIDIA NIM to score the proposal."
+  },
+  {
+    "startFrame": 294,
+    "endFrame": 315,
+    "text": "The agent tries to buy a one-hundred-fifty-dollar premium lookup API."
+  },
+  {
+    "startFrame": 315,
+    "endFrame": 369,
+    "text": "Our local NemoClaw proxy intercepts the call and returns four-oh-three Forbidden, because the merchant is outside the approved list and the cap would be exceeded."
+  },
+  {
+    "startFrame": 369,
+    "endFrame": 445,
+    "text": "It processed one hundred cases with a ninety-one percent QA agreement rate."
+  },
+  {
+    "startFrame": 445,
+    "endFrame": 526,
+    "text": "Agent IC issues CONTINUE with a two-hundred-fifty-dollar next cap and draft-only autonomy, then saves the learned procedure as a reusable Hermes playbook."
+  },
+  {
+    "startFrame": 732,
+    "endFrame": 1509,
+    "text": "Lower the QA threshold to eighty-two percent, and the decision flips to KILL."
+  },
+  {
+    "startFrame": 1509,
+    "endFrame": 2232,
+    "text": "This is how enterprises let agents operate with money without losing control."
+  }
+]

@@ -1,0 +1,496 @@
+{
+  "runId": "run_atlas-freight-rma-copilot_1781656588566",
+  "inputHash": "input-atlas-freight-rma-copilot",
+  "policyHash": "gov-2026.06-hackathon-demo",
+  "nemotron": {
+    "state": "fallback",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "provider": "Local deterministic evaluator",
+    "latencyMs": "0 (deterministic)",
+    "badge": "Deterministic Nemotron-style fallback",
+    "evaluator": "Local deterministic fallback"
+  },
+  "sandbox": {
+    "runtime": "NemoClaw / OpenShell sandbox (deterministic replay)",
+    "status": "ready",
+    "credentialBroker": "OpenShell",
+    "credentialPolicy": "Primary tokens live outside the agent transcript; runtime injects short-lived session credentials.",
+    "networkPolicy": "deny-all except allow-listed tool endpoints",
+    "policyHash": "gov-2026.06-hackathon-demo",
+    "invariants": [
+      "Every tool call is scoped by proposal, budget line, approver, and expiry.",
+      "No autonomous spend above the pre-authorized Stripe line item cap.",
+      "External customer messages are draft-only until evidence grade reaches B+ and sponsor approvals are current.",
+      "PII access is read-only, purpose-bound, and excluded from model prompts unless explicitly transformed into approved evidence features.",
+      "Kill switch revokes tokens, expires Stripe Checkout Sessions, freezes agent skills, and preserves the audit log."
+    ],
+    "blockedCall": {
+      "host": "premium-market-api.example.com",
+      "method": "POST",
+      "path": "/v1/lookup",
+      "attemptedAmount": 150,
+      "status": 403,
+      "policy": "unapproved_external_vendor",
+      "detail": "Outbound call intercepted by OpenShell network policy. Merchant category outside approved SaaS list and per-authorization cap exceeded."
+    }
+  },
+  "stripeSkill": {
+    "name": "stripe-link-cli",
+    "displayName": "Stripe Link CLI",
+    "action": "Buy SaaS subscription with one-time virtual card",
+    "amount": 15,
+    "merchant": "OpenAI API top-up",
+    "approvalGate": "Human Link app approval required — Hermes cannot self-approve",
+    "credentialLifecycle": "One-time virtual card; token scrubbed after transaction settles",
+    "policy": "Allowed only inside an active Checkout Session and below the per-authorization cap",
+    "status": "approved",
+    "sessionCap": 100,
+    "proposalId": "atlas-freight-rma-copilot",
+    "mode": "demo"
+  },
+  "skills": [
+    {
+      "name": "parts-order-cli",
+      "displayName": "Parts Order CLI",
+      "action": "Auto-order replacement parts for triaged cases",
+      "amount": 28,
+      "merchant": "Atlas Freight parts supplier",
+      "approvalGate": "Pre-approved inside envelope; human batch review nightly",
+      "status": "completed",
+      "result": "Ordered 28 USD of replacement parts within the remaining envelope"
+    },
+    {
+      "name": "slack-status-cli",
+      "displayName": "Slack Status CLI",
+      "action": "Post pilot outcome to team channel",
+      "amount": 0,
+      "merchant": "Slack workspace",
+      "approvalGate": "Read-only notification; no autonomous write to customers",
+      "status": "completed",
+      "result": "Notified #logistics-ops: 48 auto-triaged, 100 cases processed, net 631 USD"
+    }
+  ],
+  "stages": [
+    {
+      "id": "mission",
+      "label": "Mission loaded",
+      "status": "complete",
+      "detail": "Atlas Freight — Resolve 100 late-freight exception tickets in 72 hours with a governed Hermes agent",
+      "ts": "2026-06-17T00:36:28.566Z"
+    },
+    {
+      "id": "sandbox",
+      "label": "OpenShell sandbox ready",
+      "status": "complete",
+      "detail": "deny-all network policy · short-lived credentials · policy invariants recorded",
+      "ts": "2026-06-17T00:36:28.766Z"
+    },
+    {
+      "id": "envelope",
+      "label": "Spend envelope created",
+      "status": "complete",
+      "detail": "Cap 100 USD · 4 allowed tools · 4 kill criteria",
+      "ts": "2026-06-17T00:36:28.966Z"
+    },
+    {
+      "id": "stripe",
+      "label": "Stripe authorization recorded",
+      "status": "complete",
+      "detail": "demo session cs_test_agent_ic_atlas-freight-rma-copilot_1781656588557 · recurring spend blocked",
+      "ts": "2026-06-17T00:36:29.466Z"
+    },
+    {
+      "id": "stripeSkill",
+      "label": "Stripe Link skill approved",
+      "status": "approved",
+      "detail": "Buy SaaS subscription with one-time virtual card · human approval required",
+      "ts": "2026-06-17T00:36:29.766Z"
+    },
+    {
+      "id": "blocked",
+      "label": "Out-of-policy spend blocked",
+      "status": "blocked",
+      "detail": "Premium market-rate lookup API denied · 403 Forbidden · tool_scope_violation",
+      "ts": "2026-06-17T00:36:30.066Z"
+    },
+    {
+      "id": "evidence",
+      "label": "Evidence imported",
+      "status": "complete",
+      "detail": "100 cases · 91% QA · 35 USD spent · net computed",
+      "ts": "2026-06-17T00:36:30.566Z"
+    },
+    {
+      "id": "skills",
+      "label": "Hermes skills executed",
+      "status": "complete",
+      "detail": "Parts Order CLI · Slack Status CLI",
+      "ts": "2026-06-17T00:36:31.066Z"
+    },
+    {
+      "id": "decision",
+      "label": "Capital decision issued",
+      "status": "approved",
+      "detail": "CONTINUE · next cap 250 USD · draft-only",
+      "ts": "2026-06-17T00:36:31.566Z"
+    }
+  ],
+  "mission": {
+    "company": "Atlas Freight",
+    "title": "Autonomous RMA + claims copilot for late freight exceptions",
+    "description": "Resolve 100 late-freight exception tickets in 72 hours with a governed Hermes agent",
+    "durationHours": 72,
+    "allowedTools": [
+      "Shipment event API",
+      "Draft reply tool",
+      "Evidence collector",
+      "Slack approval room"
+    ],
+    "killCriteria": [
+      "Evidence grade below B after week 4",
+      "False autonomous action rate above 1.0%",
+      "Forecast payback above 120 days after spend is committed",
+      "Any governance invariant breach"
+    ]
+  },
+  "envelope": {
+    "cap": 100,
+    "spent": 35,
+    "remaining": 65,
+    "renewal": "blocked",
+    "allowedToolCount": 4,
+    "blockedTool": {
+      "name": "Premium market-rate lookup API",
+      "category": "Unapproved external data vendor",
+      "reason": "Merchant category outside the approved SaaS list and per-authorization cap exceeded"
+    }
+  },
+  "stripe": {
+    "mode": "demo",
+    "sessionId": "cs_test_agent_ic_atlas-freight-rma-copilot_1781656588557",
+    "clientReferenceId": "atlas-freight-rma-copilot",
+    "amountCents": 10000,
+    "metadata": {
+      "proposal_id": "atlas-freight-rma-copilot",
+      "governance_policy": "NemoClaw/OpenShell-style envelope",
+      "autonomous_spend_cap_dollars": "100"
+    },
+    "url": "/mock-stripe-checkout?session=cs_test_agent_ic_atlas-freight-rma-copilot"
+  },
+  "blocked": {
+    "actor": "SaaS provisioning agent",
+    "action": "DENIED",
+    "proposalId": "atlas-freight-rma-copilot",
+    "detail": "Attempted to use Premium market-rate lookup API (Unapproved external data vendor) — Merchant category outside the approved SaaS list and per-authorization cap exceeded",
+    "kind": "blocked",
+    "policyBreach": "tool_scope_violation",
+    "attemptedTool": "Premium market-rate lookup API",
+    "attemptedAmount": 150,
+    "cap": 100,
+    "stripeResult": "No session created — blocked before network call"
+  },
+  "evidence": {
+    "casesProcessed": 100,
+    "autoTriaged": 48,
+    "hoursSaved": 9,
+    "grossValue": 666,
+    "spendConsumed": 35,
+    "netValue": 631,
+    "qaAgreement": 91,
+    "criticalIncidents": 0
+  },
+  "decision": {
+    "verdict": "CONTINUE",
+    "nextCap": 250,
+    "autonomy": "draft-only",
+    "qaThreshold": 85,
+    "envelopeCap": 100
+  },
+  "hermesPlaybook": {
+    "id": "playbook-atlas-freight-rma-copilot-1781656588565",
+    "taskId": "task-m5g37yhu",
+    "version": "1.0.0",
+    "name": "Bounded Capital Experiment Playbook",
+    "description": "Reusable Hermes skill for approving a spend envelope, running a governed micro-pilot, blocking out-of-policy actions, and deciding on evidence.",
+    "inputs": {
+      "proposal": "normalized IC schema (company, title, pain, ask, duration, evidence plan)",
+      "budget": "recommendedBudget + autonomousSpendCap",
+      "policy": "governancePolicy id + killCriteria",
+      "evidenceGates": "week 0/2/4/6/8 milestones"
+    },
+    "outputs": {
+      "spendCap": "dollar amount with Stripe metadata",
+      "killCriteria": "array of breach conditions",
+      "boardMemo": "one-page investment recommendation"
+    },
+    "reusedOn": [
+      "Bramble Bank",
+      "Helio Retail"
+    ],
+    "artifact": "SKILL.md / task-m5g37yhu / webhook:atlas-freight-rma-copilot",
+    "hermesNative": true,
+    "ts": "2026-06-17T00:36:28.565Z"
+  },
+  "boardPacket": {
+    "memo": {
+      "title": "Agent IC Investment Memo — Atlas Freight",
+      "decision": "CONTINUE",
+      "thesis": "Atlas Freight clears the Agent IC bar: 38-day payback, 2.36x 90-day ROI, and 91/100 governance score under a bounded Hermes/Nemotron operating envelope.",
+      "budget": "$185,000",
+      "cap": "$35,000",
+      "payback": "38 days",
+      "roi": "2.36x 90-day",
+      "confidence": "high",
+      "evidenceGrade": "C",
+      "netObserved": "$0"
+    },
+    "auditSummary": {
+      "totalEvents": 9,
+      "evaluationEvents": 3,
+      "stripeEvents": 2,
+      "evidenceEvents": 2,
+      "blockedEvents": 2
+    },
+    "nextGate": {
+      "label": "30-day review",
+      "date": "2026-07-17",
+      "criteria": [
+        "Evidence grade maintained at B+",
+        "Net observed value positive",
+        "No governance invariant breach"
+      ]
+    }
+  },
+  "auditRows": [
+    {
+      "id": "AUD-000010",
+      "ts": "2026-06-17T00:36:28.565Z",
+      "actor": "Agent IC decision engine",
+      "action": "decision_issued",
+      "detail": "CONTINUE — next cap 250 USD, autonomy draft-only",
+      "kind": "evaluation",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000009",
+      "ts": "2026-06-17T00:36:28.557Z",
+      "actor": "ROI evidence collector",
+      "action": "evidence_imported",
+      "detail": "100 cases, QA 91%, net 631 USD",
+      "kind": "evidence",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000008",
+      "ts": "2026-06-17T00:36:28.557Z",
+      "actor": "SaaS provisioning agent",
+      "action": "DENIED",
+      "detail": "Attempted to use Premium market-rate lookup API (Unapproved external data vendor) — Merchant category outside the approved SaaS list and per-authorization cap exceeded",
+      "kind": "blocked",
+      "proposalId": "atlas-freight-rma-copilot",
+      "policyBreach": "tool_scope_violation",
+      "attemptedTool": "Premium market-rate lookup API",
+      "attemptedAmount": 150,
+      "cap": 100,
+      "stripeResult": "No session created — blocked before network call"
+    },
+    {
+      "id": "AUD-000007",
+      "ts": "2026-06-17T00:36:28.557Z",
+      "actor": "Stripe demo adapter",
+      "action": "created Checkout Session",
+      "detail": "demo session [CHECKOUT_SESSION] for cap 100 USD",
+      "kind": "stripe",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000006",
+      "ts": "2026-06-17T00:36:28.556Z",
+      "actor": "Agent IC policy engine",
+      "action": "envelope_created",
+      "detail": "Spend cap 100 USD, 4 allowed tools, 4 kill criteria",
+      "kind": "evaluation",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000002",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "Stripe demo adapter",
+      "action": "created Checkout Session",
+      "detail": "demo session [CHECKOUT_SESSION] for cap 100 USD",
+      "kind": "stripe",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000003",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "SaaS provisioning agent",
+      "action": "DENIED",
+      "detail": "Attempted to use Premium market-rate lookup API (Unapproved external data vendor) — Merchant category outside the approved SaaS list and per-authorization cap exceeded",
+      "kind": "blocked",
+      "proposalId": "atlas-freight-rma-copilot",
+      "policyBreach": "tool_scope_violation",
+      "attemptedTool": "Premium market-rate lookup API",
+      "attemptedAmount": 150,
+      "cap": 100,
+      "stripeResult": "No session created — blocked before network call"
+    },
+    {
+      "id": "AUD-000004",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "ROI evidence collector",
+      "action": "evidence_imported",
+      "detail": "100 cases, QA 91%, net 631 USD",
+      "kind": "evidence",
+      "proposalId": "atlas-freight-rma-copilot"
+    }
+  ],
+  "providerReceipts": {
+    "nemotron": {
+      "state": "fallback",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "latencyMs": "0 (deterministic)",
+      "evaluator": "Local deterministic fallback"
+    },
+    "stripe": {
+      "state": "demo",
+      "sessionId": "cs_test_agent_ic_atlas-freight-rma-copilot_1781656588557",
+      "clientReferenceId": "atlas-freight-rma-copilot",
+      "amountCents": 10000,
+      "metadata": {
+        "proposal_id": "atlas-freight-rma-copilot",
+        "governance_policy": "NemoClaw/OpenShell-style envelope",
+        "autonomous_spend_cap_dollars": "100"
+      }
+    },
+    "hermes": {
+      "state": "playbook-saved",
+      "playbookId": "playbook-atlas-freight-rma-copilot",
+      "taskId": "task-aoifrs68",
+      "reusedOn": [
+        "Bramble Bank",
+        "Helio Retail"
+      ]
+    },
+    "governance": {
+      "state": "approved",
+      "policyHash": "gov-2026.06-hackathon-demo",
+      "blockedCount": 2,
+      "approvedCount": 4,
+      "killCriteria": [
+        "Evidence grade below B after week 4",
+        "False autonomous action rate above 1.0%",
+        "Forecast payback above 120 days after spend is committed",
+        "Any governance invariant breach"
+      ]
+    },
+    "audit": {
+      "rowCount": 9,
+      "newestId": "AUD-000009",
+      "retentionLimit": 100
+    }
+  },
+  "liveError": null,
+  "audit": [
+    {
+      "id": "AUD-000010",
+      "ts": "2026-06-17T00:36:28.565Z",
+      "actor": "Agent IC decision engine",
+      "action": "decision_issued",
+      "detail": "CONTINUE — next cap 250 USD, autonomy draft-only",
+      "kind": "evaluation",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000009",
+      "ts": "2026-06-17T00:36:28.557Z",
+      "actor": "ROI evidence collector",
+      "action": "evidence_imported",
+      "detail": "100 cases, QA 91%, net 631 USD",
+      "kind": "evidence",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000008",
+      "ts": "2026-06-17T00:36:28.557Z",
+      "actor": "SaaS provisioning agent",
+      "action": "DENIED",
+      "detail": "Attempted to use Premium market-rate lookup API (Unapproved external data vendor) — Merchant category outside the approved SaaS list and per-authorization cap exceeded",
+      "kind": "blocked",
+      "proposalId": "atlas-freight-rma-copilot",
+      "policyBreach": "tool_scope_violation",
+      "attemptedTool": "Premium market-rate lookup API",
+      "attemptedAmount": 150,
+      "cap": 100,
+      "stripeResult": "No session created — blocked before network call"
+    },
+    {
+      "id": "AUD-000007",
+      "ts": "2026-06-17T00:36:28.557Z",
+      "actor": "Stripe demo adapter",
+      "action": "created Checkout Session",
+      "detail": "demo session [CHECKOUT_SESSION] for cap 100 USD",
+      "kind": "stripe",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000006",
+      "ts": "2026-06-17T00:36:28.556Z",
+      "actor": "Agent IC policy engine",
+      "action": "envelope_created",
+      "detail": "Spend cap 100 USD, 4 allowed tools, 4 kill criteria",
+      "kind": "evaluation",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000002",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "Stripe demo adapter",
+      "action": "created Checkout Session",
+      "detail": "demo session [CHECKOUT_SESSION] for cap 100 USD",
+      "kind": "stripe",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000003",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "SaaS provisioning agent",
+      "action": "DENIED",
+      "detail": "Attempted to use Premium market-rate lookup API (Unapproved external data vendor) — Merchant category outside the approved SaaS list and per-authorization cap exceeded",
+      "kind": "blocked",
+      "proposalId": "atlas-freight-rma-copilot",
+      "policyBreach": "tool_scope_violation",
+      "attemptedTool": "Premium market-rate lookup API",
+      "attemptedAmount": 150,
+      "cap": 100,
+      "stripeResult": "No session created — blocked before network call"
+    },
+    {
+      "id": "AUD-000004",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "ROI evidence collector",
+      "action": "evidence_imported",
+      "detail": "100 cases, QA 91%, net 631 USD",
+      "kind": "evidence",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000005",
+      "ts": "2026-06-17T00:09:07.906Z",
+      "actor": "Agent IC decision engine",
+      "action": "decision_issued",
+      "detail": "CONTINUE — next cap 250 USD, autonomy draft-only",
+      "kind": "evaluation",
+      "proposalId": "atlas-freight-rma-copilot"
+    },
+    {
+      "id": "AUD-000001",
+      "ts": "2026-06-17T00:09:07.905Z",
+      "actor": "Agent IC policy engine",
+      "action": "envelope_created",
+      "detail": "Spend cap 100 USD, 4 allowed tools, 4 kill criteria",
+      "kind": "evaluation",
+      "proposalId": "atlas-freight-rma-copilot"
+    }
+  ]
+}

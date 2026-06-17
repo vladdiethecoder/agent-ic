@@ -1,0 +1,11 @@
+Agents can now spend money and provision tools. That is powerful — and dangerous. Agent IC gives agents a governed capital account.
+
+Here the mission is to resolve 100 late-freight exceptions in 72 hours. Before work starts, Agent IC creates a $100 spend envelope, approved tools, and kill criteria.
+
+Stripe records the bounded authorization. This is not a blank check. The spend path carries the proposal ID, policy ID, cap, and renewal rules.
+
+Now the agent tries to buy a $149 premium lookup API. Agent IC blocks it before money moves, and writes the denial to the audit log.
+
+Then it imports evidence: cases processed, QA agreement, spend, and net value. The decision is continue, but only with the next cap and draft-only autonomy.
+
+Hermes saves the whole procedure as a reusable playbook. This is how enterprises let agents operate with money without losing control.

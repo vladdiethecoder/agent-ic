@@ -1,0 +1,17 @@
+# SIMULATED: hermes-agent is not installed or HERMES_AGENT_URL is not configured for capture
+$ curl -sS -X POST "$HERMES_AGENT_URL" -H "Content-Type: application/json" -H "Authorization: Bearer $HERMES_AGENT_TOKEN" -d '{"proposalId":"atlas-freight-rma-copilot","requestedSkills":["official/payments/stripe-link-cli","official/payments/stripe-projects","official/payments/mpp-agent"]}'
+HTTP/1.1 202 Accepted
+
+{
+  "taskId": "hermes-task-atlas-freight-9e2b",
+  "status": "dispatched",
+  "skillPlan": [
+    "official/payments/stripe-link-cli",
+    "official/payments/stripe-projects",
+    "official/payments/mpp-agent"
+  ],
+  "playbook": "Agent IC Bounded Capital Experiment Playbook",
+  "latencyMs": 142
+}
+
+Skill plan queued: 3 payment / governance skills

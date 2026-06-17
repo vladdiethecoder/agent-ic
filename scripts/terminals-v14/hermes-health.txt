@@ -1,0 +1,20 @@
+# Hermes gateway (local replay)
+$ curl -sS "$HERMES_AGENT_URL/health"
+{
+  "ok": true,
+  "agent": "Hermes",
+  "version": "0.9.1",
+  "skills_loaded": 12
+}
+
+$ curl -sS "$HERMES_AGENT_URL/skills"
+{
+  "skills": [
+    "official/payments/stripe-link-cli",
+    "official/payments/stripe-projects",
+    "official/payments/mpp-agent",
+    "official/security/policy-gate"
+  ]
+}
+
+Hermes agent is healthy

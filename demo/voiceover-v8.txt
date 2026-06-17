@@ -1,0 +1,15 @@
+Agents can now spend money and provision tools. That is powerful, and dangerous.
+Agent IC gives them a governed capital account.
+We drop a messy operations request into Agent IC: resolve one hundred late-freight tickets in seventy-two hours.
+Watch what happens live.
+The system dispatches a Hermes Agent task, then calls NVIDIA NIM to score the proposal.
+It creates a Stripe test Checkout Session capped at exactly one hundred dollars.
+No session, no money moves.
+The agent tries to buy a one-hundred-fifty-dollar premium lookup API.
+Our local NemoClaw proxy intercepts the call and returns four-oh-three Forbidden, because the merchant is outside the approved list and the cap would be exceeded.
+No money moves.
+Once compliant operations execute, the agent finishes the workflow.
+It processed one hundred cases with a ninety-one percent QA agreement rate.
+Agent IC issues CONTINUE with a two-hundred-fifty-dollar next cap and draft-only autonomy, then saves the learned procedure as a reusable Hermes playbook.
+Lower the QA threshold to eighty-two percent, and the decision flips to KILL.
+This is how enterprises let agents operate with money without losing control.

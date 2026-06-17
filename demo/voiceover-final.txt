@@ -1,0 +1,15 @@
+Enterprises are about to launch thousands of AI pilots. The failure mode is not demos — it is ungoverned spend with no proof of ROI. Agent IC turns every pilot into an investment decision: should this agent get budget, tools, and production access?
+
+Here is the live workbench. I choose Atlas Freight, an autonomous RMA and claims copilot for late freight exceptions. Hermes normalizes the messy proposal into a business, evidence, and governance schema. Nemotron-style evaluation scores viability, usefulness, risk, and ROI proof.
+
+The committee does not return a vague yes or no. It returns Continue, a one-hundred-eighty-five-thousand-dollar pilot budget, a roughly thirty-five-thousand-dollar autonomous spend cap, a thirty-eight-day payback estimate, and a risk register.
+
+Now the agent asks to spend. The important part is the gate. It cannot provision tools or move money without visible approval. Stripe creates a bounded authorization with proposal metadata, policy, and spend cap. Demo mode is safe; with a test key this same path becomes a hosted Checkout Session.
+
+Funding is not the end of the workflow. The pilot keeps capital only by producing evidence. I advance the ROI timeline through week two, week four, week six, and week eight. Agent IC tracks gross impact, spend consumed, net observed value, evidence grade, and kill criteria.
+
+At week four it can stop the pilot if evidence is weak. By week eight, Atlas has enough proof for a finance-readable Continue decision. This is not model opinion; it is a decision backed by ledger values and the evidence timeline.
+
+Governance is built into every step. The policy envelope scopes model evaluation, Hermes workstreams, SaaS provisioning, Stripe spend, and evidence logging. The audit log is the product: who acted, what was authorized, which constraint applied, and what evidence changed the decision.
+
+This is useful because CFOs and operators need to decide which agents deserve money. It is viable because it runs locally and upgrades to NVIDIA NIM and Stripe by adding environment variables. It presents cleanly because the demo is one loop: evaluate, fund, govern, measure, decide. Agent IC is the investment committee for autonomous agents.

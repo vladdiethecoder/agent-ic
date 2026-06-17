@@ -1,0 +1,56 @@
+{
+  "stages": [
+    {
+      "id": "mission",
+      "frame": 6,
+      "ts": 1781658443510
+    },
+    {
+      "id": "sandbox",
+      "frame": 104,
+      "ts": 1781658446790
+    },
+    {
+      "id": "envelope",
+      "frame": 179,
+      "ts": 1781658449293
+    },
+    {
+      "id": "stripe",
+      "frame": 254,
+      "ts": 1781658451795
+    },
+    {
+      "id": "stripeSkill",
+      "frame": 329,
+      "ts": 1781658454298
+    },
+    {
+      "id": "blocked",
+      "frame": 404,
+      "ts": 1781658456799
+    },
+    {
+      "id": "evidence",
+      "frame": 488,
+      "ts": 1781658459578
+    },
+    {
+      "id": "skills",
+      "frame": 586,
+      "ts": 1781658462857
+    },
+    {
+      "id": "decision",
+      "frame": 666,
+      "ts": 1781658465533
+    },
+    {
+      "id": "counterfactual",
+      "frame": 1650,
+      "ts": 1781658498315
+    }
+  ],
+  "fps": 30,
+  "videoStart": 1781658443318
+}

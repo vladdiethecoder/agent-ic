@@ -1,0 +1,13 @@
+# SIMULATED: NemoClaw proxy is not configured or CAPTURE_REAL_BLOCKED is unset
+$ curl -sS -X POST "$NEMOCLAW_PROXY_URL/v1/gate" -H "Content-Type: application/json" -d '{"targetUri":"https://unapproved-vendor.example/api/charge","method":"POST","amount":50000,"proposalId":"atlas-freight-rma-copilot"}'
+HTTP/1.1 403 Forbidden
+
+{
+  "error": "blocked",
+  "policy": "unapproved_external_vendor",
+  "detail": "Target host is not in the allow-list for this sandbox",
+  "sandboxId": "sandbox-atlas-freight-rma-copilot-7a3f",
+  "attemptedAmount": 50000
+}
+
+Blocked by NemoClaw policy gate

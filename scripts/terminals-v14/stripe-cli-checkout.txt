@@ -1,0 +1,17 @@
+$ stripe checkout sessions create --mode payment --success-url "http://localhost:3000/mock-stripe-checkout?session_id={CHECKOUT_SESSION_ID}" --cancel-url "http://localhost:3000" --unit-amount=10000 --currency=usd --metadata "proposal_id=atlas-freight-rma-copilot" --metadata "autonomous_spend_cap_dollars=100"
+{
+  "id": "cs_test_agent_ic_atlas_100usd",
+  "object": "checkout.session",
+  "amount_total": 10000,
+  "currency": "usd",
+  "mode": "payment",
+  "status": "open",
+  "url": "https://checkout.stripe.com/c/pay/cs_test_agent_ic_atlas_100usd",
+  "metadata": {
+    "proposal_id": "atlas-freight-rma-copilot",
+    "autonomous_spend_cap_dollars": "100"
+  },
+  "test_mode": true
+}
+
+Checkout session created in test mode

@@ -1,0 +1,23 @@
+{
+  "name": "NemoClaw / OpenShell agent tool allow-list",
+  "version": "1.0.0",
+  "perCallCap": 100,
+  "allowedMerchants": [
+    {
+      "host": "api.shipwell.example.com",
+      "category": "logistics"
+    },
+    {
+      "host": "api.zendesk.example.com",
+      "category": "support"
+    },
+    {
+      "host": "hooks.slack.example.com",
+      "category": "notifications"
+    },
+    {
+      "host": "api.stripe.com",
+      "category": "payments"
+    }
+  ]
+}

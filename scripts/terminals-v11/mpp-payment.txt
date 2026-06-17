@@ -1,0 +1,17 @@
+# SIMULATED: mppx is not installed or CAPTURE_REAL_MPP is unset
+$ npm install -g mppx
+added 1 package in 320ms
+
+$ mppx probe http://localhost:3000/api/run-capital-experiment
+PROBE 402 Payment Required
+  endpoint: http://localhost:3000/api/run-capital-experiment
+  amount:   $35,000.00 USD
+  merchant: atlas-freight-rma-copilot
+  reason:   autonomous RMA pilot envelope
+
+$ mppx pay --amount 35000 --currency USD --reason "autonomous RMA pilot" --test-mode
+PAY 200 OK
+  payment_id:    mpp_pay_1OaKx9v7nQ2wL4mZ
+  amount:        $35,000.00
+  status:        authorized
+  receipt_hash:  sha256:8f4e2c...

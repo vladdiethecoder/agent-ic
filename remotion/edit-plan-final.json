@@ -1,0 +1,91 @@
+{
+  "fps": 30,
+  "introFrames": 90,
+  "mainFrames": 4286,
+  "outroFrames": 90,
+  "totalFrames": 4466,
+  "audioDuration": 142.869,
+  "callouts": [
+    {
+      "stageId": "hero",
+      "startFrame": 90,
+      "endFrame": 459,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "AI pilots need an investment committee"
+    },
+    {
+      "stageId": "workbench",
+      "startFrame": 474,
+      "endFrame": 506,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Hermes: proposal \u2192 governed schema"
+    },
+    {
+      "stageId": "evaluation",
+      "startFrame": 521,
+      "endFrame": 1072,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Nemotron-style evaluation: viability, evidence, risk"
+    },
+    {
+      "stageId": "budget",
+      "startFrame": 1087,
+      "endFrame": 1637,
+      "x": 80,
+      "y": 220,
+      "width": 560,
+      "text": "Continue \u2022 $185K budget \u2022 ~$35K cap"
+    },
+    {
+      "stageId": "stripe",
+      "startFrame": 1652,
+      "endFrame": 2210,
+      "x": 80,
+      "y": 420,
+      "width": 560,
+      "text": "Stripe authorization, not a blank check"
+    },
+    {
+      "stageId": "evidence",
+      "startFrame": 2225,
+      "endFrame": 3056,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Capital continues only with evidence"
+    },
+    {
+      "stageId": "decision",
+      "startFrame": 3071,
+      "endFrame": 3500,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Week 8: finance-readable Continue decision"
+    },
+    {
+      "stageId": "audit",
+      "startFrame": 3899,
+      "endFrame": 4268,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Audit log = product"
+    },
+    {
+      "stageId": "storyboard",
+      "startFrame": 4283,
+      "endFrame": 4667,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Useful \u2022 viable \u2022 presentable"
+    }
+  ]
+}

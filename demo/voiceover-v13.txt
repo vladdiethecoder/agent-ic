@@ -1,0 +1,13 @@
+AI agents can now spend capital and provision software, but for enterprises, unconstrained autonomy is a catastrophic operational risk. This is Agent IC: a governed capital envelope for autonomous enterprise work. We do not just build autonomous agents; we govern their capital liquidity.
+
+Let's look at a live interaction from start to finish. We drop a chaotic operations request into the Agent IC dashboard: resolve one hundred late-freight tickets.
+
+As the application initializes, the backend instantly instantiates a secure policy sandbox via NVIDIA NemoClaw and programmatically provisions a live Stripe virtual credit card capped at exactly one hundred dollars. No session, no money moves without direct envelope alignment.
+
+Here is the critical turning point in the live execution stream. The local Nous Hermes agent attempts to bypass our policy guardrails to purchase an unauthorized, high-cost premium data lookup API. In a standard unmonitored architecture, that is an immediate budget bust and a data leak.
+
+But watch the live network intercept: our local proxy layer captures the tool payload dynamically, throws a genuine four-oh-three forbidden status code directly into the agent's context window, and safely forces the model back into its compliant execution lane.
+
+Once compliant operations finish through our authorized tools, the agent compiles its performance data back into our analytics dashboard. It processed every single ticket with a ninety-one percent QA agreement rate. Based on resource metrics, Agent IC generates an explicit, evidence-backed continue or kill memo based on realized utility, not model hallucinations.
+
+We approve the expanded allocation, and the verified operational run is cleanly exported as a native, reusable Hermes playbook asset. This is how enterprises scale autonomous labor without surrendering financial sovereignty. Built live on local hardware. Thank you.

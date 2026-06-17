@@ -1,0 +1,10 @@
+# SIMULATED: stripe CLI is not installed or CAPTURE_REAL_STRIPE is unset
+$ stripe projects add neon/postgres --name atlas-freight-db --description "Postgres for Atlas Freight pilot"
+Adding resource neon/postgres to project atlas-freight-db...
+
+RESOURCE 200 OK
+  project_id:  proj_1PqR8sXyZaBcDeFgHiJkLmN
+  resource:    neon/postgres
+  status:      provisioned
+  region:      us-east-1
+  connection:  [REDACTED]

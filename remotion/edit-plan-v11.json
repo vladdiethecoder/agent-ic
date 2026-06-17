@@ -1,0 +1,141 @@
+{
+  "fps": 30,
+  "introFrames": 90,
+  "mainFrames": 4626,
+  "outroFrames": 90,
+  "totalFrames": 4806,
+  "audioDuration": 154.219,
+  "callouts": [
+    {
+      "stageId": "problem",
+      "startFrame": 90,
+      "endFrame": 630,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Problem \u2014 ungoverned AI pilot spend"
+    },
+    {
+      "stageId": "onboard",
+      "startFrame": 690,
+      "endFrame": 1530,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Onboard \u2014 NemoClaw + Hermes sandbox"
+    },
+    {
+      "stageId": "evaluate",
+      "startFrame": 1590,
+      "endFrame": 1950,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Evaluate \u2014 Nemotron scores the pilot"
+    },
+    {
+      "stageId": "fund",
+      "startFrame": 2040,
+      "endFrame": 2430,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Fund \u2014 $185K budget \u00b7 ~$35K cap \u00b7 Stripe auth"
+    },
+    {
+      "stageId": "govern",
+      "startFrame": 2490,
+      "endFrame": 2850,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Govern \u2014 evidence gates decide continuation"
+    },
+    {
+      "stageId": "measure",
+      "startFrame": 2940,
+      "endFrame": 3450,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Measure \u2014 NemoClaw blocks out-of-policy call"
+    },
+    {
+      "stageId": "decide",
+      "startFrame": 3540,
+      "endFrame": 3930,
+      "x": 80,
+      "y": 260,
+      "width": 560,
+      "text": "Decide \u2014 Continue, reusable playbook saved"
+    }
+  ],
+  "terminalOverlays": [
+    {
+      "name": "nemoclaw-onboard",
+      "src": "terminals-v11/nemoclaw-onboard.webm",
+      "startFrame": 600,
+      "endFrame": 1050,
+      "x": 1120,
+      "y": 540,
+      "width": 760,
+      "height": 480,
+      "label": "nemohermes onboard"
+    },
+    {
+      "name": "hermes-dispatch",
+      "src": "terminals-v11/hermes-dispatch.webm",
+      "startFrame": 1110,
+      "endFrame": 1500,
+      "x": 1120,
+      "y": 540,
+      "width": 760,
+      "height": 480,
+      "label": "hermes dispatch"
+    },
+    {
+      "name": "stripe-link-spend",
+      "src": "terminals-v11/stripe-link-spend.webm",
+      "startFrame": 1560,
+      "endFrame": 1950,
+      "x": 1120,
+      "y": 540,
+      "width": 760,
+      "height": 480,
+      "label": "link-cli spend-request"
+    },
+    {
+      "name": "mpp-payment",
+      "src": "terminals-v11/mpp-payment.webm",
+      "startFrame": 2010,
+      "endFrame": 2340,
+      "x": 1120,
+      "y": 540,
+      "width": 760,
+      "height": 480,
+      "label": "mppx pay 402 API"
+    },
+    {
+      "name": "stripe-projects-provision",
+      "src": "terminals-v11/stripe-projects-provision.webm",
+      "startFrame": 2400,
+      "endFrame": 2700,
+      "x": 1120,
+      "y": 540,
+      "width": 760,
+      "height": 480,
+      "label": "stripe projects add neon/postgres"
+    },
+    {
+      "name": "blocked-tool-403",
+      "src": "terminals-v11/blocked-tool-403.webm",
+      "startFrame": 2760,
+      "endFrame": 3150,
+      "x": 1120,
+      "y": 540,
+      "width": 760,
+      "height": 480,
+      "label": "NemoClaw 403 block"
+    }
+  ]
+}
