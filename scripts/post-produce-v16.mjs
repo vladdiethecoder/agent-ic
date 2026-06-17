@@ -22,8 +22,8 @@ const VIEWPORT = { width: 1920, height: 1080 };
 const FPS = 30;
 const VIDEO_CODEC = 'h264_nvenc';
 const VIDEO_BITRATE = '8M';
-const INTRO_SECONDS = 4;
-const OUTRO_SECONDS = 4;
+const INTRO_SECONDS = 3;
+const OUTRO_SECONDS = 3;
 
 const FONT_REGULAR = '/usr/share/fonts/rsms-inter-fonts/Inter-Regular.ttf';
 const FONT_BOLD = '/usr/share/fonts/rsms-inter-fonts/Inter-Bold.ttf';
@@ -98,16 +98,24 @@ async function makeTitleCard(output, { title, subtitle, duration }) {
   ]);
 }
 
-async function makeOutroCard(output, { title, lines, duration }) {
-  const titleFilter = `drawtext=fontfile=${FONT_BOLD}:text='${escapeDrawtext(title)}':fontcolor=white:fontsize=84:x=(w-text_w)/2:y=(h-text_h)/2-90`;
-  const lineFilters = lines.map((line, i) => {
-    const safe = escapeDrawtext(line);
-    return `drawtext=fontfile=${FONT_REGULAR}:text='${safe}':fontcolor=#9ca3af:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2+${20 + i * 58}`;
-  });
-  const vf = [titleFilter, ...lineFilters].join(',');
+async function makeOutroCard(output, { title, lines, duration, qrImage }) {
+  const hasQr = existsSync(qrImage);
+  const cardImage = output.replace(/\.mp4$/i, '.png');
+
+  const pyArgs = [
+    'scripts/generate-outro-card.py',
+    '--output', cardImage,
+    '--title', title,
+    ...lines.flatMap((line) => ['--line', line]),
+  ];
+  if (hasQr) {
+    pyArgs.push('--qr', qrImage);
+  }
+  execSync(`python3 ${pyArgs.map((a) => `"${a}"`).join(' ')}`);
+
   await execFfmpeg([
-    '-y', '-f', 'lavfi', '-i', `color=c=0x0b0d10:s=${VIEWPORT.width}x${VIEWPORT.height}:r=${FPS}:d=${duration}`,
-    '-vf', vf,
+    '-y', '-loop', '1', '-i', cardImage,
+    '-t', String(duration),
     '-c:v', VIDEO_CODEC,
     '-b:v', VIDEO_BITRATE,
     '-r', String(FPS),
@@ -123,7 +131,9 @@ async function composeFinal(intro, main, outro, audioFile, output) {
   const audioExists = existsSync(audioFile);
 
   const captionFilters = buildCaptionFilters();
-  const videoChain = `[0:v][1:v][2:v]concat=n=3:v=1:a=0[base];[base]${captionFilters}[outv]`;
+  const videoChain = captionFilters
+    ? `[0:v][1:v][2:v]concat=n=3:v=1:a=0[base];[base]${captionFilters}[outv]`
+    : `[0:v][1:v][2:v]concat=n=3:v=1:a=0[outv]`;
 
   const args = [
     '-y',
@@ -184,14 +194,23 @@ async function main() {
     duration: INTRO_SECONDS,
   });
   const demoUrl = process.env.AGENT_IC_DEMO_URL || 'http://localhost:3000';
-  const githubUrl = process.env.AGENT_IC_GITHUB_URL || 'https://github.com/agent-ic/agent-ic-hermes-hackathon';
+  const githubUrl = process.env.AGENT_IC_GITHUB_URL || 'https://github.com/vladdiethecoder/agent-ic-hermes-hackathon';
+
+  const qrImage = path.join(OUT_DIR, 'agent-ic-github-qr.png');
+  try {
+    execSync(`npx -y qrcode -o "${qrImage}" -t png -w 320 "${githubUrl}"`, { stdio: 'inherit' });
+  } catch (err) {
+    console.warn(`[post] QR generation failed: ${err.message}`);
+  }
+
   await makeOutroCard(outroVideo, {
     title: 'Agent IC',
     lines: [
-      `Open the live demo at ${demoUrl}`,
       githubUrl,
+      `Run it locally: ${demoUrl}`,
     ],
     duration: OUTRO_SECONDS,
+    qrImage,
   });
 
   console.log('[post] composing final video with captions and audio...');

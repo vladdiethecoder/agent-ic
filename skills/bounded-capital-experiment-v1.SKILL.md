@@ -8,7 +8,7 @@ author: Agent IC
 
 # Bounded Capital Experiment Playbook
 
-Reusable Hermes skill for governed capital experiments.
+Reusable Hermes skill for approving a spend envelope, running a governed micro-pilot, blocking out-of-policy actions, and deciding on evidence.
 
 ## Purpose
 

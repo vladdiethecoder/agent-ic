@@ -18,8 +18,8 @@ const RAW_DIR = path.join(OUT_DIR, 'raw');
 const RAW_VIDEO = path.join(OUT_DIR, 'agent-ic-demo-v16-raw.webm');
 const VIEWPORT = { width: 1920, height: 1080 };
 
-const TARGET_RECORDING_SECONDS = 78;
-const MAX_RECORDING_SECONDS = 82;
+const TARGET_RECORDING_SECONDS = 80;
+const MAX_RECORDING_SECONDS = 84;
 
 const APP_URL = 'http://localhost:3000/run-v14?recording=1&noAutoRun=1';
 const TERMINAL_BASE = 'http://localhost:4000';
@@ -334,10 +334,14 @@ async function waitForActiveStage(page, stageId, timeoutMs = 30_000) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
     const active = await page.evaluate((sid) => {
-      const el = document.querySelector(`[data-testid="stage-${sid}"]`);
-      return el?.classList?.contains('active') || false;
+      const pills = Array.from(document.querySelectorAll('.v14-stage-pill'));
+      const el = pills.find((p) => p.dataset.stage === sid || p.textContent.toLowerCase().includes(sid));
+      return el?.classList?.contains('active') || el?.getAttribute('aria-current') === 'step' || false;
     }, stageId);
-    if (active) return;
+    if (active) {
+      beat('stage', stageId);
+      return;
+    }
     await sleep(200);
   }
   throw new Error(`Stage ${stageId} did not become active within ${timeoutMs}ms`);
@@ -470,6 +474,9 @@ async function captureRawVideo() {
     await injectCursorOverlay(appPage);
     await appPage.goto(APP_URL, { waitUntil: 'load' });
     beat('loaded');
+    // Reset the timing reference so all stage/duration math is relative to the
+    // actual on-screen content, not the long server boot.
+    beats.start = Date.now();
 
     // Open terminal proof tabs in the background.
     const terminalTabs = await openTerminalTabs(context);
@@ -487,31 +494,28 @@ async function captureRawVideo() {
       console.warn(`[warn] could not click live trace tab: ${err.message}`);
     }
 
-    // Timeline: let fixed recording stage timers advance while we cut to proof tabs.
+    // Timeline: follow the recording stage timers and cut to proof tabs at the
+    // right narrative moments.
     const stagePromises = [
-      waitForActiveStage(appPage, 'evaluate', 25_000),
-      waitForActiveStage(appPage, 'fund', 35_000),
-      waitForActiveStage(appPage, 'govern', 45_000),
-      waitForActiveStage(appPage, 'decide', 60_000),
+      waitForActiveStage(appPage, 'fund', 70_000),
+      waitForActiveStage(appPage, 'govern', 80_000),
+      waitForActiveStage(appPage, 'decide', 90_000),
     ];
 
     // Around the Fund stage, show the real Stripe Checkout Session terminal page.
-    await sleep(17_000);
+    await waitForActiveStage(appPage, 'fund', 70_000);
     await switchToTab(terminalTabs, 'stripe-checkout');
     await sleep(4_000);
     await appPage.bringToFront();
 
     // Around Govern, show the NemoClaw 403 gate.
-    await sleep(6_000);
+    await waitForActiveStage(appPage, 'govern', 30_000);
     await switchToTab(terminalTabs, 'nemoclaw-gate-403');
     await sleep(4_500);
     await appPage.bringToFront();
 
-    // Wait for the red vignette / govern content.
-    await waitForActiveStage(appPage, 'govern', 20_000);
-    await sleep(2_500);
-
     // Manual interaction: expand the raw intercept response to prove the UI is live.
+    await sleep(1_500);
     try {
       await clickTarget(appPage, '[data-testid="intercept-card"] .v14-intercept-toggle', {
         move: true,
@@ -522,6 +526,7 @@ async function captureRawVideo() {
     }
 
     // Around Decide, show GPU/Nemotron evidence and playbook artifact.
+    await waitForActiveStage(appPage, 'decide', 30_000);
     await switchToTab(terminalTabs, 'nvidia-smi');
     await sleep(3_500);
     await switchToTab(terminalTabs, 'cat-playbook');
@@ -530,8 +535,7 @@ async function captureRawVideo() {
     await sleep(2_500);
     await appPage.bringToFront();
 
-    // Make sure Decide stage is visible and scroll artifact panel into view.
-    await waitForActiveStage(appPage, 'decide', 25_000);
+    // Scroll artifact panel into view and give the UI a moment to settle.
     await sleep(1_000);
 
     const artifactPanel = await appPage.locator('[data-testid="artifact-shot-panel"]').first();

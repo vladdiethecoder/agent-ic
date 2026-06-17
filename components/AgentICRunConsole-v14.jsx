@@ -39,7 +39,7 @@ const STAGE_BY_AUDIT_ACTION = {
   envelope_created: 'evaluate',
 };
 
-const RECORDING_STAGE_DELAYS = [0, 8000, 14000, 20000, 28000, 38000];
+const RECORDING_STAGE_DELAYS = [0, 10000, 20000, 32000, 46000, 62000];
 
 function idSeq(id) {
   const match = String(id || '').match(/AUD-(\d+)/);
@@ -210,12 +210,27 @@ export default function AgentICRunConsoleV14({ recording = false, noAutoRun = fa
     stageTimersRef.current = [];
   }, []);
 
+  const startStageTimers = useCallback(() => {
+    clearStageTimers();
+    setCurrentStage('problem');
+    RECORDING_STAGE_DELAYS.forEach((delay, index) => {
+      const timer = setTimeout(() => {
+        const stage = STAGES[index];
+        if (stage) setCurrentStage(stage.id);
+      }, delay);
+      stageTimersRef.current.push(timer);
+    });
+  }, [clearStageTimers]);
+
   const runExperiment = useCallback(async () => {
     setLoading(true);
     setError(null);
     setSavedPlaybook(false);
     setPlaybookContent('');
     setPlaybookError(null);
+    if (recording) {
+      startStageTimers();
+    }
     try {
       const response = await fetch('/api/run-capital-experiment-v8', {
         method: 'POST',
@@ -265,20 +280,7 @@ export default function AgentICRunConsoleV14({ recording = false, noAutoRun = fa
       .catch(() => {});
   }, [payload, proposal.id, savedPlaybook]);
 
-  useEffect(() => {
-    if (!recording) return;
-    clearStageTimers();
-    setCurrentStage('problem');
 
-    RECORDING_STAGE_DELAYS.forEach((delay, index) => {
-      const timer = setTimeout(() => {
-        const stage = STAGES[index];
-        if (stage) setCurrentStage(stage.id);
-      }, delay);
-      stageTimersRef.current.push(timer);
-    });
-    return () => clearStageTimers();
-  }, [recording, clearStageTimers]);
 
   useEffect(() => {
     if (!recording || !displayAudit.length) return;
