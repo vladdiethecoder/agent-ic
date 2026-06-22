@@ -2,21 +2,21 @@
 
 ## 1. Purpose
 
-Define the execution layer that turns a proposal into a governed pilot evaluation.
+Define the execution layer that turns an agentic-service trial into a governed evaluation.
 
 ## 2. Responsibilities
 
-- Parse messy enterprise requests.
-- Generate pilot charters and success metrics.
-- Select tools/services required for the pilot.
-- Execute or coordinate the pilot run.
+- Parse enterprise service-trial requests.
+- Generate trial charters and success metrics.
+- Select tools/services required by the worker agent.
+- Execute or coordinate the worker-service run.
 - Synthesize evidence into a decision memo.
 - Save reusable playbook steps for future pilots.
 
 ## 3. Required Workflow
 
-1. Intake proposal.
-2. Classify pilot type, department, risk level, and likely value driver.
+1. Intake service trial.
+2. Classify service type, buyer department, risk level, and likely value driver.
 3. Generate hypothesis, metrics, kill criteria, and budget recommendation.
 4. Build a plan with required actions and required approvals.
 5. Request approval for any spend/provisioning-capable action.
@@ -55,8 +55,7 @@ Every decision must include:
 
 ## 7. Acceptance Criteria
 
-- Given the seeded proposal, the runtime produces a complete charter, event stream, evidence summary, and decision memo.
+- Given the default service trial, the runtime produces a complete charter, event stream, evidence summary, and decision memo.
 - No spend-capable step can execute before approval.
-- The final decision is deterministic enough for demo rehearsal when using seeded inputs.
+- The final decision is deterministic enough for local rehearsal, while the submission path cites real or inspectable workload evidence.
 - Errors become timeline events rather than silent failures.
-

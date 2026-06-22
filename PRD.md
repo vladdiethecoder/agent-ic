@@ -2,94 +2,97 @@
 
 ## 1. Summary
 
-Agent IC is a live hackathon demo for the Hermes Agent Accelerated Business Hackathon. It is a **governed capital account for autonomous work**: it receives a proposed agentic mission, approves a bounded spend envelope, runs or simulates a 72-hour micro-pilot under policy, blocks unsafe actions, imports measurable evidence, and issues a continue/revise/kill decision backed by an audit packet and a reusable Hermes playbook.
+Agent IC is an enterprise solution for buying agentic services with governance. It gives an enterprise a controlled way to trial an outside or internal worker agent: approve a bounded spend envelope, restrict tools and data access, observe the service doing real work, block unsafe or over-budget actions, import evidence, and decide whether the service earns more budget or autonomy.
 
-The submission thesis is: enterprises do not need another isolated AI agent; they need a governed function that decides which agents deserve capital, constrains how they spend it, and proves whether the work earned more.
+The submission thesis is:
+
+> Enterprises will not buy autonomous agents at scale without a control plane that governs spend, actions, evidence, and renewal decisions.
+
+Agent IC is that control plane.
 
 ## 2. Goals
 
-- Deliver a 1–3 minute top-3-caliber demo showing an agent that can earn, spend, and run real operations under governance.
-- Demonstrate a live **bounded capital experiment**: a micro-pilot receives a hard spend envelope, runs work, hits a policy block, imports evidence, and reaches a capital decision.
-- Show Stripe-backed scoped spend, NVIDIA/Nemotron-backed reasoning or evaluation, and Hermes skill/memory reuse.
-- Make the blocked-action beat visible: at least one out-of-policy tool request is denied before any live spend is authorized.
-- Produce a clear audit trail: mission, hypothesis, envelope, policy, approvals, blocked events, evidence, ROI, and kill/continue decision.
-- Save the learned procedure as a reusable Hermes playbook so the experiment ends with an operating asset, not just a memo.
-- Keep the final recorded demo reliable enough to run fully live with rehearsed deterministic inputs.
+- Demonstrate an enterprise evaluating an agentic service before expanding spend.
+- Show a governed service trial where the service receives a hard trial envelope, performs real work, hits a policy block, imports evidence, and receives a continue/revise/kill decision.
+- Show Stripe-backed test-mode spend authorization, NVIDIA/Nemotron-backed reasoning or evidence synthesis, Hermes skill/playbook reuse, and NemoHermes/OpenShell policy enforcement.
+- Make the blocked-action beat visible: at least one out-of-policy tool or spend request is denied before the trial can expand.
+- Produce a clear audit trail: buyer, service under test, mission, envelope, policy, approvals, blocked events, evidence, decision, and next cap.
+- Save the learned service-evaluation procedure as a reusable Hermes playbook.
 
 ## 3. Non-Goals
 
 - Do not build a generic procurement platform.
-- Do not build a full enterprise GRC suite.
-- Do not support arbitrary real-money autonomous spending without explicit approval gates.
+- Do not build the worker agent as the product.
+- Do not present a dataset analysis as the product.
 - Do not claim production compliance, SOC2 readiness, or real enterprise legal review.
 - Do not claim live always-on agent execution unless credentials and environments are actually present.
-- Do not build every possible enterprise function; one excellent micro-pilot controller is enough.
+- Do not support arbitrary real-money autonomous spending without explicit approval gates.
 
 ## 4. Target Users
 
-- Primary: enterprise innovation, ops, or finance leader deciding which agentic pilots deserve capital and autonomy.
-- Secondary: solo founder or operator who wants a framework for disciplined agent spending.
-- Judge persona: Nous/NVIDIA/Stripe evaluators looking for usefulness, viability, and presentation.
+- Enterprise innovation, operations, procurement, or finance leaders deciding which agentic services deserve budget and autonomy.
+- Security and governance owners who need proof that agentic services can be constrained before they touch production systems.
+- Hackathon judges evaluating usefulness, viability, sponsor alignment, and presentation quality.
 
 ## 5. Core Demo Scenario
 
-The demo operator enters a messy request:
+The demo operator evaluates an external complaint-triage agentic service:
 
-> "Resolve 100 Atlas Freight late-freight exception tickets this week with a governed Hermes agent. Keep spend under $100 and only continue if the pilot saves at least 10 support hours with zero critical incidents."
+> "Run a governed trial of this complaint-triage agentic service on real public NHTSA ODI complaint rows. Give it a $100 test-mode work envelope, allow public-data reads and evidence generation, block paid enrichment above the cap, and only expand if the run produces measurable routing evidence with zero Agent IC policy incidents."
 
 Agent IC:
 
-1. Parses the request into a micro-pilot charter (mission, success metric, hard envelope).
-2. Defines the policy envelope: allowed tools, spend cap, merchant/category restrictions, expiry.
-3. Creates a Stripe Checkout authorization for the envelope with proposal metadata and governance tags.
-4. Starts the pilot run: a deterministic or low-cost real service execution (seeded by default, real Browserbase/Make tier if credentials exist).
-5. Blocks one out-of-policy action, such as an attempt to purchase a non-approved SaaS or exceed the per-authorization cap.
-6. Imports evidence: cases processed, hours saved, cost incurred, quality/latency metric.
-7. Makes a continue/revise/kill decision that cites the evidence, not model opinion.
-8. Saves the learned review pattern as a reusable Hermes pilot-evaluation playbook.
+1. Registers the service trial: buyer, vendor/service, mission, success metric, and hard envelope.
+2. Defines the policy envelope: allowed tools, spend cap, merchant/category restrictions, data sensitivity, expiry, and human-review rules.
+3. Creates a Stripe test-mode Checkout Session for the governed trial envelope with proposal metadata and reconciliation fields.
+4. Dispatches or hands off the work through Hermes/NemoHermes and records the service receipt.
+5. Lets the worker service import and route real public NHTSA complaint rows.
+6. Blocks one over-cap or unapproved paid enrichment/tool request with HTTP `403`.
+7. Imports evidence: public rows processed, route coverage, safety-review queue, service runtime, provider receipts, and policy incidents.
+8. Uses Nemotron to synthesize the run receipts into a decision rationale.
+9. Issues `CONTINUE`, `REVISE`, or `KILL` and cites the evidence instead of model opinion alone.
+10. Saves the review pattern as a reusable Hermes playbook and reruns it on a second service trial.
 
 ## 6. Required Product Surface
 
-- Proposal/mission intake form with one-click seeded examples.
+- Service trial intake showing buyer, service under test, workload, success metric, and spend envelope.
 - Spend envelope card showing mission, cap, approver, expiry, and policy rules.
-- Blocked action banner that surfaces the denied tool request and the policy invariant that blocked it.
-- Provider receipt strip showing Nemotron, Stripe, Hermes, and governance states.
-- Live run timeline with agent actions, tool calls, policy checks, blocked events, and spend events.
-- Approval modal for any spend/provisioning step.
-- ROI ledger showing expected value, actual cost, confidence, and decision.
-- Final memo view optimized for recording and sharing.
-- Saved playbook panel showing the reusable Hermes procedure generated from the experiment.
+- Provider receipt strip showing Hermes/NemoHermes, Nemotron, Stripe test mode, and policy gate states.
+- Live run timeline with worker-agent actions, tool calls, policy checks, blocked events, spend events, and evidence import.
+- Blocked action banner that surfaces denied tool request, attempted amount, cap, and policy invariant.
+- Evidence ledger showing imported source, row counts, hashes, measured runtime, route coverage, human-review queue, and policy incidents.
+- Final decision memo optimized for recording and sharing.
+- Saved playbook panel showing the reusable Hermes procedure generated from the trial.
 
 ## 7. Integrations
 
-- Hermes Agent: orchestration, skills, memory/playbook reuse.
-- NVIDIA/Nemotron: reasoning or evaluation path for mission analysis and evidence synthesis.
+- Hermes Agent / NemoHermes: dispatch, skills, playbook reuse, and repeatable service evaluation workflow.
+- NVIDIA/Nemotron: reasoning or evidence synthesis over the run receipts.
 - NemoClaw/OpenShell-style governance: policy envelope, tool permissions, blocked-action enforcement, and runtime constraints.
-- Stripe: scoped spend authorization via Checkout, session reconciliation IDs, spend controls, and ledger proof.
-- Optional real micro-pilot execution: one low-risk SaaS/API path (e.g., Browserbase, Make) if credentials are available.
+- Stripe: scoped test-mode spend authorization via Checkout, session reconciliation IDs, metadata, and ledger proof.
+- Public evidence source: NHTSA ODI complaints API snapshot for the primary workload, with VIN omitted or redacted.
 
 ## 8. Hard Invariants
 
-- No spend or provisioning occurs without visible user approval.
+- No spend or provisioning-capable action occurs without visible policy and approval state.
 - Every spend-capable action has a budget, purpose, and audit log entry.
-- At least one out-of-policy action is demonstrably blocked before any live spend is released.
-- The system must preserve a complete event trail for the demo run.
-- Kill/continue decisions must cite evidence, not just model opinion.
-- The demo must never expose real secrets, cards, tokens, or private account data.
-- The system must fail closed if credentials, policy, or payment steps are unavailable.
+- At least one out-of-policy action is demonstrably blocked before the service can earn more budget.
+- Decisions must cite run evidence, not just model opinion.
+- The demo must never expose raw keys, cards, tokens, private account data, local ports, or private workspace paths.
+- The system must fail closed if strict live proof is requested and credentials, policy, payment, or sandbox steps are unavailable.
 
 ## 9. Success Metrics
 
-- The 1–3 minute video clearly communicates the problem and the solution within the first 20 seconds.
-- The demo shows a mission, a spend envelope, a governed approval, at least one blocked action, imported evidence, and a kill/continue decision.
-- A judge can name the mission, envelope, blocked action, and evidence in one sentence after watching.
-- The implementation can be rehearsed live from a clean starting state.
-- All demo artifacts are reproducible from seeded data if external APIs fail during rehearsal.
-- The demo ends with a visible saved Hermes playbook or operating packet.
+- A viewer can state the product in one sentence: "Agent IC governs agentic services before enterprises expand spend."
+- The video shows a service trial, a spend envelope, live provider receipts, a blocked action, imported evidence, and a continue/revise/kill decision.
+- The evidence comes from a real, inspectable workload source or an explicitly labeled local rehearsal fixture.
+- The final video passes automated QA, frame-by-frame visual review, and Kimi/vision review when configured.
+- The demo ends with a visible saved Hermes playbook or operating packet that can be reused on another service trial.
 
-## 10. Open Decisions
+## 10. Resolved Product Decisions
 
-- Exact Stripe capability available: test payment, Link flow, Projects provisioning, MCP action, or ledger-only proof.
-- Exact NVIDIA/Hermes access available in the local environment.
-- Whether the final run uses a real external service under $100 or a deterministic seeded equivalent.
-- Final product name: Agent IC, Pilot IC, or Agent Investment Committee.
+- Final product name: Agent IC.
+- Primary submission framing: enterprise control plane for purchasing and governing agentic services.
+- Primary workload: real public NHTSA ODI complaint rows, used to evaluate a complaint-triage agentic service.
+- Stripe mode: test-mode Checkout Session only; no production money movement.
+- Final video path: strict live proof when recording claims live provider receipts.

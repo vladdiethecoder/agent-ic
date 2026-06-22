@@ -2,11 +2,11 @@
 
 ## 1. Purpose
 
-Provide policy, approval, budget, and audit controls for Agent IC.
+Provide policy, approval, budget, and audit controls for Agent IC service trials.
 
 ## 2. Responsibilities
 
-- Define the policy envelope for each pilot.
+- Define the policy envelope for each agentic-service trial.
 - Enforce budget limits.
 - Gate spend/provisioning behind explicit approval.
 - Record audit logs for every privileged action.
@@ -14,7 +14,7 @@ Provide policy, approval, budget, and audit controls for Agent IC.
 
 ## 3. Policy Envelope
 
-Each pilot must have:
+Each service trial must have:
 
 - Maximum budget.
 - Allowed tool/service categories.
@@ -54,7 +54,6 @@ Every privileged event records:
 ## 7. Acceptance Criteria
 
 - A denied or over-budget action cannot proceed.
-- The UI can show a complete audit trail for the seeded demo run.
+- The UI can show a complete audit trail for the governed service trial.
 - The ledger balance and event timeline agree.
 - The system fails closed on missing keys, unavailable payment path, or policy mismatch.
-

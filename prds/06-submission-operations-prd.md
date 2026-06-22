@@ -38,6 +38,5 @@ These backups are evidence and rehearsal aids, not a replacement for the intende
 
 - Final video is between 1 and 3 minutes.
 - The first 20 seconds clearly state the problem and show the product.
-- The video visibly shows governed spend/provisioning and final ROI decision.
-- The submission text explains why Agent IC is useful, viable, and presentation-ready.
-
+- The video visibly shows a governed agentic-service trial, spend/provisioning controls, blocked action, evidence import, and final expansion decision.
+- The submission text explains why Agent IC is useful, viable, and presentation-ready for enterprise buyers of agentic services.

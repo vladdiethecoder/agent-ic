@@ -1,6 +1,7 @@
 import { existsSync, statSync, openSync, readSync, closeSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { getTracePath } from '../../../lib/liveTrace.js';
+import { clearLiveTrace, getTracePath } from '../../../lib/liveTrace.js';
+import { readJsonBody } from '../../../lib/validation.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -95,6 +96,22 @@ export async function GET(request) {
     status: 200,
     headers: corsHeaders,
   });
+}
+
+export async function POST(request) {
+  const parsedBody = await readJsonBody(request);
+  if (!parsedBody.ok) return parsedBody.response;
+  const body = parsedBody.body;
+
+  if (body.reset !== true || body.confirmReset !== 'AGENT_IC_DEMO_RESET') {
+    return Response.json(
+      { error: 'reset requires AGENT_IC_DEMO_RESET confirmation' },
+      { status: 403 }
+    );
+  }
+
+  clearLiveTrace();
+  return Response.json({ trace: [] });
 }
 
 function readChunk(path, start, length) {

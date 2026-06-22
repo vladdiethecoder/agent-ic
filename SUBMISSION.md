@@ -1,70 +1,48 @@
-# Agent IC Hackathon Submission Materials
+# Submission Notes
 
-## Submission checklist
+Final artifact: `demo-out/agent-ic-demo-final-v18.mp4`
 
-- [x] 1–3 minute demo script: `STORYBOARD.md`
-- [x] Demo app builds and passes tests
-- [x] Demo app runs in production mode locally
-- [x] Submission tweet drafted (below)
-- [x] Discord submission message drafted (below)
-- [x] Record final 1–3 minute video → `demo-out/agent-ic-demo-v14.mp4` (promoted to `demo-out/agent-ic-demo-final.mp4`), target ~2:05, 1920×1080 h264 + AAC 48 kHz stereo
-- [ ] Post video on X tagging @NousResearch
-- [ ] Post submission link in Nous Discord #submissions channel
-- [ ] Complete Typeform
+## One-Line Pitch
 
-## Recording checklist (v14)
+Agent IC helps CFOs and enterprise operators fund the right AI pilots, stop the wrong ones, and prove every dollar with evidence.
 
-1. Start the app: `npm run build && npm run start`
-2. Open `http://localhost:3000/run-v14?recording=1` at 1920×1080.
-3. Run the v14 pipeline:
-   ```bash
-   npm run demo:video-v14
-   AGENT_IC_QA_SKIP_OCR=true npm run demo:qa-v14
-   ```
-4. Confirm `demo-out/agent-ic-demo-v14.mp4` exists and passes QA.
-5. Promote to final submission file:
-   ```bash
-   cp demo-out/agent-ic-demo-v14.mp4 demo-out/agent-ic-demo-final.mp4
-   ```
-6. Keep the final cut under 3 minutes.
-7. Export as MP4, preferably 1080p.
+## Core Thesis
 
-## Tweet draft
+Enterprises do not need another isolated AI agent — they need a governed function that decides which agents deserve budget, tools, and production access. Agent IC is that function.
 
-> Built Agent IC for the @NousResearch Hermes hackathon: a governed capital account for autonomous work.
->
-> We gave a Hermes agent a $100 Stripe envelope, ran a freight-triage micro-pilot, captured the raw tool-call the agent tried to make, blocked it with a real 403 from NemoClaw, and saved the governed run as a reusable playbook.
->
-> Demo + repo: <LINK>
-> #HermesAgent #AIagents #Stripe #NVIDIA
+## What The Demo Shows
 
-## Discord submission message draft
+1. A buyer submits a business problem (evaluate RouteGuard AI for complaint triage before signing a $14,400 contract)
+2. Agent IC generates a governed trial plan with a $100 Stripe Checkout envelope
+3. The vendor service processes 330 public NHTSA ODI complaints with Nemotron classification
+4. NVIDIA OpenShell blocks a $150 CARFAX enrichment attempt — spend cap exceeded
+5. Enterprise metrics computed: $2,504 net value, 5% waste, 4x risk-adjusted ROI, 7x throughput
+6. Vendor claims validated against measured results (85% claimed, 91.2% measured)
+7. Procurement decision: CONTINUE — the service generates more than twice its annual cost in value
+8. Renewal ledger shows accumulated evidence across monthly cycles
 
-Post in the Nous Discord submissions channel:
+## Sponsor Integrations
 
-> **Agent IC** — Hermes Agent Accelerated Business Hackathon submission
->
-> A governed capital account for autonomous work. The demo funds a 72-hour micro-pilot, blocks an out-of-policy action, imports ROI evidence, and saves a reusable Hermes playbook.
->
-> Demo video: <X_LINK>
-> Repo / live demo: <REPO_LINK>
+- NVIDIA Nemotron (NIM): classification + procurement decision synthesis
+- NVIDIA OpenShell: agent sandbox policy enforcement (blocked action)
+- Stripe: Checkout Sessions for governed spend envelopes
+- Hermes Agent: playbook generation and governed trial workflow
 
-## Typeform answer draft
+## Submission Checklist
 
-Use these answers as a starting point for the official Typeform.
+- [x] `npm test` — 6/6 pass
+- [x] `npm run build` — passes
+- [x] `npm run smoke` — passes
+- [x] Record demo video from `/trial`
+- [x] Verify no secrets/keys/local paths visible
+- [ ] Push stripped public repo to github.com/agent-ic
+- [ ] Update QR to point at public repo
+- [ ] Tweet demo video tagging @NousResearch
+- [ ] Drop tweet link in Discord submissions channel
+- [ ] Complete Typeform submission
 
-**Project name:** Agent IC
+## Submission Steps
 
-**One-sentence description:** A governed capital account that approves bounded spend envelopes for agentic micro-pilots, blocks out-of-policy actions, imports ROI evidence, and saves reusable Hermes playbooks.
-
-**What it does:** Agent IC turns enterprise AI pilot proposals into capital experiments. It scores the mission, creates a Stripe Checkout authorization with governance metadata, runs a deterministic or live micro-pilot, blocks unsafe tool requests, measures cost/quality/throughput evidence, and issues a continue/revise/kill decision. The learned procedure is saved as a Hermes playbook for reuse.
-
-**How it uses the sponsor stack:**
-- **Hermes:** proposal intake normalization, reusable skill/playbook persistence, memory of prior experiments.
-- **NVIDIA/Nemotron:** optional NIM/OpenAI-compatible live evaluation and evidence synthesis; deterministic fallback keeps rehearsals safe.
-- **Stripe:** Checkout Sessions create bounded, metadata-tagged spend authorizations; demo mode is safe, live mode with `STRIPE_SECRET_KEY`.
-- **NemoClaw/OpenShell:** policy envelope, tool scopes, blocked-action enforcement, and kill criteria.
-
-**Demo link:** <X_VIDEO_LINK>
-
-**Repo link:** <REPO_LINK>
+1. Tweet a 1-3 minute demo video tagging @NousResearch with a short writeup
+2. Drop the tweet link in the submissions channel via Discord
+3. Complete the official submission form on Typeform

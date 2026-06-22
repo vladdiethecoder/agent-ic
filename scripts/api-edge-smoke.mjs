@@ -1,4 +1,5 @@
 const base = process.env.AGENT_IC_BASE_URL || 'http://localhost:3000';
+const proposalId = process.env.AGENT_IC_SMOKE_PROPOSAL_ID || 'agentic-service-complaint-triage-trial';
 
 async function main() {
   await expectStatus('/api/evaluate', '{', 400, 'malformed_json');
@@ -7,7 +8,7 @@ async function main() {
   await expectStatus('/api/audit', { reset: true }, 403, 'reset requires');
 
   const killStripe = await post('/api/stripe-session', {
-    proposalId: 'atlas-freight-rma-copilot',
+    proposalId,
     evaluation: { decision: 'KILL', recommendedBudget: 185000, autonomousSpendCap: 35000 },
   });
   assert(killStripe.status === 409, 'KILL Stripe request returns 409');
@@ -16,13 +17,13 @@ async function main() {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      proposalId: 'atlas-freight-rma-copilot',
-      evaluation: { decision: 'CONTINUE', recommendedBudget: 185000, autonomousSpendCap: 35000 },
+      proposalId,
+      evaluation: { decision: 'CONTINUE', recommendedBudget: 185000, autonomousSpendCap: 100 },
     }),
   });
   assert(stripe.mode === 'demo', 'Stripe is in safe demo mode by default');
-  assert(stripe.checkout.amount_total === 3500000, 'Stripe amount_total is cents');
-  assert(stripe.checkout.metadata.autonomous_spend_cap_dollars === '35000', 'Stripe cap metadata is dollars');
+  assert(stripe.checkout.amount_total === 10000, 'Stripe amount_total is cents');
+  assert(stripe.checkout.metadata.autonomous_spend_cap_dollars === '100', 'Stripe cap metadata is dollars');
 
   console.log(JSON.stringify({ ok: true, checked: ['malformed-json', 'unknown-proposal', 'audit-reset-gate', 'kill-spend-block', 'stripe-cents'] }, null, 2));
 }

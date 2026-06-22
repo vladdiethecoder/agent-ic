@@ -1,20 +1,23 @@
 import { NextResponse } from 'next/server.js';
-import { seededProposals } from '../../../lib/demoData.js';
-import { scoreProposal } from '../../../lib/decisionEngine.js';
-import { buildProviderStates } from '../../../lib/providerStatus.js';
+import { isNemotronLive, isStripeLive } from '../../../lib/providerStatus.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const proposal = seededProposals[0];
-  const evaluation = scoreProposal(proposal);
+  let openshellAvailable = false;
+  try {
+    const { isOpenShellAvailable } = await import('../../../lib/openShellIntegration.js');
+    openshellAvailable = isOpenShellAvailable();
+  } catch {}
+
   return NextResponse.json({
-    ok: true,
-    app: 'Agent IC',
-    proposalCount: seededProposals.length,
-    seededScenario: proposal.id,
-    decision: evaluation.decision,
-    budget: evaluation.recommendedBudget,
-    integrations: buildProviderStates(),
+    status: 'ok',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    services: {
+      nemotron: isNemotronLive(),
+      stripe: isStripeLive(),
+      openshell: openshellAvailable,
+    },
   });
 }

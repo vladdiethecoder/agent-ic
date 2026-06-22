@@ -1,0 +1,17 @@
+# Hermes MCP snippet for mcp-video and the local frontier-video wrapper.
+# mcp-video is the primary open-source replacement for the previous Palmier-first path.
+# Direct server exposes the full upstream 119-tool surface; wrapper adds catalog/planner/doctor/ffprobe helpers.
+
+mcp_servers:
+  mcp_video:
+    command: uvx
+    args: ["--from", "mcp-video", "mcp-video"]
+    timeout: 180
+    connect_timeout: 120
+
+  frontier_video_editing:
+    command: node
+    args:
+      - "/run/media/vdubrov/NVMe-Storage/Hackathon Submission #1/mcp/frontier-video-editing-server.mjs"
+    timeout: 180
+    connect_timeout: 60

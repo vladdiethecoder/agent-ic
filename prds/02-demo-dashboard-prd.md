@@ -11,9 +11,9 @@ Provide a polished, recordable web interface for the Agent IC workflow.
 
 ## 3. Core Views
 
-- Intake: single proposal text area, budget limit, department, and seeded example selector.
-- Charter: generated hypothesis, success metric, kill criteria, budget, and allowed tools.
-- Run Timeline: chronological agent actions, policy checks, approval requests, spend/provisioning events, and evidence collection.
+- Intake: enterprise buyer, agentic service under test, workload source, budget limit, and service-trial selector.
+- Charter: generated hypothesis, success metric, kill criteria, budget, and allowed tools for the service.
+- Run Timeline: chronological worker-service actions, policy checks, approval requests, spend/provisioning events, and evidence collection.
 - Approval: modal or panel requiring explicit user approval before spend/provisioning.
 - ROI Ledger: cost, value estimate, confidence, decision threshold, and final recommendation.
 - Memo: concise board-style kill/continue decision.
@@ -22,7 +22,7 @@ Provide a polished, recordable web interface for the Agent IC workflow.
 ## 4. Interaction Requirements
 
 - The first screen is the working product, not a landing page.
-- Demo operator can run the whole scripted scenario with one seeded request.
+- Demo operator can run the whole scripted scenario with one governed service-trial request.
 - Live progress is visible through status chips, timestamps, and event rows.
 - Approval states are unmistakable: pending, approved, denied, blocked.
 - Final memo is visually distinct and ready for the closing shot.
@@ -59,4 +59,3 @@ Provide a polished, recordable web interface for the Agent IC workflow.
 - The run timeline updates during execution or replay from captured live traces.
 - Approval gating is visible before any spend/provisioning event.
 - The final screen clearly shows kill/continue, ROI, spend, and evidence.
-

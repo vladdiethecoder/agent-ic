@@ -6,27 +6,27 @@ Define the hackathon submission package for Agent IC so the build stays optimize
 
 ## 2. Positioning
 
-Agent IC is the enterprise function that allocates budget to AI agents. It turns AI pilot proposals into governed micro-investments with scoped spend, measurable ROI, and kill/continue decisions.
+Agent IC is the enterprise control plane for buying agentic services. It turns a service trial into governed procurement proof with scoped spend, policy enforcement, measured results, and renewal/expand/revise/kill decisions.
 
 ## 3. Judge-Facing Claim
 
-"Agent IC stops enterprise AI pilot sprawl by letting Hermes run a governed investment committee: every pilot gets a budget, policy, experiment, evidence ledger, and a kill/continue decision."
+"Agent IC lets enterprises buy agentic services with proof before expansion: every service trial gets a budget, policy, evidence ledger, blocked-action receipt, and renewal decision."
 
 ## 4. Required Narrative Beats
 
-1. Problem: enterprises are funding too many AI pilots without evidence, governance, or ROI discipline.
-2. Product: Agent IC compiles a messy pilot request into a governed, spend-capable pilot.
-3. Live action: the agent evaluates the proposal, plans the pilot, requests approval, spends/provisions, and runs the pilot.
-4. Evidence: the system records cost, quality, expected savings, and failure cases.
-5. Decision: the agent recommends kill, continue, or revise, with a reusable playbook for future pilots.
+1. Problem: enterprises want to buy agentic services but lack spend controls, safety controls, and outcome proof.
+2. Product: Agent IC wraps a service trial in a governed spend and policy envelope.
+3. Live action: the worker service runs on a real workload, calls tools, and attempts one blocked action.
+4. Evidence: Agent IC records source rows, runtime, routing/output metrics, policy receipts, and provider receipts.
+5. Decision: Agent IC recommends expand, revise, or kill, with a reusable playbook for future service trials.
 
 ## 5. Demo Script Target
 
-- 0:00-0:20: show the messy enterprise request and the one-sentence product thesis.
-- 0:20-0:55: show the generated pilot charter, budget, policy, and approval gate.
-- 0:55-1:40: show live run timeline, model/tool actions, and Stripe/NVIDIA/Hermes evidence.
-- 1:40-2:25: show ROI ledger and kill/continue memo.
-- 2:25-3:00: show reusable playbook and why this scales across enterprise functions.
+- 0:00-0:10: show the enterprise service-trial request and one-sentence product thesis.
+- 0:10-0:25: show the service under test, workload source, budget, policy, and approval gate.
+- 0:25-0:50: show worker-service actions, Stripe/NVIDIA/Hermes receipts, and the blocked policy event.
+- 0:50-1:10: show evidence metrics and the renewal/expand/revise/kill decision.
+- 1:10-1:30: show reusable playbook and why this scales across agentic services.
 
 ## 6. Submission Deliverables
 
@@ -41,5 +41,4 @@ Agent IC is the enterprise function that allocates budget to AI agents. It turns
 - The demo can be understood without reading documentation.
 - The product does not look like a procurement clone, chatbot wrapper, or static mockup.
 - The video visibly includes Hermes/NVIDIA/Stripe integration points.
-- The demo ends with a strong decision artifact that an executive would actually use.
-
+- The demo ends with a strong service-trial decision artifact that an executive or procurement owner would actually use.

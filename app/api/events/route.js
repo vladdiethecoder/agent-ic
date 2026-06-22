@@ -27,7 +27,9 @@ function sendEvent(controller, entry) {
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const sinceId = searchParams.get('sinceId');
+  const runId = searchParams.get('runId');
   const sinceSeq = parseSinceId(sinceId);
+  const matchesRun = (entry) => !runId || entry.runId === runId;
 
   const stream = new ReadableStream({
     start(controller) {
@@ -59,7 +61,7 @@ export async function GET(request) {
       // Replay historical rows newer than sinceId in chronological order.
       const existing = readAudit();
       const historical = existing
-        .filter((entry) => idSequence(entry.id) > sinceSeq)
+        .filter((entry) => idSequence(entry.id) > sinceSeq && matchesRun(entry))
         .sort((a, b) => idSequence(a.id) - idSequence(b.id));
       for (const entry of historical) {
         sendEvent(controller, entry);
@@ -67,7 +69,7 @@ export async function GET(request) {
 
       // Push future rows as they are appended.
       unsubscribe = subscribeAuditStream((entry) => {
-        sendEvent(controller, entry);
+        if (matchesRun(entry)) sendEvent(controller, entry);
       });
 
       // Close after timeout or when the client disconnects.

@@ -2,11 +2,11 @@
 
 ## 1. Purpose
 
-Convert pilot execution data into a credible business decision.
+Convert service-trial execution data into a credible business decision.
 
 ## 2. Responsibilities
 
-- Define success metrics and kill criteria before execution.
+- Define success metrics and kill criteria before the worker service runs.
 - Collect evidence during the run.
 - Estimate value, cost, confidence, and risk.
 - Produce the final kill/continue/revise recommendation.
@@ -23,10 +23,9 @@ Convert pilot execution data into a credible business decision.
 
 The first version should use a transparent formula:
 
-- Estimated weekly value = estimated hours saved * configured hourly cost.
-- Pilot cost = actual spend + estimated operating cost.
-- Payback estimate = pilot cost / estimated weekly value.
-- Decision threshold = continue only if expected value exceeds configured threshold and policy risk is acceptable.
+- Service value = measured throughput, quality, review reduction, or other buyer-approved KPI.
+- Trial cost = actual spend + estimated operating cost.
+- Expansion decision = continue only if evidence exceeds the configured threshold and policy risk is acceptable.
 
 ## 5. Decision Outputs
 
@@ -48,8 +47,7 @@ The memo must include:
 
 ## 7. Acceptance Criteria
 
-- Decision recommendation can be traced back to evidence rows.
+- Decision recommendation can be traced back to workload rows, provider receipts, and policy receipts.
 - The ROI model is simple enough to explain in the video.
 - A negative or weak pilot can be killed without looking like a product failure.
 - The memo is exportable or copyable for the submission writeup.
-

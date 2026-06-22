@@ -1,15 +1,45 @@
-Enterprises are about to launch thousands of AI pilots. The failure mode is not demos — it is ungoverned spend with no proof of ROI. Agent IC turns every pilot into an investment decision: should this agent get budget, tools, and production access?
+Agent IC is not the worker agent. It is the control plane around a paid agentic service trial.
 
-Here is the live workbench. I choose Atlas Freight, an autonomous RMA and claims copilot for late freight exceptions. Hermes normalizes the messy proposal into a business, evidence, and governance schema. Nemotron-style evaluation scores viability, usefulness, risk, and ROI proof.
+[pause:0.35]
 
-The committee does not return a vague yes or no. It returns Continue, a one-hundred-eighty-five-thousand-dollar pilot budget, a roughly thirty-five-thousand-dollar autonomous spend cap, a thirty-eight-day payback estimate, and a risk register.
+The buyer sets a $100 envelope before the worker can touch outside services.
 
-Now the agent asks to spend. The important part is the gate. It cannot provision tools or move money without visible approval. Stripe creates a bounded authorization with proposal metadata, policy, and spend cap. Demo mode is safe; with a test key this same path becomes a hosted Checkout Session.
+[pause:0.25]
 
-Funding is not the end of the workflow. The pilot keeps capital only by producing evidence. I advance the ROI timeline through week two, week four, week six, and week eight. Agent IC tracks gross impact, spend consumed, net observed value, evidence grade, and kill criteria.
+The workload is real: public NHTSA ODI complaint rows for vehicle safety triage.
 
-At week four it can stop the pilot if evidence is weak. By week eight, Atlas has enough proof for a finance-readable Continue decision. This is not model opinion; it is a decision backed by ledger values and the evidence timeline.
+[pause:0.25]
 
-Governance is built into every step. The policy envelope scopes model evaluation, Hermes workstreams, SaaS provisioning, Stripe spend, and evidence logging. The audit log is the product: who acted, what was authorized, which constraint applied, and what evidence changed the decision.
+I click once, and the empty run starts turning into receipts.
 
-This is useful because CFOs and operators need to decide which agents deserve money. It is viable because it runs locally and upgrades to NVIDIA NIM and Stripe by adding environment variables. It presents cleanly because the demo is one loop: evaluate, fund, govern, measure, decide. Agent IC is the investment committee for autonomous agents.
+[pause:0.35]
+
+Hermes dispatches the playbook. Nemotron returns a request ID, a score, and a rationale.
+
+[pause:0.3]
+
+Stripe creates a test-mode Checkout Session. That is a bounded authorization, not live production spend.
+
+[pause:0.35]
+
+Then the worker-agent asks for a $150 CARFAX lookup. Agent IC blocks it at the $100 cap: HTTP 403.
+
+[pause:0.45]
+
+That is the product moment: useful work can continue, but the over-cap action cannot.
+
+[pause:0.35]
+
+Now Agent IC imports evidence: 330 complaints, 283 routed automatically, 47 left for human review.
+
+[pause:0.35]
+
+The cost view is deliberately plain. Baseline review is $3,036; governed service cost is $532.
+
+[pause:0.35]
+
+Run from playbook shows the saved SKILL.md can replay the same policy and evidence checks on another mission.
+
+[pause:0.35]
+
+The QR opens the GitHub receipt surface. The buyer can audit source, proof artifacts, policy, and renewal logic.

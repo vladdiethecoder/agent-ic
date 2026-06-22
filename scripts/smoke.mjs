@@ -1,4 +1,5 @@
 const base = process.env.AGENT_IC_BASE_URL || 'http://localhost:3000';
+const proposalId = process.env.AGENT_IC_SMOKE_PROPOSAL_ID || 'agentic-service-complaint-triage-trial';
 
 async function main() {
   const health = await json(`${base}/api/health`);
@@ -8,7 +9,7 @@ async function main() {
   const evaluation = await json(`${base}/api/evaluate`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ proposalId: 'atlas-freight-rma-copilot' }),
+    body: JSON.stringify({ proposalId }),
   });
   assert(evaluation.evaluation?.decision, 'evaluation decision');
   assert(evaluation.evaluation?.recommendedBudget > 0, 'budget positive');
@@ -18,10 +19,10 @@ async function main() {
   const stripe = await json(`${base}/api/stripe-session`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ proposalId: 'atlas-freight-rma-copilot', evaluation: evaluation.evaluation }),
+    body: JSON.stringify({ proposalId, evaluation: evaluation.evaluation }),
   });
   assert(stripe.checkout?.id, 'stripe checkout id');
-  assert(stripe.checkout?.metadata?.proposal_id === 'atlas-freight-rma-copilot', 'stripe metadata proposal id');
+  assert(stripe.checkout?.metadata?.proposal_id === proposalId, 'stripe metadata proposal id');
   assert(stripe.checkout?.metadata?.autonomous_spend_cap_dollars, 'stripe cap dollars metadata');
 
   const audit = await json(`${base}/api/audit`);

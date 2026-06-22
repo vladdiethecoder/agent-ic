@@ -1,65 +1,70 @@
-# Mock Proof Contract
+# Proof Contract
 
-Agent IC uses seeded case-study inputs and sandbox providers so the demo is safe and reproducible. The mock must describe the **environment**, not the **outcome**.
+Agent IC is allowed to run safely in local rehearsal mode, but the final submission story must not depend on invented business outcomes.
 
 ## Rule
 
-> Mock inputs are allowed. Hard-coded outcomes are not.
+Real or inspectable inputs are required for the primary submission workload. Hard-coded outcomes are not allowed.
 
-## Allowed mock / seeded data
+## Allowed Local Rehearsal Inputs
 
-These may be hard-coded because they are the case-study fixture:
+These may exist for development and tests:
 
-- Company, mission, and pain description.
-- Budget constraint and autonomy rules.
-- Seeded dataset shape (e.g., 100 tickets).
-- Allowed and blocked tool candidates.
-- Loaded hourly cost and success thresholds.
-- Stripe sandbox / test-mode environment.
+- Local deterministic fallback proposals.
+- Stripe test-mode or local demo Checkout objects.
+- Local policy-gate fallback when strict live proof is not requested.
+- Small fixed fixtures for route and unit tests.
 
-## Outcomes that must be computed
+These must be labeled as rehearsal or compatibility data and must not be the primary video proof.
 
-These values must originate from server-side logic and be written to the audit log:
+## Primary Submission Inputs
 
-- `spent`, `blocked`, `auto-triaged`, `hours saved`.
-- `gross value`, `net value`.
-- `decision` (`CONTINUE`, `REVISE`, `KILL`).
-- `next cap`, `playbook ID`.
+The final demo must use a named, inspectable workload source. Current source:
+
+- `data/nhtsa-complaints-run/complaints.json`
+- Source metadata: `data/nhtsa-complaints-run/SOURCE.md`
+- Workload: public NHTSA ODI vehicle complaint rows with VIN omitted or redacted.
+
+## Outcomes That Must Be Computed
+
+These values must originate from server-side logic, provider receipts, or the imported workload:
+
+- Rows imported and source hash.
+- Worker-agent routing counts.
+- Human-review queue size.
+- Measured import/runtime metrics.
+- Spend envelope and Stripe test-mode receipt.
+- Blocked action status, attempted amount, cap, and policy.
+- Decision: `CONTINUE`, `REVISE`, or `KILL`.
+- Next cap or renewal decision.
+- Playbook ID and second-run result.
 - Audit rows.
 
-No React component may contain final outcome literals such as `$35`, `$149`, `CONTINUE`, or `100 cases` except when rendering values returned by the API.
-
-## Acceptance checklist
-
-Before any demo is recorded or submitted, verify:
-
-1. The UI starts from a pre-run state (no preloaded evaluation).
-2. Inputs come from a named seeded fixture or sandbox response.
-3. Outcomes are computed by `lib/decisionEngine.js`, `lib/proofEngine.js`, or provider adapters.
-4. Every computed step appends an audit event.
-5. The UI displays the source of each number.
-6. A counterfactual input (e.g., QA threshold 82%) changes the decision.
-7. The same seed reproduces the same result.
+No React component may contain final outcome literals such as fixed row counts, fixed QA scores, fixed hours saved, fixed cost-per-case deltas, or a pre-decided `CONTINUE` verdict except when rendering values returned by the API.
 
 ## Vocabulary
 
 Use these labels in the UI and narrative:
 
-- Seeded case study
-- Stripe sandbox
-- Deterministic evaluator
-- Synthetic ticket dataset
-- Computed evidence
+- Agentic service trial
+- Worker agent under governance
+- Enterprise buyer
+- Governed spend envelope
+- Stripe test-mode receipt
+- Public workload evidence
 - Policy-generated denial
 - Replayable audit log
+- Renewal / expand / revise / kill decision
 
-Avoid:
+Avoid in final submission surfaces:
 
 - Mock result
 - Fake checkout
 - Simulated decision
 - Demo numbers
+- Synthetic ticket dataset
+- Seeded case-study proof
 
-## Demo phrase
+## Demo Phrase
 
-> "These are mock case-study inputs, not mock outcomes. The evidence, block, spend ledger, and decision are generated live by Agent IC. If I change the cap or evidence threshold, the decision changes."
+> "Agent IC does not sell the worker agent. It governs the service trial: budget, tools, policy, receipts, evidence, and the decision to expand or stop spend."

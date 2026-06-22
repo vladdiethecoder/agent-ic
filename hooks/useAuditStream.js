@@ -36,6 +36,9 @@ export function useAuditStream({ sinceId, runId }) {
       if (latestIdRef.current) {
         url.searchParams.set('sinceId', latestIdRef.current);
       }
+      if (runId) {
+        url.searchParams.set('runId', runId);
+      }
 
       const es = new EventSource(url.toString());
       esRef.current = es;

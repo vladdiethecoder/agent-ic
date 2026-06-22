@@ -1,9 +1,9 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Agent IC — Hermes/Nemotron AI Pilot Investment Committee',
+  title: 'Agent IC — Governed Agentic Service Procurement',
   description:
-    'Live Hermes hackathon demo: evaluate enterprise AI pilot proposals, scope budgets, authorize Stripe spend, measure ROI evidence, and make kill/continue decisions with audit logs.',
+    'Evaluate agentic services before enterprise expansion with bounded Stripe test-mode spend, policy gates, workload evidence, and audit-backed decisions.',
 };
 
 export default function RootLayout({ children }) {

@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const command = process.argv[2] || 'dev';
@@ -38,6 +38,7 @@ function assertSafeMirrorRoot(dir) {
 function mirrorWithRsync(from, to) {
   mkdirSync(to, { recursive: true });
   rmSync(join(to, '.agent-ic'), { recursive: true, force: true });
+  removeRuntimeEnvFiles(to);
   const result = spawnSync(
     'rsync',
     [
@@ -47,7 +48,10 @@ function mirrorWithRsync(from, to) {
       '--exclude', '.next',
       '--exclude', '.git',
       '--exclude', '.agent-ic',
-      '--exclude', '.env.local',
+      '--include', '.env.example',
+      '--include', '.env.local',
+      '--exclude', '.env',
+      '--exclude', '.env.*',
       '--exclude', '.venv',
       '--exclude', '.venv*',
       '--exclude', '.cache',
@@ -60,6 +64,14 @@ function mirrorWithRsync(from, to) {
   if (result.error || result.status !== 0) {
     console.error('[agent-ic] rsync failed; check that rsync is installed and source path is readable.');
     process.exit(result.status || 1);
+  }
+}
+
+function removeRuntimeEnvFiles(dir) {
+  for (const entry of readdirSync(dir)) {
+    if (entry === '.env' || (entry.startsWith('.env.') && entry !== '.env.example')) {
+      rmSync(join(dir, entry), { force: true });
+    }
   }
 }
 

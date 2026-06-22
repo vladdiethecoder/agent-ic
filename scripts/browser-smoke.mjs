@@ -16,13 +16,13 @@ function main() {
   runChrome(['--headless', '--disable-gpu', '--no-sandbox', '--virtual-time-budget=3000', '--dump-dom', base], { stdoutFile: domPath });
   const dom = readFileSync(domPath, 'utf8');
   for (const text of [
-    'Enterprise AI pilots should earn capital like investments, not vibes.',
-    'Agent IC memo',
-    'Stripe spend path',
-    'ROI evidence',
+    'Agentic services should earn expansion from receipts, not promises.',
+    'Service trial memo',
+    'Stripe test-mode envelope',
+    'Workload evidence',
     'Governance',
     'Append-only operating record',
-    '1–3 minute demo arc',
+    'Governed service-trial workflow',
   ]) {
     assert(dom.includes(text), `DOM includes ${text}`);
   }
