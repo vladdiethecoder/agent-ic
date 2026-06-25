@@ -349,7 +349,6 @@ async function ocrFrames(paths) {
 async function writeReport(allPass) {
   const report = {
     video: VIDEO_PATH,
-    timestamp: new Date().toISOString(),
     overall: allPass ? 'PASS' : 'FAIL',
     checks,
     diagnostics,

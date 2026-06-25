@@ -107,7 +107,7 @@ check('README names primary video hash', readme.includes(VIDEO_SHA256), 'README.
 check('quickstart explains media exclusion', /does not include generated videos/i.test(quickstart), 'JUDGE_QUICKSTART.md');
 check('quickstart documents judge check', /npm run judge:check/.test(quickstart), 'JUDGE_QUICKSTART.md');
 check('submission keeps external actions explicit', /Tweet demo video tagging @NousResearch/.test(submission) && /Complete Typeform/.test(submission), 'SUBMISSION.md');
-check('final packet names QA hashes', /3e701a262e60da28ab67aa4726d849651f76059a3b90c1f7fb37c900ff13e671/.test(packet) && /bfefa4c26f10fe62a26d44b74718a106a2efddb911a694ad0a741711d49b39a3/.test(packet), 'FINAL_SUBMISSION_PACKET.md');
+check('final packet names QA hashes', /1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43d481eb61a/.test(packet) && /95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f/.test(packet), 'FINAL_SUBMISSION_PACKET.md');
 
 const trackedFiles = listTrackedFiles();
 const publicTrackedFiles = trackedFiles.filter(isPublicExportPath);

@@ -519,7 +519,6 @@ async function main() {
 
   const report = {
     video: VIDEO_PATH,
-    timestamp: new Date().toISOString(),
     overall: checks.every((entry) => entry.pass) ? 'PASS' : 'FAIL',
     metadata: { fps, duration, expectedFrames, extractedFrames: frames.length },
     output: { frames: FRAME_DIR, contactSheets: CONTACT_DIR },

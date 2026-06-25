@@ -45,7 +45,7 @@
     ],
     "videoQa": {
       "report": "demo-out/video-qa-report-winning-v3.json",
-      "sha256": "3e701a262e60da28ab67aa4726d849651f76059a3b90c1f7fb37c900ff13e671",
+      "sha256": "1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43d481eb61a",
       "result": "PASS",
       "checks": "65/65",
       "method": "ffprobe, ffmpeg, ImageMagick contact sheets, frame hashes, detail metrics, and frame-difference metrics",
@@ -55,7 +55,7 @@
     },
     "frameQa": {
       "report": "demo-out/frame-review-winning-v3.json",
-      "sha256": "bfefa4c26f10fe62a26d44b74718a106a2efddb911a694ad0a741711d49b39a3",
+      "sha256": "95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f",
       "result": "PASS",
       "checks": "16/16",
       "framesExtracted": 2871
