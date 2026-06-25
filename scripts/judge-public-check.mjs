@@ -11,6 +11,7 @@ const REQUIRED_FILES = [
   'SUBMISSION.md',
   'SUBMISSION_MANIFEST.json',
   'FINAL_SUBMISSION_PACKET.md',
+  'POSTING_PACKET.md',
   'VALIDATION.md',
   'package.json',
 ];
@@ -20,6 +21,7 @@ const PUBLIC_TOP_LEVEL_FILES = new Set([
   'Dockerfile',
   'FINAL_SUBMISSION_PACKET.md',
   'JUDGE_QUICKSTART.md',
+  'POSTING_PACKET.md',
   'PRD.md',
   'PRODUCT_CONTRACT.md',
   'PRODUCTION_GAP_AUDIT.md',
@@ -101,13 +103,28 @@ const readme = readText('README.md');
 const quickstart = readText('JUDGE_QUICKSTART.md');
 const submission = readText('SUBMISSION.md');
 const packet = readText('FINAL_SUBMISSION_PACKET.md');
+const posting = readText('POSTING_PACKET.md');
 
 check('README names public repo', readme.includes(PUBLIC_REPO_URL), 'README.md');
 check('README names primary video hash', readme.includes(VIDEO_SHA256), 'README.md');
 check('quickstart explains media exclusion', /does not include generated videos/i.test(quickstart), 'JUDGE_QUICKSTART.md');
 check('quickstart documents judge check', /npm run judge:check/.test(quickstart), 'JUDGE_QUICKSTART.md');
+check('quickstart names posting packet', quickstart.includes('POSTING_PACKET.md'), 'JUDGE_QUICKSTART.md');
 check('submission keeps external actions explicit', /Tweet demo video tagging @NousResearch/.test(submission) && /Complete Typeform/.test(submission), 'SUBMISSION.md');
+check('submission names posting packet', submission.includes('POSTING_PACKET.md'), 'SUBMISSION.md');
 check('final packet names QA hashes', /1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43d481eb61a/.test(packet) && /95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f/.test(packet), 'FINAL_SUBMISSION_PACKET.md');
+check('final packet names posting packet', packet.includes('POSTING_PACKET.md'), 'FINAL_SUBMISSION_PACKET.md');
+if (posting) {
+  const xPost = extractFirstCodeBlockAfter(posting, '## X Post Copy');
+  const altText = extractFirstCodeBlockAfter(posting, '## X Alt Text');
+  const discord = extractFirstCodeBlockAfter(posting, '## Discord Submission Copy');
+  check('posting packet names primary video', posting.includes(VIDEO), VIDEO);
+  check('posting packet names primary video hash', posting.includes(VIDEO_SHA256), VIDEO_SHA256);
+  check('posting packet X copy is ready', xPost.length > 0 && xPost.length <= 260 && /@NousResearch/.test(xPost) && xPost.includes(PUBLIC_REPO_URL), `${xPost.length} chars`);
+  check('posting packet alt text is ready', altText.length >= 120 && altText.length <= 1000 && /policy-gate 403/i.test(altText), `${altText.length} chars`);
+  check('posting packet Discord copy is ready', discord.includes('X_POST_URL') && discord.includes(PUBLIC_REPO_URL) && /NemoHermes/i.test(discord), 'POSTING_PACKET.md');
+  check('posting packet Typeform answers are ready', /## Typeform Answers/.test(posting) && /Why it is useful:/.test(posting) && /Why it is viable:/.test(posting) && /Integrations used:/.test(posting), 'POSTING_PACKET.md');
+}
 
 const trackedFiles = listTrackedFiles();
 const publicTrackedFiles = trackedFiles.filter(isPublicExportPath);
@@ -191,4 +208,12 @@ function secretShapePattern() {
 
 function privatePathPattern() {
   return new RegExp(`\\/${'run'}\\/${'media'}\\/${'vdubrov'}|\\/${'home'}\\/${'vdubrov'}`);
+}
+
+function extractFirstCodeBlockAfter(text, heading) {
+  const start = text.indexOf(heading);
+  if (start < 0) return '';
+  const rest = text.slice(start);
+  const match = rest.match(/```text\n([\s\S]*?)\n```/);
+  return match?.[1]?.trim() || '';
 }

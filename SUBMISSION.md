@@ -45,6 +45,7 @@ Enterprises do not need another isolated AI agent — they need a governed funct
 - [x] Add machine-readable judge proof map: `SUBMISSION_MANIFEST.json`
 - [x] Push stripped public repo to `https://github.com/vladdiethecoder/agent-ic`
 - [x] Confirm v3 video has no QR end card; public repo is carried in tweet copy and judge docs
+- [x] Prepare final account posting packet: `POSTING_PACKET.md`
 - [ ] Tweet demo video tagging @NousResearch
 - [ ] Drop tweet link in Discord submissions channel: `https://discord.gg/nousresearch/PFbQZMesC`
 - [ ] Complete Typeform submission: `https://form.typeform.com/to/hpEifIK4`
@@ -81,11 +82,11 @@ Source checked June 25, 2026: Hermes Agent Accelerated Business Hackathon, prese
 ## Judge-Facing Tweet Copy
 
 ```text
-Agent IC is an investment committee for enterprise AI agents: fund a bounded Stripe test-mode trial, run real NHTSA work, block unsafe spend/tool calls, and decide continue/revise/kill with Nemotron + NemoHermes receipts. @NousResearch
+Agent IC governs enterprise AI-agent spend: $100 Stripe test-mode trial, 330 real NHTSA rows, Nemotron evidence, $150 unsafe tool call blocked, NemoHermes receipt, and continue/revise/kill verdict. @NousResearch
 https://github.com/vladdiethecoder/agent-ic
 ```
 
-Use the v3 MP4 as the attached demo video: `demo-out/agent-ic-demo-final-winning-v3.mp4`.
+Use the v3 MP4 as the attached demo video: `demo-out/agent-ic-demo-final-winning-v3.mp4`. The final X alt text, Discord message, and Typeform answers are in `POSTING_PACKET.md`.
 
 ## Typeform Copy
 

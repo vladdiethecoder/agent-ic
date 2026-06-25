@@ -13,9 +13,10 @@ const SIDECAR = 'demo-out/stage-events-winning-v3.json';
 const CONTACT_SHEET = 'demo-out/video-qa-contact-sheet-winning-v3.jpg';
 const CONTACT_SHEET_SHA256 = '134f222729f72f74896c944e47bc250a9e591fe300d209ff7a854516afa5ea14';
 const SUBMISSION_MANIFEST = 'SUBMISSION_MANIFEST.json';
+const POSTING_PACKET = 'POSTING_PACKET.md';
 const PRIMARY_ANNOUNCEMENT = 'https://x.com/NousResearch/status/2066921443548348436';
 const ANNOUNCEMENT_MIRROR = 'https://digg.com/tech/hz8d871s';
-const REQUIRED_DOCS = ['SUBMISSION.md', 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', SUBMISSION_MANIFEST];
+const REQUIRED_DOCS = ['SUBMISSION.md', POSTING_PACKET, 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', SUBMISSION_MANIFEST];
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
 
 const checks = [];
@@ -65,20 +66,44 @@ if (sidecar) {
 }
 
 const submission = readText('SUBMISSION.md');
+const postingPacket = readText(POSTING_PACKET);
 const finalPacket = readText('FINAL_SUBMISSION_PACKET.md');
 const judgeQuickstart = readText('JUDGE_QUICKSTART.md');
 const pkg = readJson('package.json');
 const submissionManifest = readJson(SUBMISSION_MANIFEST);
 for (const doc of REQUIRED_DOCS) check(`${doc} exists`, existsSync(doc), doc);
 check('package has public judge check script', pkg?.scripts?.['judge:check'] === 'npm test && npm run build && node scripts/judge-public-check.mjs', pkg?.scripts?.['judge:check']);
+let tweet = '';
 if (submission) {
-  const tweet = extractFirstCodeBlockAfter(submission, '## Judge-Facing Tweet Copy');
+  tweet = extractFirstCodeBlockAfter(submission, '## Judge-Facing Tweet Copy');
   check('tweet copy exists', Boolean(tweet), 'SUBMISSION.md');
   check('tweet copy tags Nous Research', /@NousResearch/.test(tweet), tweet);
   check('tweet copy includes public repo', tweet.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
-  check('tweet copy fits X character limit', tweet.length > 0 && tweet.length <= 280, `${tweet.length} chars`);
+  check('tweet copy fits X character limit with posting margin', tweet.length > 0 && tweet.length <= 260, `${tweet.length} chars`);
   check('Typeform copy exists', /## Typeform Copy/.test(submission) && /Why it is useful:/.test(submission) && /Why it is viable:/.test(submission), 'SUBMISSION.md');
   check('submission docs mention public judge check', /npm run judge:check/.test(submission), 'SUBMISSION.md');
+  check('submission docs mention posting packet', submission.includes(POSTING_PACKET), POSTING_PACKET);
+}
+
+if (postingPacket) {
+  const postingTweet = extractFirstCodeBlockAfter(postingPacket, '## X Post Copy');
+  const altText = extractFirstCodeBlockAfter(postingPacket, '## X Alt Text');
+  const discordCopy = extractFirstCodeBlockAfter(postingPacket, '## Discord Submission Copy');
+  check('posting packet names primary video', postingPacket.includes(VIDEO), VIDEO);
+  check('posting packet names primary video hash', postingPacket.includes(VIDEO_SHA256), VIDEO_SHA256);
+  check('posting packet names primary announcement', postingPacket.includes(PRIMARY_ANNOUNCEMENT), PRIMARY_ANNOUNCEMENT);
+  check('posting packet X copy exists', Boolean(postingTweet), POSTING_PACKET);
+  check('posting packet X copy matches submission docs', Boolean(postingTweet) && postingTweet === tweet, `${postingTweet.length} chars`);
+  check('posting packet X copy tags Nous Research', /@NousResearch/.test(postingTweet), postingTweet);
+  check('posting packet X copy includes public repo', postingTweet.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
+  check('posting packet X copy keeps posting margin', postingTweet.length > 0 && postingTweet.length <= 260, `${postingTweet.length} chars`);
+  check('posting packet alt text exists', altText.length >= 120 && altText.length <= 1000, `${altText.length} chars`);
+  check('posting packet alt text covers proof arc', /Stripe test-mode/i.test(altText) && /NHTSA/i.test(altText) && /policy-gate 403/i.test(altText) && /NemoHermes/i.test(altText), 'alt proof arc');
+  check('posting packet Discord copy has replaceable X URL', discordCopy.includes('X_POST_URL'), discordCopy);
+  check('posting packet Discord copy includes public repo', discordCopy.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
+  check('posting packet Discord copy covers proof claims', /Stripe test-mode/i.test(discordCopy) && /NHTSA/i.test(discordCopy) && /OpenShell/i.test(discordCopy) && /NemoHermes/i.test(discordCopy), 'Discord proof claims');
+  check('posting packet Typeform answers exist', /## Typeform Answers/.test(postingPacket) && /Why it is useful:/.test(postingPacket) && /Why it is viable:/.test(postingPacket) && /Integrations used:/.test(postingPacket), POSTING_PACKET);
+  check('posting packet final account checklist exists', /## Final Account Checklist/.test(postingPacket) && /Complete the Typeform/i.test(postingPacket), POSTING_PACKET);
 }
 
 if (finalPacket) {
@@ -101,6 +126,10 @@ if (submissionManifest) {
   check('submission manifest names announcement mirror', submissionManifest.hackathon?.announcementMirror === ANNOUNCEMENT_MIRROR, submissionManifest.hackathon?.announcementMirror);
   check('submission manifest names primary video', submissionManifest.submissionVideo?.path === VIDEO, submissionManifest.submissionVideo?.path);
   check('submission manifest names primary video hash', submissionManifest.submissionVideo?.sha256 === VIDEO_SHA256, submissionManifest.submissionVideo?.sha256);
+  check('submission manifest names posting packet', submissionManifest.postingPacket?.path === POSTING_PACKET, submissionManifest.postingPacket?.path);
+  check('submission manifest names X post length', submissionManifest.postingPacket?.xPostRawCharacters === 255, submissionManifest.postingPacket?.xPostRawCharacters);
+  check('submission manifest requires X video attachment', submissionManifest.postingPacket?.requiresXPostVideoAttachment === true, submissionManifest.postingPacket?.requiresXPostVideoAttachment);
+  check('submission manifest requires Discord X URL replacement', submissionManifest.postingPacket?.requiresDiscordLinkReplacement === 'X_POST_URL', submissionManifest.postingPacket?.requiresDiscordLinkReplacement);
   check('submission manifest names video QA report hash', submissionManifest.validation?.videoQa?.sha256 === VIDEO_QA_SHA256, submissionManifest.validation?.videoQa?.sha256);
   check('submission manifest names contact sheet hash', submissionManifest.validation?.videoQa?.contactSheetSha256 === CONTACT_SHEET_SHA256, submissionManifest.validation?.videoQa?.contactSheetSha256);
   check('submission manifest names frame QA report hash', submissionManifest.validation?.frameQa?.sha256 === FRAME_QA_SHA256, submissionManifest.validation?.frameQa?.sha256);

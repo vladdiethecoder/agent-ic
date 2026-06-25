@@ -12,6 +12,7 @@ Primary submission video:
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
 - Runtime: 114.84 seconds
 - Format: 1920x1080 H.264/AAC
+- Final posting packet: `POSTING_PACKET.md`
 
 The public GitHub repo intentionally does not include generated videos, frame dumps, local browser profiles, or `.env.local`. The video should be attached to the X submission post; the repo contains the app, source, data snapshot, tests, proof docs, and validators.
 

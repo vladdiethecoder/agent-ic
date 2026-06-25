@@ -27,6 +27,12 @@
     "codecs": "h264/aac",
     "publicDelivery": "Attach this MP4 to the X submission post; generated video artifacts are intentionally excluded from the public repo."
   },
+  "postingPacket": {
+    "path": "POSTING_PACKET.md",
+    "xPostRawCharacters": 255,
+    "requiresXPostVideoAttachment": true,
+    "requiresDiscordLinkReplacement": "X_POST_URL"
+  },
   "proofClaims": {
     "stripe": "Stripe test-mode Checkout Session creates a bounded $100 spend envelope.",
     "workload": "Governed worker processes 330 public NHTSA ODI complaint rows.",
