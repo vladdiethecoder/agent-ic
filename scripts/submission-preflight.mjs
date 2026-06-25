@@ -27,6 +27,7 @@ const REQUIRED_DOCS = ['SUBMISSION.md', POSTING_PACKET, 'FINAL_SUBMISSION_PACKET
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
 const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final';
 const PUBLIC_RELEASE_URL = `${PUBLIC_REPO_URL}/tree/${PUBLIC_RELEASE_TAG}`;
+const EXPECTED_TEST_COUNT = 184;
 
 const checks = [];
 
@@ -111,6 +112,7 @@ if (submission) {
   check('tweet copy includes public repo', tweet.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('tweet copy fits X character limit with posting margin', tweet.length > 0 && tweet.length <= 260, `${tweet.length} chars`);
   check('Typeform copy exists', /## Typeform Copy/.test(submission) && /Why it is useful:/.test(submission) && /Why it is viable:/.test(submission), 'SUBMISSION.md');
+  check('submission Typeform copy names current test count', submission.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b183 passing tests\b/.test(submission), `${EXPECTED_TEST_COUNT} passing tests`);
   check('submission docs mention public judge check', /npm run judge:check/.test(submission), 'SUBMISSION.md');
   check('submission docs mention posting packet', submission.includes(POSTING_PACKET), POSTING_PACKET);
 }
@@ -137,11 +139,13 @@ if (postingPacket) {
   check('posting packet Discord copy includes public repo', discordCopy.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('posting packet Discord copy covers proof claims', /Stripe test-mode/i.test(discordCopy) && /NHTSA/i.test(discordCopy) && /OpenShell/i.test(discordCopy) && /NemoHermes/i.test(discordCopy), 'Discord proof claims');
   check('posting packet Typeform answers exist', /## Typeform Answers/.test(postingPacket) && /Why it is useful:/.test(postingPacket) && /Why it is viable:/.test(postingPacket) && /Integrations used:/.test(postingPacket), POSTING_PACKET);
+  check('posting packet Typeform copy names current test count', postingPacket.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b183 passing tests\b/.test(postingPacket), `${EXPECTED_TEST_COUNT} passing tests`);
   check('posting packet final account checklist exists', /## Final Account Checklist/.test(postingPacket) && /Complete the Typeform/i.test(postingPacket), POSTING_PACKET);
 }
 
 if (finalPacket) {
   check('final packet references stable sidecar', finalPacket.includes(SIDECAR), SIDECAR);
+  check('final packet names current test count', finalPacket.includes(`${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT} passing`) && !/\b183\/183\b/.test(finalPacket), `${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT}`);
   check('final packet names current judging criteria', /usefulness, viability, and presentation/i.test(finalPacket), 'judging criteria');
   check('final packet names video judge guide', finalPacket.includes(VIDEO_JUDGE_GUIDE), VIDEO_JUDGE_GUIDE);
 }
@@ -211,6 +215,7 @@ if (submissionManifest) {
 
 const docsText = REQUIRED_DOCS.map((file) => readText(file)).join('\n');
 check('public docs avoid stale v2 artifact references', !/(winning-v2|f3c6ce8a|2931\/2931)/.test(docsText), 'stale artifact scan');
+check('public docs avoid stale test-count references', !/\b183(?:\/183| passing tests)\b/.test(docsText), 'stale test-count scan');
 check('public docs avoid raw provider secrets', !/(sk_(live|test)_[A-Za-z0-9]{16,}|nvapi-[A-Za-z0-9_-]{16,}|whsec_[A-Za-z0-9]{16,})/.test(docsText), 'secret scan');
 check('public docs keep Stripe wording in test mode', /Stripe test-mode/i.test(docsText) && !/production money movement/i.test(submission), 'Stripe wording');
 

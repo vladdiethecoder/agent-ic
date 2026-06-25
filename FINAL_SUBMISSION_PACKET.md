@@ -95,7 +95,7 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 ## Latest Local Evidence
 
 - `npm run lint`: passing.
-- `npm test`: 183/183 passing.
+- `npm test`: 184/184 passing.
 - `npm run build`: production build passing.
 - `AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke`: passing when run against the local Next server, with Nemotron, Stripe, OpenShell, evidence storage, and renewal relationships verified.
 - `AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:api`: passing contract/edge checks, including OpenAPI, version headers, proof report, audit chain, evidence export, readiness, CORS, and security headers.

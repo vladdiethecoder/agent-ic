@@ -119,7 +119,7 @@ Enterprises are buying agentic services faster than finance, security, and opera
 Why it is viable:
 
 ```text
-The prototype is a working Next.js control plane with live-proof gates. The current submission cut has passing video QA, 183 passing tests, production build, API/browser smoke, release check, masked proof report, test-mode Stripe receipt, Nemotron request evidence, OpenShell/policy block receipt, public workload hash, and live NemoHermes sandbox execution receipt. Production gaps are documented separately and not overstated.
+The prototype is a working Next.js control plane with live-proof gates. The current submission cut has passing video QA, 184 passing tests, production build, API/browser smoke, release check, masked proof report, test-mode Stripe receipt, Nemotron request evidence, OpenShell/policy block receipt, public workload hash, and live NemoHermes sandbox execution receipt. Production gaps are documented separately and not overstated.
 ```
 
 Integrations used:

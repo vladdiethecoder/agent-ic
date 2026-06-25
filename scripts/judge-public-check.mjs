@@ -10,6 +10,7 @@ const VIDEO = 'demo-out/agent-ic-demo-final-winning-v3.mp4';
 const VIDEO_SHA256 = '5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726';
 const COVER_IMAGE = 'demo-out/agent-ic-x-cover-proof.jpg';
 const COVER_SHA256 = 'd54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1';
+const EXPECTED_TEST_COUNT = 184;
 const REQUIRED_FILES = [
   'README.md',
   'JUDGE_QUICKSTART.md',
@@ -149,8 +150,10 @@ check('video judge guide has timestamped watch map', /00:00-00:15[\s\S]*01:49-01
 check('video judge guide has transcript', /## Voiceover Transcript/.test(videoGuide) && /Agent IC is the control plane/.test(videoGuide), VIDEO_JUDGE_GUIDE);
 check('video judge guide keeps OCR diagnostic-only', /OCR is diagnostic only/i.test(videoGuide), VIDEO_JUDGE_GUIDE);
 check('submission keeps external actions explicit', /Tweet demo video tagging @NousResearch/.test(submission) && /Complete Typeform/.test(submission), 'SUBMISSION.md');
+check('submission names current test count', submission.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b183 passing tests\b/.test(submission), 'SUBMISSION.md');
 check('submission names posting packet', submission.includes('POSTING_PACKET.md'), 'SUBMISSION.md');
 check('final packet names QA hashes', /1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43d481eb61a/.test(packet) && /95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f/.test(packet), 'FINAL_SUBMISSION_PACKET.md');
+check('final packet names current test count', packet.includes(`${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT} passing`) && !/\b183\/183\b/.test(packet), 'FINAL_SUBMISSION_PACKET.md');
 check('final packet names posting packet', packet.includes('POSTING_PACKET.md'), 'FINAL_SUBMISSION_PACKET.md');
 check('final packet names video judge guide', packet.includes(VIDEO_JUDGE_GUIDE), 'FINAL_SUBMISSION_PACKET.md');
 check('public release doc names immutable release tag', releaseDoc.includes(PUBLIC_RELEASE_TAG), 'PUBLIC_REPO_RELEASE.md');
@@ -168,6 +171,7 @@ if (posting) {
   check('posting packet alt text is ready', altText.length >= 120 && altText.length <= 1000 && /policy-gate 403/i.test(altText), `${altText.length} chars`);
   check('posting packet Discord copy is ready', discord.includes('X_POST_URL') && discord.includes(PUBLIC_REPO_URL) && /NemoHermes/i.test(discord), 'POSTING_PACKET.md');
   check('posting packet Typeform answers are ready', /## Typeform Answers/.test(posting) && /Why it is useful:/.test(posting) && /Why it is viable:/.test(posting) && /Integrations used:/.test(posting), 'POSTING_PACKET.md');
+  check('posting packet names current test count', posting.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b183 passing tests\b/.test(posting), 'POSTING_PACKET.md');
 }
 
 const trackedFiles = listTrackedFiles();
@@ -177,6 +181,7 @@ check('tracked files exclude local/generated artifacts', forbiddenTracked.length
 
 const scanned = scanTrackedText(publicTrackedFiles);
 check('tracked text avoids stale/private repo slugs', !staleRepoPattern().test(scanned), 'stale repo scan');
+check('tracked text avoids stale test-count references', !/\b183(?:\/183| passing tests)\b/.test(scanned), 'stale test-count scan');
 check('tracked text avoids raw provider secret shapes', !secretShapePattern().test(scanned), 'secret shape scan');
 check('tracked text avoids private local paths', !privatePathPattern().test(scanned), 'local path scan');
 
