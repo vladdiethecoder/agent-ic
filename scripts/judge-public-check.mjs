@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
-const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v3';
+const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v4';
 const PUBLIC_RELEASE_URL = `${PUBLIC_REPO_URL}/tree/${PUBLIC_RELEASE_TAG}`;
 const PUBLIC_RELEASE_PAGE_URL = `${PUBLIC_REPO_URL}/releases/tag/${PUBLIC_RELEASE_TAG}`;
 const PUBLIC_RELEASE_DOWNLOAD_URL = `${PUBLIC_REPO_URL}/releases/download/${PUBLIC_RELEASE_TAG}`;
@@ -182,6 +182,8 @@ check('scorecard documents public clone check', /npm run judge:check/.test(score
 check('scorecard keeps Stripe wording in test mode', /Stripe test-mode/i.test(scorecard), 'JUDGE_SCORECARD.md');
 check('scorecard keeps OCR diagnostic-only', /OCR is diagnostic only/i.test(scorecard), 'JUDGE_SCORECARD.md');
 check('video judge guide names primary video hash', videoGuide.includes(VIDEO_SHA256), VIDEO_JUDGE_GUIDE);
+check('video judge guide names immutable public release tag', videoGuide.includes(PUBLIC_RELEASE_TAG), VIDEO_JUDGE_GUIDE);
+check('video judge guide avoids stale final release tags', !/hackathon-submission-2026-06-25-final-v[123]\b/.test(videoGuide), VIDEO_JUDGE_GUIDE);
 check('video judge guide maps live criteria', ['Usefulness', 'Viability', 'Presentation'].every((key) => videoGuide.includes(key)), VIDEO_JUDGE_GUIDE);
 check('video judge guide has timestamped watch map', /00:00-00:15[\s\S]*01:49-01:55/.test(videoGuide), VIDEO_JUDGE_GUIDE);
 check('video judge guide has transcript', /## Voiceover Transcript/.test(videoGuide) && /Agent IC is the control plane/.test(videoGuide), VIDEO_JUDGE_GUIDE);

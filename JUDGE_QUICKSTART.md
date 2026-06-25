@@ -4,9 +4,9 @@ Agent IC is an enterprise procurement control plane for agentic services. It fun
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25-final-v3`
+Immutable public release tag: `hackathon-submission-2026-06-25-final-v4`
 
-Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
+Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v4`
 
 For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
 
@@ -15,7 +15,7 @@ For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
 Primary submission video:
 
 - `demo-out/agent-ic-demo-final-winning-v3.mp4`
-- Release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v3/agent-ic-demo-final-winning-v3.mp4`
+- Release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v4/agent-ic-demo-final-winning-v3.mp4`
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
 - Runtime: 114.84 seconds
 - Format: 1920x1080 H.264/AAC

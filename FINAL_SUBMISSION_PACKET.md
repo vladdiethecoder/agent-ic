@@ -76,8 +76,8 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 
 - Primary submission video: `demo-out/agent-ic-demo-final-winning-v3.mp4`
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
-- Release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v3/agent-ic-demo-final-winning-v3.mp4`
-- Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
+- Release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v4/agent-ic-demo-final-winning-v3.mp4`
+- Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v4`
 - Duration: 114.84 seconds
 - Resolution: 1920x1080
 - Video/audio: H.264 + AAC, audio normalized to `-16.5 LUFS`

@@ -26,7 +26,7 @@ const VIDEO_JUDGE_GUIDE = 'VIDEO_JUDGE_GUIDE.md';
 const PUBLIC_REPO_RELEASE = 'PUBLIC_REPO_RELEASE.md';
 const REQUIRED_DOCS = ['SUBMISSION.md', POSTING_PACKET, 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', JUDGE_SCORECARD, VIDEO_JUDGE_GUIDE, PUBLIC_REPO_RELEASE, SUBMISSION_MANIFEST];
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
-const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v3';
+const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v4';
 const PUBLIC_RELEASE_URL = `${PUBLIC_REPO_URL}/tree/${PUBLIC_RELEASE_TAG}`;
 const PUBLIC_RELEASE_PAGE_URL = `${PUBLIC_REPO_URL}/releases/tag/${PUBLIC_RELEASE_TAG}`;
 const PUBLIC_RELEASE_DOWNLOAD_URL = `${PUBLIC_REPO_URL}/releases/download/${PUBLIC_RELEASE_TAG}`;
@@ -215,6 +215,8 @@ if (judgeScorecard) {
 
 if (videoJudgeGuide) {
   check('video judge guide names primary video', videoJudgeGuide.includes(VIDEO), VIDEO);
+  check('video judge guide names immutable public release tag', videoJudgeGuide.includes(PUBLIC_RELEASE_TAG), PUBLIC_RELEASE_TAG);
+  check('video judge guide avoids stale final release tags', !/hackathon-submission-2026-06-25-final-v[123]\b/.test(videoJudgeGuide), VIDEO_JUDGE_GUIDE);
   check('video judge guide names primary video hash', videoJudgeGuide.includes(VIDEO_SHA256), VIDEO_SHA256);
   check('video judge guide maps live criteria', ['Usefulness', 'Viability', 'Presentation'].every((key) => videoJudgeGuide.includes(key)), VIDEO_JUDGE_GUIDE);
   check('video judge guide has timestamped watch map', /00:00-00:15[\s\S]*01:49-01:55/.test(videoJudgeGuide), VIDEO_JUDGE_GUIDE);
