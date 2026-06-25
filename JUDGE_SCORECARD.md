@@ -6,9 +6,9 @@ Agent IC is a governed buying control plane for enterprise AI agents. It funds b
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25-final`
+Immutable public release tag: `hackathon-submission-2026-06-25-final-v2`
 
-Release tag URL: `https://github.com/vladdiethecoder/agent-ic/tree/hackathon-submission-2026-06-25-final`
+Release tag URL: `https://github.com/vladdiethecoder/agent-ic/tree/hackathon-submission-2026-06-25-final-v2`
 
 Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 

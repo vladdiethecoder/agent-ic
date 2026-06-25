@@ -8,7 +8,7 @@ Runtime: 114.84 seconds
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25-final`
+Immutable public release tag: `hackathon-submission-2026-06-25-final-v2`
 
 ## Fast Watch Map
 

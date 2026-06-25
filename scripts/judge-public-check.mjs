@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
-const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final';
+const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v2';
 const PUBLIC_RELEASE_URL = `${PUBLIC_REPO_URL}/tree/${PUBLIC_RELEASE_TAG}`;
 const VIDEO_JUDGE_GUIDE = 'VIDEO_JUDGE_GUIDE.md';
 const VIDEO = 'demo-out/agent-ic-demo-final-winning-v3.mp4';
