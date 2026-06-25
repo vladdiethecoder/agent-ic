@@ -13,8 +13,9 @@ npm run public:export
 The export writes a stripped repo to `.agent-ic/public-submission-export/agent-ic` and a tarball at `.agent-ic/agent-ic-public-submission.tar.gz`.
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
-Immutable public release tag: `hackathon-submission-2026-06-25`
+Immutable public release tag: `hackathon-submission-2026-06-25-final`
 Machine-readable proof map: `SUBMISSION_MANIFEST.json`
+Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 
 The public export intentionally excludes:
 

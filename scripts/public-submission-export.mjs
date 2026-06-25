@@ -29,6 +29,7 @@ const TOP_LEVEL_FILES = [
   'SUBMISSION.md',
   'SUBMISSION_MANIFEST.json',
   'VALIDATION.md',
+  'VIDEO_JUDGE_GUIDE.md',
   'eslint.config.mjs',
   'middleware.js',
   'next.config.mjs',

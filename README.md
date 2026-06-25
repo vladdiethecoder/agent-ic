@@ -11,12 +11,12 @@ The product is not another AI agent. It is the governance layer that funds a bou
 Start with `JUDGE_QUICKSTART.md` and `JUDGE_SCORECARD.md`, then watch the X-attached demo video:
 
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`
-- Immutable public release tag: `hackathon-submission-2026-06-25`
+- Immutable public release tag: `hackathon-submission-2026-06-25-final`
 - Primary video: `demo-out/agent-ic-demo-final-winning-v3.mp4`
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
 - Runtime: 114.84 seconds, 1920x1080 H.264/AAC
 
-The stripped public repo intentionally excludes generated videos, frame dumps, browser profiles, local state, and `.env.local`; the video should be attached to the public X submission post. `JUDGE_SCORECARD.md`, `SUBMISSION_MANIFEST.json`, `SUBMISSION.md`, `FINAL_SUBMISSION_PACKET.md`, and `VALIDATION.md` contain the criteria map, proof map, current validation status, tweet copy, Typeform copy, and fail-closed QA rules.
+The stripped public repo intentionally excludes generated videos, frame dumps, browser profiles, local state, and `.env.local`; the video should be attached to the public X submission post. `VIDEO_JUDGE_GUIDE.md`, `JUDGE_SCORECARD.md`, `SUBMISSION_MANIFEST.json`, `SUBMISSION.md`, `FINAL_SUBMISSION_PACKET.md`, and `VALIDATION.md` contain the timestamped video guide, criteria map, proof map, current validation status, tweet copy, Typeform copy, and fail-closed QA rules.
 
 ## Core Thesis
 

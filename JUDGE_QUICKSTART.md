@@ -4,7 +4,7 @@ Agent IC is an enterprise procurement control plane for agentic services. It fun
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25`
+Immutable public release tag: `hackathon-submission-2026-06-25-final`
 
 For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
 
@@ -17,6 +17,7 @@ Primary submission video:
 - Runtime: 114.84 seconds
 - Format: 1920x1080 H.264/AAC
 - Final posting packet: `POSTING_PACKET.md`
+- Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 - Optional X custom cover: `demo-out/agent-ic-x-cover-proof.jpg`
 
 The public GitHub repo intentionally does not include generated videos, frame dumps, local browser profiles, or `.env.local`. The video should be attached to the X submission post; the repo contains the app, source, data snapshot, tests, proof docs, and validators.
@@ -85,6 +86,7 @@ The current QA report hashes are recorded in `SUBMISSION_MANIFEST.json`.
 ## More Detail
 
 - `SUBMISSION.md` has tweet copy, Typeform copy, and the exact public submission steps.
+- `VIDEO_JUDGE_GUIDE.md` has the timestamped watch map and transcript.
 - `JUDGE_SCORECARD.md` maps the entry to usefulness, viability, and presentation.
 - `SUBMISSION_MANIFEST.json` is the machine-readable judge proof map.
 - `FINAL_SUBMISSION_PACKET.md` has the full evidence packet and current validation list.

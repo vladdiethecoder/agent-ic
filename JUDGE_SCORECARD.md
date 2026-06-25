@@ -6,9 +6,11 @@ Agent IC is a governed buying control plane for enterprise AI agents. It funds b
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25`
+Immutable public release tag: `hackathon-submission-2026-06-25-final`
 
-Release tag URL: `https://github.com/vladdiethecoder/agent-ic/tree/hackathon-submission-2026-06-25`
+Release tag URL: `https://github.com/vladdiethecoder/agent-ic/tree/hackathon-submission-2026-06-25-final`
+
+Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 
 Primary demo video: `demo-out/agent-ic-demo-final-winning-v3.mp4`
 
@@ -54,6 +56,7 @@ npm run demo:frame-qa:v18
 ## Submission Artifacts
 
 - `JUDGE_QUICKSTART.md` is the fastest repo entry point.
+- `VIDEO_JUDGE_GUIDE.md` is the timestamped video watch map and transcript.
 - `SUBMISSION_MANIFEST.json` is the machine-readable proof map.
 - `FINAL_SUBMISSION_PACKET.md` is the full evidence packet.
 - `POSTING_PACKET.md` contains the X copy, alt text, Discord copy, Typeform answers, and final account checklist.
