@@ -15,6 +15,7 @@ const TOP_LEVEL_FILES = [
   'Dockerfile',
   'FINAL_SUBMISSION_PACKET.md',
   'JUDGE_QUICKSTART.md',
+  'JUDGE_SCORECARD.md',
   'POSTING_PACKET.md',
   'PRD.md',
   'PRODUCT_CONTRACT.md',

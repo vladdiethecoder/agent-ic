@@ -3,7 +3,8 @@
     "name": "Agent IC",
     "oneLinePitch": "Fund the right AI pilots. Stop the wrong ones. Prove every dollar with evidence.",
     "publicRepo": "https://github.com/vladdiethecoder/agent-ic",
-    "primarySurface": "/trial"
+    "primarySurface": "/trial",
+    "judgeScorecard": "JUDGE_SCORECARD.md"
   },
   "hackathon": {
     "name": "Hermes Agent Accelerated Business Hackathon",

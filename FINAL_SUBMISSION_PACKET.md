@@ -32,6 +32,8 @@ The current hackathon entry requirements were checked on June 25, 2026 (`https:/
 
 Public code repo for the X post: `https://github.com/vladdiethecoder/agent-ic`.
 
+Fast judge scorecard: `JUDGE_SCORECARD.md`.
+
 - Usefulness: Agent IC governs an enterprise buying decision for vendor agents, not a toy workflow. The demo shows budget, tool access, policy enforcement, measurable ROI, claim validation, and renewal evidence.
 - Viability: The submission carries live Nemotron/NemoHermes receipts, Stripe test-mode evidence, public NHTSA workload hashes, policy-block receipts, a passing release gate, and honest production-readiness boundaries.
 - Presentation: The v3 cut fits the 1-3 minute window, uses a clean browser surface, shows the proof arc in-frame, and passes deterministic video/frame QA using image and video analysis tools.

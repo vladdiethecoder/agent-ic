@@ -10,6 +10,7 @@ const COVER_SHA256 = 'd54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0
 const REQUIRED_FILES = [
   'README.md',
   'JUDGE_QUICKSTART.md',
+  'JUDGE_SCORECARD.md',
   'SUBMISSION.md',
   'SUBMISSION_MANIFEST.json',
   'FINAL_SUBMISSION_PACKET.md',
@@ -23,6 +24,7 @@ const PUBLIC_TOP_LEVEL_FILES = new Set([
   'Dockerfile',
   'FINAL_SUBMISSION_PACKET.md',
   'JUDGE_QUICKSTART.md',
+  'JUDGE_SCORECARD.md',
   'POSTING_PACKET.md',
   'PRD.md',
   'PRODUCT_CONTRACT.md',
@@ -106,6 +108,7 @@ if (manifest) {
 
 const readme = readText('README.md');
 const quickstart = readText('JUDGE_QUICKSTART.md');
+const scorecard = readText('JUDGE_SCORECARD.md');
 const submission = readText('SUBMISSION.md');
 const packet = readText('FINAL_SUBMISSION_PACKET.md');
 const posting = readText('POSTING_PACKET.md');
@@ -115,6 +118,14 @@ check('README names primary video hash', readme.includes(VIDEO_SHA256), 'README.
 check('quickstart explains media exclusion', /does not include generated videos/i.test(quickstart), 'JUDGE_QUICKSTART.md');
 check('quickstart documents judge check', /npm run judge:check/.test(quickstart), 'JUDGE_QUICKSTART.md');
 check('quickstart names posting packet', quickstart.includes('POSTING_PACKET.md'), 'JUDGE_QUICKSTART.md');
+check('quickstart links judge scorecard', quickstart.includes('JUDGE_SCORECARD.md'), 'JUDGE_QUICKSTART.md');
+check('scorecard names public repo', scorecard.includes(PUBLIC_REPO_URL), 'JUDGE_SCORECARD.md');
+check('scorecard names primary video hash', scorecard.includes(VIDEO_SHA256), 'JUDGE_SCORECARD.md');
+check('scorecard names optional X cover', scorecard.includes(COVER_IMAGE) && scorecard.includes(COVER_SHA256), 'JUDGE_SCORECARD.md');
+check('scorecard maps all judging criteria', ['usefulness', 'viability', 'presentation'].every((key) => new RegExp(key, 'i').test(scorecard)), 'JUDGE_SCORECARD.md');
+check('scorecard documents public clone check', /npm run judge:check/.test(scorecard), 'JUDGE_SCORECARD.md');
+check('scorecard keeps Stripe wording in test mode', /Stripe test-mode/i.test(scorecard), 'JUDGE_SCORECARD.md');
+check('scorecard keeps OCR diagnostic-only', /OCR is diagnostic only/i.test(scorecard), 'JUDGE_SCORECARD.md');
 check('submission keeps external actions explicit', /Tweet demo video tagging @NousResearch/.test(submission) && /Complete Typeform/.test(submission), 'SUBMISSION.md');
 check('submission names posting packet', submission.includes('POSTING_PACKET.md'), 'SUBMISSION.md');
 check('final packet names QA hashes', /1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43d481eb61a/.test(packet) && /95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f/.test(packet), 'FINAL_SUBMISSION_PACKET.md');

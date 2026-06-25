@@ -20,7 +20,8 @@ const SUBMISSION_MANIFEST = 'SUBMISSION_MANIFEST.json';
 const POSTING_PACKET = 'POSTING_PACKET.md';
 const PRIMARY_ANNOUNCEMENT = 'https://x.com/NousResearch/status/2066921443548348436';
 const ANNOUNCEMENT_MIRROR = 'https://digg.com/tech/hz8d871s';
-const REQUIRED_DOCS = ['SUBMISSION.md', POSTING_PACKET, 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', SUBMISSION_MANIFEST];
+const JUDGE_SCORECARD = 'JUDGE_SCORECARD.md';
+const REQUIRED_DOCS = ['SUBMISSION.md', POSTING_PACKET, 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', JUDGE_SCORECARD, SUBMISSION_MANIFEST];
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
 
 const checks = [];
@@ -90,6 +91,7 @@ const submission = readText('SUBMISSION.md');
 const postingPacket = readText(POSTING_PACKET);
 const finalPacket = readText('FINAL_SUBMISSION_PACKET.md');
 const judgeQuickstart = readText('JUDGE_QUICKSTART.md');
+const judgeScorecard = readText(JUDGE_SCORECARD);
 const pkg = readJson('package.json');
 const submissionManifest = readJson(SUBMISSION_MANIFEST);
 for (const doc of REQUIRED_DOCS) check(`${doc} exists`, existsSync(doc), doc);
@@ -141,11 +143,24 @@ if (judgeQuickstart) {
   check('judge quickstart explains public repo media exclusion', /does not include generated videos/i.test(judgeQuickstart), 'public repo media exclusion');
   check('judge quickstart maps judging criteria', /Usefulness:[\s\S]*Viability:[\s\S]*Presentation:/i.test(judgeQuickstart), 'criteria map');
   check('judge quickstart documents public clone check', /npm run judge:check/.test(judgeQuickstart), 'JUDGE_QUICKSTART.md');
+  check('judge quickstart links judge scorecard', judgeQuickstart.includes(JUDGE_SCORECARD), JUDGE_SCORECARD);
+}
+
+if (judgeScorecard) {
+  check('judge scorecard names public repo', judgeScorecard.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
+  check('judge scorecard names primary video', judgeScorecard.includes(VIDEO), VIDEO);
+  check('judge scorecard names primary video hash', judgeScorecard.includes(VIDEO_SHA256), VIDEO_SHA256);
+  check('judge scorecard names optional X cover', judgeScorecard.includes(COVER_IMAGE) && judgeScorecard.includes(COVER_SHA256), COVER_IMAGE);
+  check('judge scorecard maps live criteria', ['usefulness', 'viability', 'presentation'].every((key) => new RegExp(key, 'i').test(judgeScorecard)), JUDGE_SCORECARD);
+  check('judge scorecard documents public clone check', /npm run judge:check/.test(judgeScorecard), JUDGE_SCORECARD);
+  check('judge scorecard keeps Stripe wording in test mode', /Stripe test-mode/i.test(judgeScorecard), JUDGE_SCORECARD);
+  check('judge scorecard keeps OCR diagnostic-only', /OCR is diagnostic only/i.test(judgeScorecard), JUDGE_SCORECARD);
 }
 
 check('submission manifest parses', Boolean(submissionManifest), SUBMISSION_MANIFEST);
 if (submissionManifest) {
   check('submission manifest names public repo', submissionManifest.project?.publicRepo === PUBLIC_REPO_URL, submissionManifest.project?.publicRepo);
+  check('submission manifest names judge scorecard', submissionManifest.project?.judgeScorecard === JUDGE_SCORECARD, submissionManifest.project?.judgeScorecard);
   check('submission manifest names primary announcement', submissionManifest.hackathon?.primaryAnnouncement === PRIMARY_ANNOUNCEMENT, submissionManifest.hackathon?.primaryAnnouncement);
   check('submission manifest names announcement mirror', submissionManifest.hackathon?.announcementMirror === ANNOUNCEMENT_MIRROR, submissionManifest.hackathon?.announcementMirror);
   check('submission manifest names primary video', submissionManifest.submissionVideo?.path === VIDEO, submissionManifest.submissionVideo?.path);

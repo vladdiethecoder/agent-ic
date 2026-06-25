@@ -4,6 +4,8 @@ Agent IC is an enterprise procurement control plane for agentic services. It fun
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
+For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
+
 ## Watch First
 
 Primary submission video:
@@ -81,6 +83,7 @@ The current QA report hashes are recorded in `SUBMISSION_MANIFEST.json`.
 ## More Detail
 
 - `SUBMISSION.md` has tweet copy, Typeform copy, and the exact public submission steps.
+- `JUDGE_SCORECARD.md` maps the entry to usefulness, viability, and presentation.
 - `SUBMISSION_MANIFEST.json` is the machine-readable judge proof map.
 - `FINAL_SUBMISSION_PACKET.md` has the full evidence packet and current validation list.
 - `VALIDATION.md` lists fail-closed video and proof requirements.
