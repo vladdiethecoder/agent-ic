@@ -10,7 +10,6 @@ if (isDirectRun()) {
 function main() {
   const command = process.argv[2] || 'dev';
   const source = process.cwd();
-  const safeRoot = resolve(process.env.AGENT_IC_SAFE_ROOT || (command === 'dev' ? '/tmp/agent-ic-dev' : '/tmp/agent-ic-build'));
   const localScript = `${command}:local`;
   const unsafePath = /[#\0]/.test(source);
 
@@ -18,6 +17,8 @@ function main() {
     console.error(unsupportedCommandMessage(command));
     process.exit(1);
   }
+
+  const safeRoot = resolve(defaultSafeRoot(command));
 
   if (!unsafePath && !process.env.AGENT_IC_FORCE_SAFE_COPY) {
     run('npm', ['run', localScript], source);
@@ -35,6 +36,11 @@ function main() {
 
 export function isSupportedCommand(command) {
   return ['dev', 'build', 'start'].includes(command);
+}
+
+export function defaultSafeRoot(command, pid = process.pid, env = process.env) {
+  if (env.AGENT_IC_SAFE_ROOT) return env.AGENT_IC_SAFE_ROOT;
+  return `/tmp/agent-ic-${command}-${pid}`;
 }
 
 export function unsupportedCommandMessage(command) {

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  defaultSafeRoot,
   isSafeMirrorRoot,
   isSupportedCommand,
   unsafeMirrorRootMessage,
@@ -23,4 +24,14 @@ test('safe-next rejects unsupported commands', () => {
   assert.equal(isSupportedCommand('start'), true);
   assert.equal(isSupportedCommand('deploy'), false);
   assert.match(unsupportedCommandMessage('deploy'), /Unsupported safe-next command/);
+});
+
+test('safe-next default mirror roots are process-scoped unless overridden', () => {
+  assert.equal(defaultSafeRoot('build', 12345, {}), '/tmp/agent-ic-build-12345');
+  assert.equal(defaultSafeRoot('dev', 23456, {}), '/tmp/agent-ic-dev-23456');
+  assert.equal(
+    defaultSafeRoot('build', 12345, { AGENT_IC_SAFE_ROOT: '/tmp/agent-ic-fixed' }),
+    '/tmp/agent-ic-fixed'
+  );
+  assert.equal(isSafeMirrorRoot(defaultSafeRoot('build', 12345, {}), {}), true);
 });

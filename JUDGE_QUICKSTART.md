@@ -4,6 +4,8 @@ Agent IC is an enterprise procurement control plane for agentic services. It fun
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
+Immutable public release tag: `hackathon-submission-2026-06-25`
+
 For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
 
 ## Watch First

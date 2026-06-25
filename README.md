@@ -11,6 +11,7 @@ The product is not another AI agent. It is the governance layer that funds a bou
 Start with `JUDGE_QUICKSTART.md` and `JUDGE_SCORECARD.md`, then watch the X-attached demo video:
 
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`
+- Immutable public release tag: `hackathon-submission-2026-06-25`
 - Primary video: `demo-out/agent-ic-demo-final-winning-v3.mp4`
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
 - Runtime: 114.84 seconds, 1920x1080 H.264/AAC

@@ -9,6 +9,7 @@ Use this packet for the account-bound submission steps. Do not alter the X copy,
 - Optional X custom thumbnail/cover, if the upload UI offers it: `demo-out/agent-ic-x-cover-proof.jpg`
 - Cover SHA-256: `d54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1`
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`
+- Immutable public release tag: `hackathon-submission-2026-06-25`
 - Source requirements: `https://x.com/NousResearch/status/2066921443548348436`
 
 ## X Post Copy
