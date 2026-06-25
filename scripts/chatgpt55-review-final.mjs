@@ -567,7 +567,7 @@ async function buildEvidenceBundle() {
     `- Voiceover script: ${ARTIFACTS.voiceover}`,
     `- Evidence source: ${ARTIFACTS.source}`,
     `- Playbook artifact: ${ARTIFACTS.skill}`,
-    '- QR target: https://github.com/agent-ic (HTTP 200 verified during remediation; public source profile, not a local/private URL)',
+    '- Source handoff target: https://github.com/vladdiethecoder/agent-ic (public source repo, not a local/private URL)',
     '',
     'Deterministic gate summaries:',
     `- Video QA overall: ${videoQa?.overall}; checks: ${videoChecks.passed}/${videoChecks.total}`,

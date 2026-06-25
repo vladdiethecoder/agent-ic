@@ -180,9 +180,9 @@ function buildLiveEnvBlock() {
     NEMOCLAW_SANDBOX_NAME: sandboxName,
     NEXT_PUBLIC_APP_URL: process.env.AGENT_IC_PUBLIC_APP_URL || 'https://agent-ic.demo',
     NEXT_PUBLIC_GITHUB_REPO_URL:
-      process.env.AGENT_IC_PUBLIC_REPO_URL || 'https://github.com/agent-ic',
+      process.env.AGENT_IC_PUBLIC_REPO_URL || 'https://github.com/vladdiethecoder/agent-ic',
     NEXT_PUBLIC_GITHUB_REPO_LABEL:
-      process.env.AGENT_IC_PUBLIC_REPO_LABEL || 'github.com/agent-ic',
+      process.env.AGENT_IC_PUBLIC_REPO_LABEL || 'github.com/vladdiethecoder/agent-ic',
   };
   const passThroughKeys = [
     'STRIPE_SECRET_KEY',

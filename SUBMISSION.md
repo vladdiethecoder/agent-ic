@@ -42,7 +42,7 @@ Enterprises do not need another isolated AI agent — they need a governed funct
 - [x] Run image/video-analysis QA: `demo-out/video-qa-report-winning-v3.json` and `demo-out/frame-review-winning-v3.json`
 - [x] Prepare stripped public repo export: `.agent-ic/agent-ic-public-submission.tar.gz`
 - [x] Push stripped public repo to `https://github.com/vladdiethecoder/agent-ic`
-- [ ] Update QR to point at public repo
+- [x] Confirm v3 video has no QR end card; public repo is carried in tweet copy and judge docs
 - [ ] Tweet demo video tagging @NousResearch
 - [ ] Drop tweet link in Discord submissions channel: `https://discord.gg/nousresearch/PFbQZMesC`
 - [ ] Complete Typeform submission: `https://form.typeform.com/to/hpEifIK4`
