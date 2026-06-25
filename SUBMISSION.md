@@ -46,6 +46,7 @@ Enterprises do not need another isolated AI agent — they need a governed funct
 - [x] Push stripped public repo to `https://github.com/vladdiethecoder/agent-ic`
 - [x] Confirm v3 video has no QR end card; public repo is carried in tweet copy and judge docs
 - [x] Prepare final account posting packet: `POSTING_PACKET.md`
+- [x] Prepare optional X custom cover: `demo-out/agent-ic-x-cover-proof.jpg`
 - [ ] Tweet demo video tagging @NousResearch
 - [ ] Drop tweet link in Discord submissions channel: `https://discord.gg/nousresearch/PFbQZMesC`
 - [ ] Complete Typeform submission: `https://form.typeform.com/to/hpEifIK4`
@@ -61,12 +62,13 @@ Enterprises do not need another isolated AI agent — they need a governed funct
 Run this immediately before posting:
 
 ```bash
+npm run submission:cover
 npm run submission:preflight
 npm run judge:check
 npm run public:export
 ```
 
-The preflight verifies the primary video hash, duration, codecs, v3 sidecar, video/frame QA reports, live proof receipts, tweet length, Typeform copy, stale artifact references, and public-doc secret patterns. The export command writes `.agent-ic/public-submission-export/agent-ic` and `.agent-ic/agent-ic-public-submission.tar.gz`, excluding local credentials, generated videos/frames, browser profiles, and local state.
+The cover command extracts a proof-dense optional X thumbnail from the current MP4. The preflight verifies the primary video hash, duration, codecs, v3 sidecar, video/frame QA reports, cover image hash, live proof receipts, tweet length, Typeform copy, stale artifact references, and public-doc secret patterns. The export command writes `.agent-ic/public-submission-export/agent-ic` and `.agent-ic/agent-ic-public-submission.tar.gz`, excluding local credentials, generated videos/frames, browser profiles, and local state.
 
 ## Current Hackathon Requirements
 
@@ -86,7 +88,7 @@ Agent IC governs enterprise AI-agent spend: $100 Stripe test-mode trial, 330 rea
 https://github.com/vladdiethecoder/agent-ic
 ```
 
-Use the v3 MP4 as the attached demo video: `demo-out/agent-ic-demo-final-winning-v3.mp4`. The final X alt text, Discord message, and Typeform answers are in `POSTING_PACKET.md`.
+Use the v3 MP4 as the attached demo video: `demo-out/agent-ic-demo-final-winning-v3.mp4`. If X offers a custom thumbnail/cover selector, use `demo-out/agent-ic-x-cover-proof.jpg`. The final X alt text, Discord message, and Typeform answers are in `POSTING_PACKET.md`.
 
 ## Typeform Copy
 

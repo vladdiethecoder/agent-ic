@@ -12,6 +12,10 @@ const FRAME_QA_SHA256 = '95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e
 const SIDECAR = 'demo-out/stage-events-winning-v3.json';
 const CONTACT_SHEET = 'demo-out/video-qa-contact-sheet-winning-v3.jpg';
 const CONTACT_SHEET_SHA256 = '134f222729f72f74896c944e47bc250a9e591fe300d209ff7a854516afa5ea14';
+const COVER_IMAGE = 'demo-out/agent-ic-x-cover-proof.jpg';
+const COVER_SHA256 = 'd54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1';
+const COVER_REPORT = 'demo-out/submission-cover-report.json';
+const COVER_SELECTED_TIME_SECONDS = 99.3;
 const SUBMISSION_MANIFEST = 'SUBMISSION_MANIFEST.json';
 const POSTING_PACKET = 'POSTING_PACKET.md';
 const PRIMARY_ANNOUNCEMENT = 'https://x.com/NousResearch/status/2066921443548348436';
@@ -53,6 +57,23 @@ if (frameQa) {
   check('frame QA points at primary video', frameQa.video === VIDEO, frameQa.video);
 }
 
+const coverReport = readJson(COVER_REPORT);
+check('X cover image exists', existsSync(COVER_IMAGE), COVER_IMAGE);
+if (existsSync(COVER_IMAGE)) {
+  check('X cover image sha256 matches manifest', sha256File(COVER_IMAGE) === COVER_SHA256, sha256File(COVER_IMAGE));
+  const stats = imageStats(COVER_IMAGE);
+  check('X cover image is 1920x1080', stats.width === 1920 && stats.height === 1080, `${stats.width}x${stats.height}`);
+  check('X cover image is nonblank by image analysis', stats.mean > 0.04 && stats.stddev > 0.06, JSON.stringify(stats));
+}
+check('X cover report exists', Boolean(coverReport), COVER_REPORT);
+if (coverReport) {
+  check('X cover report points at primary video', coverReport.video === VIDEO, coverReport.video);
+  check('X cover report points at cover image', coverReport.coverImage === COVER_IMAGE, coverReport.coverImage);
+  check('X cover report records cover hash', coverReport.coverImageSha256 === COVER_SHA256, coverReport.coverImageSha256);
+  check('X cover report records selected timestamp', coverReport.selectedTimeSeconds === COVER_SELECTED_TIME_SECONDS, coverReport.selectedTimeSeconds);
+  check('X cover report records image/video tools', coverReport.tools?.ffmpeg === true && coverReport.tools?.imageMagick === true, JSON.stringify(coverReport.tools || {}));
+}
+
 const sidecar = readJson(SIDECAR);
 check('stable sidecar exists', Boolean(sidecar), SIDECAR);
 if (sidecar) {
@@ -73,6 +94,7 @@ const pkg = readJson('package.json');
 const submissionManifest = readJson(SUBMISSION_MANIFEST);
 for (const doc of REQUIRED_DOCS) check(`${doc} exists`, existsSync(doc), doc);
 check('package has public judge check script', pkg?.scripts?.['judge:check'] === 'npm test && npm run build && node scripts/judge-public-check.mjs', pkg?.scripts?.['judge:check']);
+check('package has submission cover script', pkg?.scripts?.['submission:cover'] === 'node scripts/prepare-submission-cover.mjs', pkg?.scripts?.['submission:cover']);
 let tweet = '';
 if (submission) {
   tweet = extractFirstCodeBlockAfter(submission, '## Judge-Facing Tweet Copy');
@@ -91,6 +113,8 @@ if (postingPacket) {
   const discordCopy = extractFirstCodeBlockAfter(postingPacket, '## Discord Submission Copy');
   check('posting packet names primary video', postingPacket.includes(VIDEO), VIDEO);
   check('posting packet names primary video hash', postingPacket.includes(VIDEO_SHA256), VIDEO_SHA256);
+  check('posting packet names optional X cover', postingPacket.includes(COVER_IMAGE), COVER_IMAGE);
+  check('posting packet names optional X cover hash', postingPacket.includes(COVER_SHA256), COVER_SHA256);
   check('posting packet names primary announcement', postingPacket.includes(PRIMARY_ANNOUNCEMENT), PRIMARY_ANNOUNCEMENT);
   check('posting packet X copy exists', Boolean(postingTweet), POSTING_PACKET);
   check('posting packet X copy matches submission docs', Boolean(postingTweet) && postingTweet === tweet, `${postingTweet.length} chars`);
@@ -128,6 +152,9 @@ if (submissionManifest) {
   check('submission manifest names primary video hash', submissionManifest.submissionVideo?.sha256 === VIDEO_SHA256, submissionManifest.submissionVideo?.sha256);
   check('submission manifest names posting packet', submissionManifest.postingPacket?.path === POSTING_PACKET, submissionManifest.postingPacket?.path);
   check('submission manifest names X post length', submissionManifest.postingPacket?.xPostRawCharacters === 255, submissionManifest.postingPacket?.xPostRawCharacters);
+  check('submission manifest names X cover image', submissionManifest.postingPacket?.xCoverImage === COVER_IMAGE, submissionManifest.postingPacket?.xCoverImage);
+  check('submission manifest names X cover hash', submissionManifest.postingPacket?.xCoverImageSha256 === COVER_SHA256, submissionManifest.postingPacket?.xCoverImageSha256);
+  check('submission manifest names X cover timestamp', submissionManifest.postingPacket?.xCoverSelectedTimeSeconds === COVER_SELECTED_TIME_SECONDS, submissionManifest.postingPacket?.xCoverSelectedTimeSeconds);
   check('submission manifest requires X video attachment', submissionManifest.postingPacket?.requiresXPostVideoAttachment === true, submissionManifest.postingPacket?.requiresXPostVideoAttachment);
   check('submission manifest requires Discord X URL replacement', submissionManifest.postingPacket?.requiresDiscordLinkReplacement === 'X_POST_URL', submissionManifest.postingPacket?.requiresDiscordLinkReplacement);
   check('submission manifest names video QA report hash', submissionManifest.validation?.videoQa?.sha256 === VIDEO_QA_SHA256, submissionManifest.validation?.videoQa?.sha256);
@@ -192,6 +219,22 @@ function ffprobe(file) {
     height: Number(video.height || 0),
     videoCodec: video.codec_name || '',
     audioCodec: audio.codec_name || '',
+  };
+}
+
+function imageStats(file) {
+  const raw = execFileSync('magick', [
+    'identify',
+    '-format',
+    '%w %h %[fx:mean] %[fx:standard_deviation]',
+    file,
+  ], { encoding: 'utf8' }).trim();
+  const [width, height, mean, stddev] = raw.split(/\s+/);
+  return {
+    width: Number(width),
+    height: Number(height),
+    mean: Number(mean),
+    stddev: Number(stddev),
   };
 }
 

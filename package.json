@@ -43,6 +43,7 @@
     "demo:mux:v18": "node scripts/mux-v18-demo.mjs",
     "demo:video:v18": "npm run demo:voice:v18 && npm run demo:record:v18 && npm run demo:mux:v18",
     "demo:inspect": "ffprobe -show_streams demo-out/agent-ic-demo-final.mp4",
+    "submission:cover": "node scripts/prepare-submission-cover.mjs",
     "submission:preflight": "node scripts/submission-preflight.mjs",
     "public:export": "node scripts/public-submission-export.mjs",
     "prod:check": "node scripts/production-readiness-check.mjs",

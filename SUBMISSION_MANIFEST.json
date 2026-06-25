@@ -30,6 +30,9 @@
   "postingPacket": {
     "path": "POSTING_PACKET.md",
     "xPostRawCharacters": 255,
+    "xCoverImage": "demo-out/agent-ic-x-cover-proof.jpg",
+    "xCoverImageSha256": "d54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1",
+    "xCoverSelectedTimeSeconds": 99.3,
     "requiresXPostVideoAttachment": true,
     "requiresDiscordLinkReplacement": "X_POST_URL"
   },

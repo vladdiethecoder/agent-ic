@@ -6,6 +6,8 @@ Use this packet for the account-bound submission steps. Do not alter the X copy,
 
 - Attach: `demo-out/agent-ic-demo-final-winning-v3.mp4`
 - Video SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
+- Optional X custom thumbnail/cover, if the upload UI offers it: `demo-out/agent-ic-x-cover-proof.jpg`
+- Cover SHA-256: `d54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1`
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`
 - Source requirements: `https://x.com/NousResearch/status/2066921443548348436`
 
@@ -78,7 +80,8 @@ Hermes Agent/NemoHermes for governed playbook execution receipts, NVIDIA Nemotro
 
 1. Run `npm run submission:preflight`.
 2. Upload `demo-out/agent-ic-demo-final-winning-v3.mp4` to X with the exact X post copy and alt text above.
-3. Confirm the published X post includes the attached video, `@NousResearch`, and the public repo URL.
-4. Replace `X_POST_URL` in the Discord copy with the published X post URL.
-5. Post the Discord copy in the Nous submissions channel.
-6. Complete the Typeform with the answers above.
+3. If X offers a custom thumbnail/cover selector, use `demo-out/agent-ic-x-cover-proof.jpg`.
+4. Confirm the published X post includes the attached video, `@NousResearch`, and the public repo URL.
+5. Replace `X_POST_URL` in the Discord copy with the published X post URL.
+6. Post the Discord copy in the Nous submissions channel.
+7. Complete the Typeform with the answers above.

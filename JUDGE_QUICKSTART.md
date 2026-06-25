@@ -13,6 +13,7 @@ Primary submission video:
 - Runtime: 114.84 seconds
 - Format: 1920x1080 H.264/AAC
 - Final posting packet: `POSTING_PACKET.md`
+- Optional X custom cover: `demo-out/agent-ic-x-cover-proof.jpg`
 
 The public GitHub repo intentionally does not include generated videos, frame dumps, local browser profiles, or `.env.local`. The video should be attached to the X submission post; the repo contains the app, source, data snapshot, tests, proof docs, and validators.
 

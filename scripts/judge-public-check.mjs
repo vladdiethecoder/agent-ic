@@ -5,6 +5,8 @@ import { existsSync, readFileSync } from 'node:fs';
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
 const VIDEO = 'demo-out/agent-ic-demo-final-winning-v3.mp4';
 const VIDEO_SHA256 = '5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726';
+const COVER_IMAGE = 'demo-out/agent-ic-x-cover-proof.jpg';
+const COVER_SHA256 = 'd54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1';
 const REQUIRED_FILES = [
   'README.md',
   'JUDGE_QUICKSTART.md',
@@ -82,6 +84,7 @@ if (pkg) {
   check('judge check script exists', pkg.scripts?.['judge:check'] === 'npm test && npm run build && node scripts/judge-public-check.mjs', pkg.scripts?.['judge:check']);
   check('test script exists', Boolean(pkg.scripts?.test), pkg.scripts?.test);
   check('build script uses safe-next wrapper', pkg.scripts?.build === 'node scripts/safe-next.mjs build', pkg.scripts?.build);
+  check('submission cover script exists', pkg.scripts?.['submission:cover'] === 'node scripts/prepare-submission-cover.mjs', pkg.scripts?.['submission:cover']);
 }
 
 const manifest = readJson('SUBMISSION_MANIFEST.json');
@@ -91,6 +94,8 @@ if (manifest) {
   check('manifest names public repo', manifest.project?.publicRepo === PUBLIC_REPO_URL, manifest.project?.publicRepo);
   check('manifest names primary video', manifest.submissionVideo?.path === VIDEO, manifest.submissionVideo?.path);
   check('manifest names primary video hash', manifest.submissionVideo?.sha256 === VIDEO_SHA256, manifest.submissionVideo?.sha256);
+  check('manifest names optional X cover', manifest.postingPacket?.xCoverImage === COVER_IMAGE, manifest.postingPacket?.xCoverImage);
+  check('manifest names optional X cover hash', manifest.postingPacket?.xCoverImageSha256 === COVER_SHA256, manifest.postingPacket?.xCoverImageSha256);
   check('manifest explains public video delivery', /attach this mp4 to the x submission post/i.test(manifest.submissionVideo?.publicDelivery || ''), manifest.submissionVideo?.publicDelivery);
   check('manifest carries video QA hash', /^[a-f0-9]{64}$/.test(manifest.validation?.videoQa?.sha256 || ''), manifest.validation?.videoQa?.sha256);
   check('manifest carries frame QA hash', /^[a-f0-9]{64}$/.test(manifest.validation?.frameQa?.sha256 || ''), manifest.validation?.frameQa?.sha256);
@@ -120,6 +125,7 @@ if (posting) {
   const discord = extractFirstCodeBlockAfter(posting, '## Discord Submission Copy');
   check('posting packet names primary video', posting.includes(VIDEO), VIDEO);
   check('posting packet names primary video hash', posting.includes(VIDEO_SHA256), VIDEO_SHA256);
+  check('posting packet names optional X cover', posting.includes(COVER_IMAGE) && posting.includes(COVER_SHA256), COVER_IMAGE);
   check('posting packet X copy is ready', xPost.length > 0 && xPost.length <= 260 && /@NousResearch/.test(xPost) && xPost.includes(PUBLIC_REPO_URL), `${xPost.length} chars`);
   check('posting packet alt text is ready', altText.length >= 120 && altText.length <= 1000 && /policy-gate 403/i.test(altText), `${altText.length} chars`);
   check('posting packet Discord copy is ready', discord.includes('X_POST_URL') && discord.includes(PUBLIC_REPO_URL) && /NemoHermes/i.test(discord), 'POSTING_PACKET.md');
