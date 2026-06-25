@@ -69,7 +69,7 @@ The preflight verifies the primary video hash, duration, codecs, v3 sidecar, vid
 
 ## Current Hackathon Requirements
 
-Source checked June 25, 2026: Hermes Agent Accelerated Business Hackathon, presented by NVIDIA, Stripe, and Nous Research (`https://x.com/NousResearch/status/2069150335386456283`, mirrored at `https://digg.com/tech/hz8d871s`).
+Source checked June 25, 2026: Hermes Agent Accelerated Business Hackathon, presented by NVIDIA, Stripe, and Nous Research (`https://x.com/NousResearch/status/2066921443548348436`, mirrored at `https://digg.com/tech/hz8d871s`).
 
 - Required public artifact: tweet a 1-3 minute demo video tagging `@NousResearch` with a short writeup.
 - Required follow-through: drop the tweet link in the Discord submissions channel and fill out the Typeform.

@@ -28,7 +28,7 @@ Enterprises do not need another isolated AI agent. They need a governed investme
 
 ## Live Judging Criteria Alignment
 
-The current hackathon entry requirements were checked on June 25, 2026 (`https://x.com/NousResearch/status/2069150335386456283`, mirrored at `https://digg.com/tech/hz8d871s`): tweet a 1-3 minute demo video tagging `@NousResearch`, drop the link in the Discord submissions channel (`https://discord.gg/nousresearch/PFbQZMesC`), complete the Typeform (`https://form.typeform.com/to/hpEifIK4`), and optimize for usefulness, viability, and presentation.
+The current hackathon entry requirements were checked on June 25, 2026 (`https://x.com/NousResearch/status/2066921443548348436`, mirrored at `https://digg.com/tech/hz8d871s`): tweet a 1-3 minute demo video tagging `@NousResearch`, drop the link in the Discord submissions channel (`https://discord.gg/nousresearch/PFbQZMesC`), complete the Typeform (`https://form.typeform.com/to/hpEifIK4`), and optimize for usefulness, viability, and presentation.
 
 Public code repo for the X post: `https://github.com/vladdiethecoder/agent-ic`.
 
