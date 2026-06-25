@@ -155,7 +155,7 @@ const REVIEWS = [
     title: 'No local, private, or stale leakage',
     focus: [
       'Audit visible/proof text for local URLs, private paths, old repo URL, raw full identifiers, or debug language.',
-      'Fail for localhost, 127.0.0.1, :3000, local home paths, mounted-drive workspace paths, private user handles, DevTools, noAutoRun, or stale agent-ic-hermes-hackathon.',
+      'Fail for localhost, 127.0.0.1, :3000, local home paths, mounted-drive workspace paths, private user handles, DevTools, noAutoRun, or stale/private repo slugs.',
       'Pass only if identifiers are masked and the public repo URL is clean.',
     ],
   },
