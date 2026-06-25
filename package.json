@@ -16,6 +16,7 @@
     "smoke": "node scripts/smoke.mjs",
     "smoke:api": "node scripts/api-edge-smoke.mjs",
     "smoke:browser": "node scripts/browser-smoke.mjs",
+    "judge:check": "npm test && npm run build && node scripts/judge-public-check.mjs",
     "proof:hermes": "node scripts/agent-ic-proof.mjs proof hermes",
     "proof:stripe": "node scripts/agent-ic-proof.mjs proof stripe",
     "proof:nemotron": "node scripts/agent-ic-proof.mjs proof nemotron",

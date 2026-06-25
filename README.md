@@ -63,6 +63,7 @@ Each case uses public or inspectable workload evidence, Nemotron-backed reasonin
 ```bash
 npm install
 npm run dev          # Start dev server
+npm run judge:check  # Public-clone judge gate: test, build, and proof-map checks
 npm test             # Run Node test suite
 npm run build        # Production build
 npm run smoke        # API smoke tests
@@ -111,6 +112,7 @@ Full production readiness still requires deployed SSO/OIDC redirect/callback or 
 ```bash
 npm test
 npm run build
+npm run judge:check
 npm run release:check
 ```
 

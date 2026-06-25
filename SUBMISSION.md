@@ -37,6 +37,7 @@ Enterprises do not need another isolated AI agent — they need a governed funct
 - [x] `npm run smoke` — passes
 - [x] `npm run release:check` — passes
 - [x] `npm run submission:preflight` — passes against the v3 video, stable sidecar, QA reports, tweet copy, and public docs
+- [x] `npm run judge:check` — passes from a clean public clone without private video artifacts
 - [x] `/api/proof-report` — masked judge audit surface
 - [x] Record browser-chrome demo video from `/trial`
 - [x] Run image/video-analysis QA: `demo-out/video-qa-report-winning-v3.json` and `demo-out/frame-review-winning-v3.json`
@@ -60,6 +61,7 @@ Run this immediately before posting:
 
 ```bash
 npm run submission:preflight
+npm run judge:check
 npm run public:export
 ```
 

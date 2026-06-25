@@ -67,8 +67,10 @@ if (sidecar) {
 const submission = readText('SUBMISSION.md');
 const finalPacket = readText('FINAL_SUBMISSION_PACKET.md');
 const judgeQuickstart = readText('JUDGE_QUICKSTART.md');
+const pkg = readJson('package.json');
 const submissionManifest = readJson(SUBMISSION_MANIFEST);
 for (const doc of REQUIRED_DOCS) check(`${doc} exists`, existsSync(doc), doc);
+check('package has public judge check script', pkg?.scripts?.['judge:check'] === 'npm test && npm run build && node scripts/judge-public-check.mjs', pkg?.scripts?.['judge:check']);
 if (submission) {
   const tweet = extractFirstCodeBlockAfter(submission, '## Judge-Facing Tweet Copy');
   check('tweet copy exists', Boolean(tweet), 'SUBMISSION.md');
@@ -76,6 +78,7 @@ if (submission) {
   check('tweet copy includes public repo', tweet.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('tweet copy fits X character limit', tweet.length > 0 && tweet.length <= 280, `${tweet.length} chars`);
   check('Typeform copy exists', /## Typeform Copy/.test(submission) && /Why it is useful:/.test(submission) && /Why it is viable:/.test(submission), 'SUBMISSION.md');
+  check('submission docs mention public judge check', /npm run judge:check/.test(submission), 'SUBMISSION.md');
 }
 
 if (finalPacket) {
@@ -88,6 +91,7 @@ if (judgeQuickstart) {
   check('judge quickstart names public repo', judgeQuickstart.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('judge quickstart explains public repo media exclusion', /does not include generated videos/i.test(judgeQuickstart), 'public repo media exclusion');
   check('judge quickstart maps judging criteria', /Usefulness:[\s\S]*Viability:[\s\S]*Presentation:/i.test(judgeQuickstart), 'criteria map');
+  check('judge quickstart documents public clone check', /npm run judge:check/.test(judgeQuickstart), 'JUDGE_QUICKSTART.md');
 }
 
 check('submission manifest parses', Boolean(submissionManifest), SUBMISSION_MANIFEST);

@@ -43,8 +43,11 @@ Core gates:
 ```bash
 npm test
 npm run build
+npm run judge:check
 npm run release:check
 ```
+
+`npm run judge:check` is safe to run from a clean public clone. It runs tests, builds the app, verifies `SUBMISSION_MANIFEST.json`, confirms generated video artifacts are intentionally excluded from Git, and checks the public docs for stale/private URLs and secret-shaped strings. The private video QA gates below require the local MP4 artifacts.
 
 Live smoke gates require the app to be running:
 

@@ -60,6 +60,7 @@ AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:browser
 npm run demo:qa:v18
 npm run demo:frame-qa:v18
 npm run submission:preflight
+npm run judge:check
 npm run public:export
 # optional supporting strict-proof walkthrough
 npm run demo:qa
@@ -76,8 +77,7 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 - Video/audio: H.264 + AAC, audio normalized to `-16.5 LUFS`
 - The v3 cut preserves headed-browser chrome and a clean visible product host (`app.agenticontrolplane.com`, initially `/trial`; later in-page navigation may show `#trial`) while showing the actual `/trial` proof arc: typed buyer mission -> governed run -> NHTSA progress counters -> Stripe $100 test-mode envelope -> Nemotron sample classification -> OpenShell policy block of a $150 CARFAX request -> live NemoHermes sandbox receipt -> CONTINUE decision -> evidence formulas -> renewal ledger.
 - Video QA: `demo-out/video-qa-report-winning-v3.json` - PASS, 65/65 checks using `ffprobe`/`ffmpeg` video analysis plus ImageMagick contact-sheet and frame-difference analysis. SHA-256: `3e701a262e60da28ab67aa4726d849651f76059a3b90c1f7fb37c900ff13e671`. OCR is skipped by default and recorded only as a diagnostic when explicitly enabled.
-- Frame QA: `demo-out/frame-review-winning-v3.json` - PASS, 16/16 checks, 2871/2871 frames extracted. SHA-256: `bfefa4c26f10fe62a26d44b74718a106a2efddb911a694ad0a741711d49b39a3`.
-- Frame QA: `demo-out/frame-review-winning-v3.json` - PASS, 2871/2871 frames extracted, no black-frame intervals, 12 contact sheets generated, 24/24 sampled frame hashes unique, 23/23 sampled frame transitions with meaningful image differences.
+- Frame QA: `demo-out/frame-review-winning-v3.json` - PASS, 16/16 checks, 2871/2871 frames extracted, no black-frame intervals, 12 contact sheets generated, 24/24 sampled frame hashes unique, 23/23 sampled frame transitions with meaningful image differences. SHA-256: `bfefa4c26f10fe62a26d44b74718a106a2efddb911a694ad0a741711d49b39a3`.
 - Contact sheets: `demo-out/video-qa-contact-sheet-winning-v3.jpg` and `demo-out/frame-review-winning-v3/contact-sheets/`
 - Supporting strict-proof walkthrough: `demo-out/agent-ic-demo-final-winning.mp4` remains available at 89.00 seconds with strict sidecar evidence in `demo-out/stage-events-final.json`, but it is no longer the primary judge-facing cut.
 
@@ -99,6 +99,7 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 - `npm run demo:qa:v18`: passing against `demo-out/agent-ic-demo-final-winning-v3.mp4`, 65/65 image/video-analysis checks.
 - `npm run demo:frame-qa:v18`: passing, 2871/2871 frames extracted and 12 contact sheets generated.
 - `npm run submission:preflight`: passing against the v3 video, stable sidecar, QA reports, tweet copy, Typeform copy, and public-doc stale/secret scans.
+- `npm run judge:check`: passing from a clean public clone without private video artifacts; composes tests, build, proof-map checks, export-policy checks, and public-doc stale/secret scans.
 - `npm run public:export`: passing, wrote `.agent-ic/agent-ic-public-submission.tar.gz` and `.agent-ic/public-submission-export-manifest.json` without `.env.local`, `demo-out`, `.agent-ic`, `.git`, or `node_modules`.
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`, populated from the stripped public export only.
 - Machine-readable judge proof map: `SUBMISSION_MANIFEST.json`.

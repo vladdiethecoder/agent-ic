@@ -6,6 +6,7 @@ Use the public export gate before creating or updating the public GitHub repo:
 
 ```bash
 npm run submission:preflight
+npm run judge:check
 npm run public:export
 ```
 
