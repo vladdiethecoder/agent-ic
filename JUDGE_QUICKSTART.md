@@ -65,6 +65,8 @@ npm run public:export
 
 Video QA is based on `ffprobe`, `ffmpeg`, ImageMagick contact sheets, frame hashes, detail metrics, and frame-difference metrics. OCR is diagnostic only.
 
+The current QA report hashes are recorded in `SUBMISSION_MANIFEST.json`.
+
 ## Judge Criteria Map
 
 - Usefulness: Agent IC gives finance/security/ops teams a concrete way to decide which vendor agents earn budget, tools, and production access.

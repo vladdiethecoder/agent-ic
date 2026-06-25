@@ -6,9 +6,12 @@ import { existsSync, readFileSync } from 'node:fs';
 const VIDEO = 'demo-out/agent-ic-demo-final-winning-v3.mp4';
 const VIDEO_SHA256 = '5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726';
 const VIDEO_QA = 'demo-out/video-qa-report-winning-v3.json';
+const VIDEO_QA_SHA256 = '3e701a262e60da28ab67aa4726d849651f76059a3b90c1f7fb37c900ff13e671';
 const FRAME_QA = 'demo-out/frame-review-winning-v3.json';
+const FRAME_QA_SHA256 = 'bfefa4c26f10fe62a26d44b74718a106a2efddb911a694ad0a741711d49b39a3';
 const SIDECAR = 'demo-out/stage-events-winning-v3.json';
 const CONTACT_SHEET = 'demo-out/video-qa-contact-sheet-winning-v3.jpg';
+const CONTACT_SHEET_SHA256 = '134f222729f72f74896c944e47bc250a9e591fe300d209ff7a854516afa5ea14';
 const SUBMISSION_MANIFEST = 'SUBMISSION_MANIFEST.json';
 const PRIMARY_ANNOUNCEMENT = 'https://x.com/NousResearch/status/2069150335386456283';
 const ANNOUNCEMENT_MIRROR = 'https://digg.com/tech/hz8d871s';
@@ -29,17 +32,20 @@ if (existsSync(VIDEO)) {
 const videoQa = readJson(VIDEO_QA);
 check('video QA report exists', Boolean(videoQa), VIDEO_QA);
 if (videoQa) {
+  check('video QA report sha256 matches manifest', sha256File(VIDEO_QA) === VIDEO_QA_SHA256, sha256File(VIDEO_QA));
   const passed = (videoQa.checks || []).filter((item) => item.pass).length;
   check('video QA passed every check', videoQa.overall === 'PASS' && passed === (videoQa.checks || []).length && passed >= 60, `${passed}/${(videoQa.checks || []).length}`);
   check('video QA points at primary video', videoQa.video === VIDEO, videoQa.video);
   check('video QA uses stable v3 sidecar', checkDetail(videoQa, 'Stage provenance exists') === SIDECAR, checkDetail(videoQa, 'Stage provenance exists'));
   check('video QA generated contact sheet', videoQa.contactSheet === CONTACT_SHEET && existsSync(CONTACT_SHEET), videoQa.contactSheet);
+  check('video QA contact sheet sha256 matches manifest', existsSync(CONTACT_SHEET) && sha256File(CONTACT_SHEET) === CONTACT_SHEET_SHA256, existsSync(CONTACT_SHEET) ? sha256File(CONTACT_SHEET) : 'missing');
   check('video QA treats OCR as diagnostic', /not a pass\/fail signal/i.test(checkDetail(videoQa, 'OCR diagnostic captured')), checkDetail(videoQa, 'OCR diagnostic captured'));
 }
 
 const frameQa = readJson(FRAME_QA);
 check('frame QA report exists', Boolean(frameQa), FRAME_QA);
 if (frameQa) {
+  check('frame QA report sha256 matches manifest', sha256File(FRAME_QA) === FRAME_QA_SHA256, sha256File(FRAME_QA));
   const passed = (frameQa.checks || []).filter((item) => item.pass).length;
   check('frame QA passed every check', frameQa.overall === 'PASS' && passed === (frameQa.checks || []).length, `${passed}/${(frameQa.checks || []).length}`);
   check('frame QA extracted every frame', frameQa.metadata?.expectedFrames === frameQa.metadata?.extractedFrames && frameQa.metadata?.extractedFrames > 2500, JSON.stringify(frameQa.metadata));
@@ -91,6 +97,9 @@ if (submissionManifest) {
   check('submission manifest names announcement mirror', submissionManifest.hackathon?.announcementMirror === ANNOUNCEMENT_MIRROR, submissionManifest.hackathon?.announcementMirror);
   check('submission manifest names primary video', submissionManifest.submissionVideo?.path === VIDEO, submissionManifest.submissionVideo?.path);
   check('submission manifest names primary video hash', submissionManifest.submissionVideo?.sha256 === VIDEO_SHA256, submissionManifest.submissionVideo?.sha256);
+  check('submission manifest names video QA report hash', submissionManifest.validation?.videoQa?.sha256 === VIDEO_QA_SHA256, submissionManifest.validation?.videoQa?.sha256);
+  check('submission manifest names contact sheet hash', submissionManifest.validation?.videoQa?.contactSheetSha256 === CONTACT_SHEET_SHA256, submissionManifest.validation?.videoQa?.contactSheetSha256);
+  check('submission manifest names frame QA report hash', submissionManifest.validation?.frameQa?.sha256 === FRAME_QA_SHA256, submissionManifest.validation?.frameQa?.sha256);
   check('submission manifest keeps OCR diagnostic-only', /diagnostic only/i.test(submissionManifest.validation?.videoQa?.ocrPolicy || ''), submissionManifest.validation?.videoQa?.ocrPolicy);
   check('submission manifest maps judging criteria', ['usefulness', 'viability', 'presentation'].every((key) => Boolean(submissionManifest.judgeMap?.[key])), JSON.stringify(Object.keys(submissionManifest.judgeMap || {})));
 }

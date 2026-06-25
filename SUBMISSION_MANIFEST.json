@@ -45,13 +45,17 @@
     ],
     "videoQa": {
       "report": "demo-out/video-qa-report-winning-v3.json",
+      "sha256": "3e701a262e60da28ab67aa4726d849651f76059a3b90c1f7fb37c900ff13e671",
       "result": "PASS",
       "checks": "65/65",
       "method": "ffprobe, ffmpeg, ImageMagick contact sheets, frame hashes, detail metrics, and frame-difference metrics",
-      "ocrPolicy": "OCR is diagnostic only and is not a pass/fail signal."
+      "ocrPolicy": "OCR is diagnostic only and is not a pass/fail signal.",
+      "contactSheet": "demo-out/video-qa-contact-sheet-winning-v3.jpg",
+      "contactSheetSha256": "134f222729f72f74896c944e47bc250a9e591fe300d209ff7a854516afa5ea14"
     },
     "frameQa": {
       "report": "demo-out/frame-review-winning-v3.json",
+      "sha256": "bfefa4c26f10fe62a26d44b74718a106a2efddb911a694ad0a741711d49b39a3",
       "result": "PASS",
       "checks": "16/16",
       "framesExtracted": 2871
