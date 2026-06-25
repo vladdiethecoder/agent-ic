@@ -6,13 +6,17 @@ Agent IC is a governed buying control plane for enterprise AI agents. It funds b
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25-final-v2`
+Immutable public release tag: `hackathon-submission-2026-06-25-final-v3`
 
-Release tag URL: `https://github.com/vladdiethecoder/agent-ic/tree/hackathon-submission-2026-06-25-final-v2`
+Release tag URL: `https://github.com/vladdiethecoder/agent-ic/tree/hackathon-submission-2026-06-25-final-v3`
+
+Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
 
 Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 
 Primary demo video: `demo-out/agent-ic-demo-final-winning-v3.mp4`
+
+Video release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v3/agent-ic-demo-final-winning-v3.mp4`
 
 Video SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
 
@@ -51,6 +55,7 @@ npm run demo:frame-qa:v18
 - Stripe evidence is test-mode Checkout Session evidence, not production money movement.
 - Agent IC is an enterprise-grade prototype and control-plane framework, not a fully deployed production SaaS.
 - Generated videos, frame dumps, browser profiles, local state, `.env.local`, and private proof artifacts are intentionally excluded from the public repo.
+- The MP4 must be submitted through X; the GitHub release assets are a fallback/audit bundle for the same video and QA artifacts.
 - OCR is diagnostic only; video QA uses `ffprobe`, `ffmpeg`, ImageMagick, frame hashes, detail metrics, and frame-difference analysis as pass/fail signals.
 
 ## Submission Artifacts
@@ -61,4 +66,5 @@ npm run demo:frame-qa:v18
 - `FINAL_SUBMISSION_PACKET.md` is the full evidence packet.
 - `POSTING_PACKET.md` contains the X copy, alt text, Discord copy, Typeform answers, and final account checklist.
 - `demo-out/agent-ic-demo-final-winning-v3.mp4` should be attached to the X post.
+- The same MP4 and QA bundle are attached to the immutable GitHub release as fallback/audit evidence.
 - `demo-out/agent-ic-x-cover-proof.jpg` is the optional custom X cover image.

@@ -10,6 +10,7 @@ const VIDEO_QA_SHA256 = '1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43
 const FRAME_QA = 'demo-out/frame-review-winning-v3.json';
 const FRAME_QA_SHA256 = '95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f';
 const SIDECAR = 'demo-out/stage-events-winning-v3.json';
+const SIDECAR_SHA256 = 'cb69631f34890f634b11c7b2625808b4730e372502474ea3429dbdc40061bf34';
 const CONTACT_SHEET = 'demo-out/video-qa-contact-sheet-winning-v3.jpg';
 const CONTACT_SHEET_SHA256 = '134f222729f72f74896c944e47bc250a9e591fe300d209ff7a854516afa5ea14';
 const COVER_IMAGE = 'demo-out/agent-ic-x-cover-proof.jpg';
@@ -25,9 +26,18 @@ const VIDEO_JUDGE_GUIDE = 'VIDEO_JUDGE_GUIDE.md';
 const PUBLIC_REPO_RELEASE = 'PUBLIC_REPO_RELEASE.md';
 const REQUIRED_DOCS = ['SUBMISSION.md', POSTING_PACKET, 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', JUDGE_SCORECARD, VIDEO_JUDGE_GUIDE, PUBLIC_REPO_RELEASE, SUBMISSION_MANIFEST];
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
-const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v2';
+const PUBLIC_RELEASE_TAG = 'hackathon-submission-2026-06-25-final-v3';
 const PUBLIC_RELEASE_URL = `${PUBLIC_REPO_URL}/tree/${PUBLIC_RELEASE_TAG}`;
-const EXPECTED_TEST_COUNT = 184;
+const PUBLIC_RELEASE_PAGE_URL = `${PUBLIC_REPO_URL}/releases/tag/${PUBLIC_RELEASE_TAG}`;
+const PUBLIC_RELEASE_DOWNLOAD_URL = `${PUBLIC_REPO_URL}/releases/download/${PUBLIC_RELEASE_TAG}`;
+const VIDEO_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/agent-ic-demo-final-winning-v3.mp4`;
+const COVER_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/agent-ic-x-cover-proof.jpg`;
+const VIDEO_QA_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/video-qa-report-winning-v3.json`;
+const FRAME_QA_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/frame-review-winning-v3.json`;
+const CONTACT_SHEET_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/video-qa-contact-sheet-winning-v3.jpg`;
+const SIDECAR_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/stage-events-winning-v3.json`;
+const PUBLIC_TARBALL_RELEASE_ASSET_URL = `${PUBLIC_RELEASE_DOWNLOAD_URL}/agent-ic-public-submission.tar.gz`;
+const EXPECTED_TEST_COUNT = 185;
 
 const checks = [];
 
@@ -95,6 +105,7 @@ if (sidecar) {
 const submission = readText('SUBMISSION.md');
 const postingPacket = readText(POSTING_PACKET);
 const finalPacket = readText('FINAL_SUBMISSION_PACKET.md');
+const readme = readText('README.md');
 const judgeQuickstart = readText('JUDGE_QUICKSTART.md');
 const judgeScorecard = readText(JUDGE_SCORECARD);
 const videoJudgeGuide = readText(VIDEO_JUDGE_GUIDE);
@@ -104,6 +115,14 @@ const submissionManifest = readJson(SUBMISSION_MANIFEST);
 for (const doc of REQUIRED_DOCS) check(`${doc} exists`, existsSync(doc), doc);
 check('package has public judge check script', pkg?.scripts?.['judge:check'] === 'npm test && npm run build && node scripts/judge-public-check.mjs', pkg?.scripts?.['judge:check']);
 check('package has submission cover script', pkg?.scripts?.['submission:cover'] === 'node scripts/prepare-submission-cover.mjs', pkg?.scripts?.['submission:cover']);
+
+if (readme) {
+  check('README names release asset bundle', readme.includes(PUBLIC_RELEASE_PAGE_URL), PUBLIC_RELEASE_PAGE_URL);
+  check('README names video release asset fallback', readme.includes(VIDEO_RELEASE_ASSET_URL), VIDEO_RELEASE_ASSET_URL);
+  check('README keeps X as required primary video upload', /video must be attached to the public X submission post/i.test(readme), 'README.md');
+  check('README labels release assets as fallback audit copy', /fallback\/audit copy/i.test(readme), 'README.md');
+}
+
 let tweet = '';
 if (submission) {
   tweet = extractFirstCodeBlockAfter(submission, '## Judge-Facing Tweet Copy');
@@ -112,7 +131,7 @@ if (submission) {
   check('tweet copy includes public repo', tweet.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('tweet copy fits X character limit with posting margin', tweet.length > 0 && tweet.length <= 260, `${tweet.length} chars`);
   check('Typeform copy exists', /## Typeform Copy/.test(submission) && /Why it is useful:/.test(submission) && /Why it is viable:/.test(submission), 'SUBMISSION.md');
-  check('submission Typeform copy names current test count', submission.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b183 passing tests\b/.test(submission), `${EXPECTED_TEST_COUNT} passing tests`);
+  check('submission Typeform copy names current test count', submission.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b(?:183|184) passing tests\b/.test(submission), `${EXPECTED_TEST_COUNT} passing tests`);
   check('submission docs mention public judge check', /npm run judge:check/.test(submission), 'SUBMISSION.md');
   check('submission docs mention posting packet', submission.includes(POSTING_PACKET), POSTING_PACKET);
 }
@@ -126,6 +145,8 @@ if (postingPacket) {
   check('posting packet names optional X cover', postingPacket.includes(COVER_IMAGE), COVER_IMAGE);
   check('posting packet names optional X cover hash', postingPacket.includes(COVER_SHA256), COVER_SHA256);
   check('posting packet names immutable public release tag', postingPacket.includes(PUBLIC_RELEASE_TAG), PUBLIC_RELEASE_TAG);
+  check('posting packet names release asset bundle', postingPacket.includes(PUBLIC_RELEASE_PAGE_URL), PUBLIC_RELEASE_PAGE_URL);
+  check('posting packet names video release asset fallback', postingPacket.includes(VIDEO_RELEASE_ASSET_URL), VIDEO_RELEASE_ASSET_URL);
   check('posting packet names video judge guide', postingPacket.includes(VIDEO_JUDGE_GUIDE), VIDEO_JUDGE_GUIDE);
   check('posting packet names primary announcement', postingPacket.includes(PRIMARY_ANNOUNCEMENT), PRIMARY_ANNOUNCEMENT);
   check('posting packet X copy exists', Boolean(postingTweet), POSTING_PACKET);
@@ -139,28 +160,38 @@ if (postingPacket) {
   check('posting packet Discord copy includes public repo', discordCopy.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('posting packet Discord copy covers proof claims', /Stripe test-mode/i.test(discordCopy) && /NHTSA/i.test(discordCopy) && /OpenShell/i.test(discordCopy) && /NemoHermes/i.test(discordCopy), 'Discord proof claims');
   check('posting packet Typeform answers exist', /## Typeform Answers/.test(postingPacket) && /Why it is useful:/.test(postingPacket) && /Why it is viable:/.test(postingPacket) && /Integrations used:/.test(postingPacket), POSTING_PACKET);
-  check('posting packet Typeform copy names current test count', postingPacket.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b183 passing tests\b/.test(postingPacket), `${EXPECTED_TEST_COUNT} passing tests`);
+  check('posting packet Typeform copy names current test count', postingPacket.includes(`${EXPECTED_TEST_COUNT} passing tests`) && !/\b(?:183|184) passing tests\b/.test(postingPacket), `${EXPECTED_TEST_COUNT} passing tests`);
   check('posting packet final account checklist exists', /## Final Account Checklist/.test(postingPacket) && /Complete the Typeform/i.test(postingPacket), POSTING_PACKET);
+  check('posting packet keeps release asset as fallback audit only', /does not replace the required X video upload/i.test(postingPacket), POSTING_PACKET);
 }
 
 if (finalPacket) {
   check('final packet references stable sidecar', finalPacket.includes(SIDECAR), SIDECAR);
-  check('final packet names current test count', finalPacket.includes(`${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT} passing`) && !/\b183\/183\b/.test(finalPacket), `${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT}`);
+  check('final packet names release asset bundle', finalPacket.includes(PUBLIC_RELEASE_PAGE_URL), PUBLIC_RELEASE_PAGE_URL);
+  check('final packet names video release asset fallback', finalPacket.includes(VIDEO_RELEASE_ASSET_URL), VIDEO_RELEASE_ASSET_URL);
+  check('final packet keeps X as required primary upload', /X remains the required primary video upload/i.test(finalPacket), 'FINAL_SUBMISSION_PACKET.md');
+  check('final packet names current test count', finalPacket.includes(`${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT} passing`) && !/\b(?:183|184)\/(?:183|184)\b/.test(finalPacket), `${EXPECTED_TEST_COUNT}/${EXPECTED_TEST_COUNT}`);
   check('final packet names current judging criteria', /usefulness, viability, and presentation/i.test(finalPacket), 'judging criteria');
   check('final packet names video judge guide', finalPacket.includes(VIDEO_JUDGE_GUIDE), VIDEO_JUDGE_GUIDE);
 }
 
 if (publicRepoRelease) {
   check('public repo release doc names immutable public release tag', publicRepoRelease.includes(PUBLIC_RELEASE_TAG), PUBLIC_RELEASE_TAG);
+  check('public repo release doc names release asset bundle', publicRepoRelease.includes(PUBLIC_RELEASE_PAGE_URL), PUBLIC_RELEASE_PAGE_URL);
+  check('public repo release doc keeps video out of git', /not committed into the public repo/i.test(publicRepoRelease), 'PUBLIC_REPO_RELEASE.md');
+  check('public repo release doc keeps release assets as fallback audit', /fallback\/audit assets/i.test(publicRepoRelease), 'PUBLIC_REPO_RELEASE.md');
   check('public repo release doc names video judge guide', publicRepoRelease.includes(VIDEO_JUDGE_GUIDE), VIDEO_JUDGE_GUIDE);
 }
 
 if (judgeQuickstart) {
   check('judge quickstart names primary video', judgeQuickstart.includes(VIDEO), VIDEO);
+  check('judge quickstart names release asset bundle', judgeQuickstart.includes(PUBLIC_RELEASE_PAGE_URL), PUBLIC_RELEASE_PAGE_URL);
+  check('judge quickstart names video release asset fallback', judgeQuickstart.includes(VIDEO_RELEASE_ASSET_URL), VIDEO_RELEASE_ASSET_URL);
   check('judge quickstart names public repo', judgeQuickstart.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('judge quickstart names immutable public release tag', judgeQuickstart.includes(PUBLIC_RELEASE_TAG), PUBLIC_RELEASE_TAG);
   check('judge quickstart names video judge guide', judgeQuickstart.includes(VIDEO_JUDGE_GUIDE), VIDEO_JUDGE_GUIDE);
   check('judge quickstart explains public repo media exclusion', /does not include generated videos/i.test(judgeQuickstart), 'public repo media exclusion');
+  check('judge quickstart keeps release asset as fallback audit only', /GitHub release asset is only a fallback\/audit copy/i.test(judgeQuickstart), 'JUDGE_QUICKSTART.md');
   check('judge quickstart maps judging criteria', /Usefulness:[\s\S]*Viability:[\s\S]*Presentation:/i.test(judgeQuickstart), 'criteria map');
   check('judge quickstart documents public clone check', /npm run judge:check/.test(judgeQuickstart), 'JUDGE_QUICKSTART.md');
   check('judge quickstart links judge scorecard', judgeQuickstart.includes(JUDGE_SCORECARD), JUDGE_SCORECARD);
@@ -169,10 +200,13 @@ if (judgeQuickstart) {
 if (judgeScorecard) {
   check('judge scorecard names public repo', judgeScorecard.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('judge scorecard names immutable public release tag', judgeScorecard.includes(PUBLIC_RELEASE_TAG) && judgeScorecard.includes(PUBLIC_RELEASE_URL), PUBLIC_RELEASE_TAG);
+  check('judge scorecard names release asset bundle', judgeScorecard.includes(PUBLIC_RELEASE_PAGE_URL), PUBLIC_RELEASE_PAGE_URL);
+  check('judge scorecard names video release asset fallback', judgeScorecard.includes(VIDEO_RELEASE_ASSET_URL), VIDEO_RELEASE_ASSET_URL);
   check('judge scorecard names video judge guide', judgeScorecard.includes(VIDEO_JUDGE_GUIDE), VIDEO_JUDGE_GUIDE);
   check('judge scorecard names primary video', judgeScorecard.includes(VIDEO), VIDEO);
   check('judge scorecard names primary video hash', judgeScorecard.includes(VIDEO_SHA256), VIDEO_SHA256);
   check('judge scorecard names optional X cover', judgeScorecard.includes(COVER_IMAGE) && judgeScorecard.includes(COVER_SHA256), COVER_IMAGE);
+  check('judge scorecard keeps release asset as fallback audit only', /fallback\/audit bundle/i.test(judgeScorecard), JUDGE_SCORECARD);
   check('judge scorecard maps live criteria', ['usefulness', 'viability', 'presentation'].every((key) => new RegExp(key, 'i').test(judgeScorecard)), JUDGE_SCORECARD);
   check('judge scorecard documents public clone check', /npm run judge:check/.test(judgeScorecard), JUDGE_SCORECARD);
   check('judge scorecard keeps Stripe wording in test mode', /Stripe test-mode/i.test(judgeScorecard), JUDGE_SCORECARD);
@@ -190,15 +224,19 @@ if (videoJudgeGuide) {
 
 check('submission manifest parses', Boolean(submissionManifest), SUBMISSION_MANIFEST);
 if (submissionManifest) {
+  const releaseAssets = new Map((submissionManifest.releaseAssets?.assets || []).map((asset) => [asset.name, asset]));
   check('submission manifest names public repo', submissionManifest.project?.publicRepo === PUBLIC_REPO_URL, submissionManifest.project?.publicRepo);
   check('submission manifest names immutable public release tag', submissionManifest.project?.publicReleaseTag === PUBLIC_RELEASE_TAG, submissionManifest.project?.publicReleaseTag);
   check('submission manifest names immutable public release url', submissionManifest.project?.publicReleaseUrl === PUBLIC_RELEASE_URL, submissionManifest.project?.publicReleaseUrl);
+  check('submission manifest names release asset bundle', submissionManifest.project?.publicReleaseAssetsUrl === PUBLIC_RELEASE_PAGE_URL, submissionManifest.project?.publicReleaseAssetsUrl);
   check('submission manifest names judge scorecard', submissionManifest.project?.judgeScorecard === JUDGE_SCORECARD, submissionManifest.project?.judgeScorecard);
   check('submission manifest names video judge guide', submissionManifest.project?.videoJudgeGuide === VIDEO_JUDGE_GUIDE, submissionManifest.project?.videoJudgeGuide);
   check('submission manifest names primary announcement', submissionManifest.hackathon?.primaryAnnouncement === PRIMARY_ANNOUNCEMENT, submissionManifest.hackathon?.primaryAnnouncement);
   check('submission manifest names announcement mirror', submissionManifest.hackathon?.announcementMirror === ANNOUNCEMENT_MIRROR, submissionManifest.hackathon?.announcementMirror);
   check('submission manifest names primary video', submissionManifest.submissionVideo?.path === VIDEO, submissionManifest.submissionVideo?.path);
   check('submission manifest names primary video hash', submissionManifest.submissionVideo?.sha256 === VIDEO_SHA256, submissionManifest.submissionVideo?.sha256);
+  check('submission manifest names video release asset fallback', submissionManifest.submissionVideo?.releaseAssetUrl === VIDEO_RELEASE_ASSET_URL, submissionManifest.submissionVideo?.releaseAssetUrl);
+  check('submission manifest keeps release asset as fallback audit only', /fallback\/audit copy/i.test(submissionManifest.submissionVideo?.publicDelivery || '') && /not a substitute/i.test(submissionManifest.submissionVideo?.publicDelivery || ''), submissionManifest.submissionVideo?.publicDelivery);
   check('submission manifest names posting packet', submissionManifest.postingPacket?.path === POSTING_PACKET, submissionManifest.postingPacket?.path);
   check('submission manifest names X post length', submissionManifest.postingPacket?.xPostRawCharacters === 255, submissionManifest.postingPacket?.xPostRawCharacters);
   check('submission manifest names X cover image', submissionManifest.postingPacket?.xCoverImage === COVER_IMAGE, submissionManifest.postingPacket?.xCoverImage);
@@ -211,11 +249,20 @@ if (submissionManifest) {
   check('submission manifest names frame QA report hash', submissionManifest.validation?.frameQa?.sha256 === FRAME_QA_SHA256, submissionManifest.validation?.frameQa?.sha256);
   check('submission manifest keeps OCR diagnostic-only', /diagnostic only/i.test(submissionManifest.validation?.videoQa?.ocrPolicy || ''), submissionManifest.validation?.videoQa?.ocrPolicy);
   check('submission manifest maps judging criteria', ['usefulness', 'viability', 'presentation'].every((key) => Boolean(submissionManifest.judgeMap?.[key])), JSON.stringify(Object.keys(submissionManifest.judgeMap || {})));
+  check('submission manifest names release asset page', submissionManifest.releaseAssets?.githubRelease === PUBLIC_RELEASE_PAGE_URL, submissionManifest.releaseAssets?.githubRelease);
+  check('submission manifest release asset purpose is fallback audit only', /Fallback\/audit bundle/.test(submissionManifest.releaseAssets?.purpose || '') && /X-attached MP4 remains the required primary/.test(submissionManifest.releaseAssets?.purpose || ''), submissionManifest.releaseAssets?.purpose);
+  check('submission manifest release asset names primary MP4', releaseAssets.get('agent-ic-demo-final-winning-v3.mp4')?.url === VIDEO_RELEASE_ASSET_URL && releaseAssets.get('agent-ic-demo-final-winning-v3.mp4')?.sha256 === VIDEO_SHA256, JSON.stringify(releaseAssets.get('agent-ic-demo-final-winning-v3.mp4') || {}));
+  check('submission manifest release asset names X cover', releaseAssets.get('agent-ic-x-cover-proof.jpg')?.url === COVER_RELEASE_ASSET_URL && releaseAssets.get('agent-ic-x-cover-proof.jpg')?.sha256 === COVER_SHA256, JSON.stringify(releaseAssets.get('agent-ic-x-cover-proof.jpg') || {}));
+  check('submission manifest release asset names video QA report', releaseAssets.get('video-qa-report-winning-v3.json')?.url === VIDEO_QA_RELEASE_ASSET_URL && releaseAssets.get('video-qa-report-winning-v3.json')?.sha256 === VIDEO_QA_SHA256, JSON.stringify(releaseAssets.get('video-qa-report-winning-v3.json') || {}));
+  check('submission manifest release asset names frame QA report', releaseAssets.get('frame-review-winning-v3.json')?.url === FRAME_QA_RELEASE_ASSET_URL && releaseAssets.get('frame-review-winning-v3.json')?.sha256 === FRAME_QA_SHA256, JSON.stringify(releaseAssets.get('frame-review-winning-v3.json') || {}));
+  check('submission manifest release asset names contact sheet', releaseAssets.get('video-qa-contact-sheet-winning-v3.jpg')?.url === CONTACT_SHEET_RELEASE_ASSET_URL && releaseAssets.get('video-qa-contact-sheet-winning-v3.jpg')?.sha256 === CONTACT_SHEET_SHA256, JSON.stringify(releaseAssets.get('video-qa-contact-sheet-winning-v3.jpg') || {}));
+  check('submission manifest release asset names sidecar', releaseAssets.get('stage-events-winning-v3.json')?.url === SIDECAR_RELEASE_ASSET_URL && releaseAssets.get('stage-events-winning-v3.json')?.sha256 === SIDECAR_SHA256, JSON.stringify(releaseAssets.get('stage-events-winning-v3.json') || {}));
+  check('submission manifest release asset names public tarball URL', releaseAssets.get('agent-ic-public-submission.tar.gz')?.url === PUBLIC_TARBALL_RELEASE_ASSET_URL, JSON.stringify(releaseAssets.get('agent-ic-public-submission.tar.gz') || {}));
 }
 
 const docsText = REQUIRED_DOCS.map((file) => readText(file)).join('\n');
 check('public docs avoid stale v2 artifact references', !/(winning-v2|f3c6ce8a|2931\/2931)/.test(docsText), 'stale artifact scan');
-check('public docs avoid stale test-count references', !/\b183(?:\/183| passing tests)\b/.test(docsText), 'stale test-count scan');
+check('public docs avoid stale test-count references', !/\b(?:183|184)(?:\/(?:183|184)| passing tests)\b/.test(docsText), 'stale test-count scan');
 check('public docs avoid raw provider secrets', !/(sk_(live|test)_[A-Za-z0-9]{16,}|nvapi-[A-Za-z0-9_-]{16,}|whsec_[A-Za-z0-9]{16,})/.test(docsText), 'secret scan');
 check('public docs keep Stripe wording in test mode', /Stripe test-mode/i.test(docsText) && !/production money movement/i.test(submission), 'Stripe wording');
 

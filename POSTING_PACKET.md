@@ -9,7 +9,9 @@ Use this packet for the account-bound submission steps. Do not alter the X copy,
 - Optional X custom thumbnail/cover, if the upload UI offers it: `demo-out/agent-ic-x-cover-proof.jpg`
 - Cover SHA-256: `d54a90f93ae9e11330cb0087df4633e70dbf284e32f6ed1e03c5b2fea0d48be1`
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`
-- Immutable public release tag: `hackathon-submission-2026-06-25-final-v2`
+- Immutable public release tag: `hackathon-submission-2026-06-25-final-v3`
+- Release asset bundle fallback: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
+- Video release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v3/agent-ic-demo-final-winning-v3.mp4`
 - Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 - Source requirements: `https://x.com/NousResearch/status/2066921443548348436`
 
@@ -69,7 +71,7 @@ Enterprises are buying agentic services faster than finance, security, and opera
 Why it is viable:
 
 ```text
-The prototype is a working Next.js control plane with live-proof gates. The current submission cut has passing video QA, 184 passing tests, production build, API/browser smoke, release check, masked proof report, test-mode Stripe receipt, Nemotron request evidence, OpenShell/policy block receipt, public workload hash, and live NemoHermes sandbox execution receipt. Production gaps are documented separately and not overstated.
+The prototype is a working Next.js control plane with live-proof gates. The current submission cut has passing video QA, 185 passing tests, production build, API/browser smoke, release check, masked proof report, test-mode Stripe receipt, Nemotron request evidence, OpenShell/policy block receipt, public workload hash, and live NemoHermes sandbox execution receipt. Production gaps are documented separately and not overstated.
 ```
 
 Integrations used:
@@ -84,6 +86,7 @@ Hermes Agent/NemoHermes for governed playbook execution receipts, NVIDIA Nemotro
 2. Upload `demo-out/agent-ic-demo-final-winning-v3.mp4` to X with the exact X post copy and alt text above.
 3. If X offers a custom thumbnail/cover selector, use `demo-out/agent-ic-x-cover-proof.jpg`.
 4. Confirm the published X post includes the attached video, `@NousResearch`, and the public repo URL.
-5. Replace `X_POST_URL` in the Discord copy with the published X post URL.
-6. Post the Discord copy in the Nous submissions channel.
-7. Complete the Typeform with the answers above.
+5. Keep the GitHub release asset bundle as fallback/audit evidence; it does not replace the required X video upload.
+6. Replace `X_POST_URL` in the Discord copy with the published X post URL.
+7. Post the Discord copy in the Nous submissions channel.
+8. Complete the Typeform with the answers above.

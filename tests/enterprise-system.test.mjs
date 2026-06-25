@@ -37,6 +37,37 @@ test('worker agent processes NHTSA complaints', async () => {
   assert.ok(result.evidence.accuracy > 0, 'has accuracy');
 });
 
+test('worker agent recovers malformed batch Nemotron output with per-item live calls', async () => {
+  const { runWorkerTrial } = await import('../lib/workerAgent.js');
+  const { getCaseById } = await import('../lib/enterpriseCases.js');
+  const caseDef = getCaseById('safety-ops-complaint-triage');
+  let calls = 0;
+  const sampleNemotronClient = {
+    available: true,
+    classify: async () => {
+      calls += 1;
+      if (calls <= 2) {
+        return {
+          ok: true,
+          requestId: `chatcmpl-batch-malformed-${calls}`,
+          text: JSON.stringify({ status: 'ok', note: 'missing classifications array' }),
+        };
+      }
+      return {
+        ok: true,
+        requestId: `chatcmpl-per-item-${calls}`,
+        text: JSON.stringify({ classification: { queue: 'technical', confidence: 0.91, rationale: 'single item recovered' } }),
+      };
+    },
+  };
+
+  const result = await runWorkerTrial({ caseDef, nemotronClient: sampleNemotronClient });
+  assert.equal(result.evidence.classificationMethod.nemotronClassified, 3);
+  assert.equal(result.evidence.classificationMethod.patternExtended, result.evidence.casesProcessed - 3);
+  assert.match(result.evidence.classificationMethod.nemotronRequestId, /^chatcmpl-per-item-/);
+  assert.equal(calls, 5);
+});
+
 test('procurement decision engine produces verdict', async () => {
   const { evaluateTrial } = await import('../lib/procurementDecisionEngine.js');
   const { getCaseById } = await import('../lib/enterpriseCases.js');

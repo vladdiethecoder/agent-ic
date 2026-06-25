@@ -13,7 +13,8 @@ npm run public:export
 The export writes a stripped repo to `.agent-ic/public-submission-export/agent-ic` and a tarball at `.agent-ic/agent-ic-public-submission.tar.gz`.
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
-Immutable public release tag: `hackathon-submission-2026-06-25-final-v2`
+Immutable public release tag: `hackathon-submission-2026-06-25-final-v3`
+Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
 Machine-readable proof map: `SUBMISSION_MANIFEST.json`
 Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 
@@ -25,7 +26,7 @@ The public export intentionally excludes:
 - `demo-out/` rendered videos, QA frames, browser profiles, and local generated state
 - local binary/model/OCR/media artifacts
 
-The final video should be attached to the public tweet, not committed into the public repo.
+The final video must be attached to the public tweet, not committed into the public repo. The immutable GitHub release may attach the same MP4, QA reports, contact sheet, sidecar, X cover, and stripped public source tarball as fallback/audit assets.
 
 Before pushing, inspect `.agent-ic/public-submission-export-manifest.json` for the tarball hash and included file list.
 

@@ -4,7 +4,9 @@ Agent IC is an enterprise procurement control plane for agentic services. It fun
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
 
-Immutable public release tag: `hackathon-submission-2026-06-25-final-v2`
+Immutable public release tag: `hackathon-submission-2026-06-25-final-v3`
+
+Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
 
 For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
 
@@ -13,6 +15,7 @@ For the shortest criteria-by-criteria read, start with `JUDGE_SCORECARD.md`.
 Primary submission video:
 
 - `demo-out/agent-ic-demo-final-winning-v3.mp4`
+- Release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v3/agent-ic-demo-final-winning-v3.mp4`
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
 - Runtime: 114.84 seconds
 - Format: 1920x1080 H.264/AAC
@@ -20,7 +23,7 @@ Primary submission video:
 - Timestamped video guide: `VIDEO_JUDGE_GUIDE.md`
 - Optional X custom cover: `demo-out/agent-ic-x-cover-proof.jpg`
 
-The public GitHub repo intentionally does not include generated videos, frame dumps, local browser profiles, or `.env.local`. The video should be attached to the X submission post; the repo contains the app, source, data snapshot, tests, proof docs, and validators.
+The public GitHub repo intentionally does not include generated videos, frame dumps, local browser profiles, or `.env.local`. The video must be attached to the X submission post; the GitHub release asset is only a fallback/audit copy. The repo contains the app, source, data snapshot, tests, proof docs, and validators.
 
 ## What The Demo Proves
 
@@ -76,6 +79,7 @@ npm run public:export
 Video QA is based on `ffprobe`, `ffmpeg`, ImageMagick contact sheets, frame hashes, detail metrics, and frame-difference metrics. OCR is diagnostic only.
 
 The current QA report hashes are recorded in `SUBMISSION_MANIFEST.json`.
+The final release also attaches the video QA report, frame QA report, contact sheet, stage-event sidecar, X cover, and stripped source tarball as fallback/audit assets.
 
 ## Judge Criteria Map
 

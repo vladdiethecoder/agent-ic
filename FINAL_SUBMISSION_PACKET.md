@@ -76,6 +76,8 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 
 - Primary submission video: `demo-out/agent-ic-demo-final-winning-v3.mp4`
 - SHA-256: `5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726`
+- Release asset fallback: `https://github.com/vladdiethecoder/agent-ic/releases/download/hackathon-submission-2026-06-25-final-v3/agent-ic-demo-final-winning-v3.mp4`
+- Release asset bundle: `https://github.com/vladdiethecoder/agent-ic/releases/tag/hackathon-submission-2026-06-25-final-v3`
 - Duration: 114.84 seconds
 - Resolution: 1920x1080
 - Video/audio: H.264 + AAC, audio normalized to `-16.5 LUFS`
@@ -85,6 +87,7 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 - Video QA: `demo-out/video-qa-report-winning-v3.json` - PASS, 65/65 checks using `ffprobe`/`ffmpeg` video analysis plus ImageMagick contact-sheet and frame-difference analysis. SHA-256: `1007217f8a8c045d20974e157e62ecfa7659dcda976b704189f4c43d481eb61a`. OCR is skipped by default and recorded only as a diagnostic when explicitly enabled.
 - Frame QA: `demo-out/frame-review-winning-v3.json` - PASS, 16/16 checks, 2871/2871 frames extracted, no black-frame intervals, 12 contact sheets generated, 24/24 sampled frame hashes unique, 23/23 sampled frame transitions with meaningful image differences. SHA-256: `95a7a4e6257c7a05f17fbf19854095a426a604a674d7ba7548c4d2e2c54a862f`.
 - Contact sheets: `demo-out/video-qa-contact-sheet-winning-v3.jpg` and `demo-out/frame-review-winning-v3/contact-sheets/`
+- The GitHub release asset bundle attaches the MP4, QA reports, contact sheet, stage-event sidecar, X cover, and stripped source tarball as fallback/audit evidence. X remains the required primary video upload.
 - Supporting strict-proof walkthrough: `demo-out/agent-ic-demo-final-winning.mp4` remains available at 89.00 seconds with strict sidecar evidence in `demo-out/stage-events-final.json`, but it is no longer the primary judge-facing cut.
 
 ### Honesty note
@@ -95,7 +98,7 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 ## Latest Local Evidence
 
 - `npm run lint`: passing.
-- `npm test`: 184/184 passing.
+- `npm test`: 185/185 passing.
 - `npm run build`: production build passing.
 - `AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke`: passing when run against the local Next server, with Nemotron, Stripe, OpenShell, evidence storage, and renewal relationships verified.
 - `AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:api`: passing contract/edge checks, including OpenAPI, version headers, proof report, audit chain, evidence export, readiness, CORS, and security headers.
