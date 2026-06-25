@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.agent-ic/
+.env
+.env.*
+!.env.example
+demo-out/
+coverage/
+*.log
