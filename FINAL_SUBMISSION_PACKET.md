@@ -28,7 +28,7 @@ Enterprises do not need another isolated AI agent. They need a governed investme
 
 ## Live Judging Criteria Alignment
 
-The current hackathon entry requirements were checked on June 25, 2026 (`https://digg.com/tech/hz8d871s`, mirroring the current Nous/X announcement): tweet a 1-3 minute demo video tagging `@NousResearch`, drop the link in the Discord submissions channel (`https://discord.gg/nousresearch/PFbQZMesC`), complete the Typeform (`https://form.typeform.com/to/hpEifIK4`), and optimize for usefulness, viability, and presentation.
+The current hackathon entry requirements were checked on June 25, 2026 (`https://x.com/NousResearch/status/2069150335386456283`, mirrored at `https://digg.com/tech/hz8d871s`): tweet a 1-3 minute demo video tagging `@NousResearch`, drop the link in the Discord submissions channel (`https://discord.gg/nousresearch/PFbQZMesC`), complete the Typeform (`https://form.typeform.com/to/hpEifIK4`), and optimize for usefulness, viability, and presentation.
 
 Public code repo for the X post: `https://github.com/vladdiethecoder/agent-ic`.
 
@@ -100,6 +100,7 @@ AGENT_IC_DEMO_VIDEO=demo-out/agent-ic-demo-final-winning.mp4 AGENT_IC_FRAME_REVI
 - `npm run submission:preflight`: passing against the v3 video, stable sidecar, QA reports, tweet copy, Typeform copy, and public-doc stale/secret scans.
 - `npm run public:export`: passing, wrote `.agent-ic/agent-ic-public-submission.tar.gz` and `.agent-ic/public-submission-export-manifest.json` without `.env.local`, `demo-out`, `.agent-ic`, `.git`, or `node_modules`.
 - Public repo: `https://github.com/vladdiethecoder/agent-ic`, populated from the stripped public export only.
+- Machine-readable judge proof map: `SUBMISSION_MANIFEST.json`.
 - Manual image review with full-resolution frames confirms the visible address bar uses the clean product host `app.agenticontrolplane.com` rather than localhost, ports, private workspace paths, or DevTools. The stable v3 sidecar records `browserUrl: http://app.agenticontrolplane.com/trial`.
 
 Refresh this packet after a final recording pass if the video, route, or proof artifacts change.

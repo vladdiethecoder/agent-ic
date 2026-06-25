@@ -74,6 +74,7 @@ Video QA is based on `ffprobe`, `ffmpeg`, ImageMagick contact sheets, frame hash
 ## More Detail
 
 - `SUBMISSION.md` has tweet copy, Typeform copy, and the exact public submission steps.
+- `SUBMISSION_MANIFEST.json` is the machine-readable judge proof map.
 - `FINAL_SUBMISSION_PACKET.md` has the full evidence packet and current validation list.
 - `VALIDATION.md` lists fail-closed video and proof requirements.
 - `PUBLIC_REPO_RELEASE.md` explains how the stripped public repo export is built.

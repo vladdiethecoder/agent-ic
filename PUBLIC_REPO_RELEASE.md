@@ -12,6 +12,7 @@ npm run public:export
 The export writes a stripped repo to `.agent-ic/public-submission-export/agent-ic` and a tarball at `.agent-ic/agent-ic-public-submission.tar.gz`.
 
 Public repo: `https://github.com/vladdiethecoder/agent-ic`
+Machine-readable proof map: `SUBMISSION_MANIFEST.json`
 
 The public export intentionally excludes:
 

@@ -1,0 +1,70 @@
+{
+  "project": {
+    "name": "Agent IC",
+    "oneLinePitch": "Fund the right AI pilots. Stop the wrong ones. Prove every dollar with evidence.",
+    "publicRepo": "https://github.com/vladdiethecoder/agent-ic",
+    "primarySurface": "/trial"
+  },
+  "hackathon": {
+    "name": "Hermes Agent Accelerated Business Hackathon",
+    "presentedBy": ["NVIDIA", "Stripe", "Nous Research"],
+    "requirementsCheckedAt": "2026-06-25",
+    "primaryAnnouncement": "https://x.com/NousResearch/status/2069150335386456283",
+    "announcementMirror": "https://digg.com/tech/hz8d871s",
+    "deadline": "2026-06-30",
+    "requiredActions": [
+      "Tweet a 1-3 minute demo video tagging @NousResearch with a short writeup",
+      "Drop the X post link in the Nous Discord submissions channel",
+      "Complete the Typeform submission"
+    ],
+    "judgingCriteria": ["usefulness", "viability", "presentation"]
+  },
+  "submissionVideo": {
+    "path": "demo-out/agent-ic-demo-final-winning-v3.mp4",
+    "sha256": "5da9da4f9b200fe4f304698d8325d225f5965119d5e98c9682c3c82e0fa14726",
+    "durationSeconds": 114.84,
+    "resolution": "1920x1080",
+    "codecs": "h264/aac",
+    "publicDelivery": "Attach this MP4 to the X submission post; generated video artifacts are intentionally excluded from the public repo."
+  },
+  "proofClaims": {
+    "stripe": "Stripe test-mode Checkout Session creates a bounded $100 spend envelope.",
+    "workload": "Governed worker processes 330 public NHTSA ODI complaint rows.",
+    "nemotron": "Nemotron classification and procurement synthesis record a live request id.",
+    "policy": "Policy gate blocks a $150 CARFAX enrichment attempt with HTTP 403 because it exceeds the $100 cap.",
+    "hermes": "Live NemoHermes sandbox receipt and governed playbook are recorded.",
+    "decision": "Agent IC computes ROI, waste, claim validation, renewal evidence, and a continue/revise/kill procurement verdict."
+  },
+  "validation": {
+    "coreCommands": [
+      "npm test",
+      "npm run build",
+      "npm run release:check",
+      "npm run submission:preflight",
+      "npm run public:export"
+    ],
+    "videoQa": {
+      "report": "demo-out/video-qa-report-winning-v3.json",
+      "result": "PASS",
+      "checks": "65/65",
+      "method": "ffprobe, ffmpeg, ImageMagick contact sheets, frame hashes, detail metrics, and frame-difference metrics",
+      "ocrPolicy": "OCR is diagnostic only and is not a pass/fail signal."
+    },
+    "frameQa": {
+      "report": "demo-out/frame-review-winning-v3.json",
+      "result": "PASS",
+      "checks": "16/16",
+      "framesExtracted": 2871
+    }
+  },
+  "publicRepoPolicy": {
+    "includes": ["source", "tests", "proof docs", "validators", "data snapshot"],
+    "excludes": [".env.local", "generated videos", "frame dumps", "browser profiles", "local state", "node_modules", ".git"],
+    "exportCommand": "npm run public:export"
+  },
+  "judgeMap": {
+    "usefulness": "Agent IC gives finance, security, and operations teams a concrete way to fund, govern, measure, and stop vendor agents before contract expansion.",
+    "viability": "The repo carries release checks, masked proof reports, public workload evidence, test-mode Stripe receipts, Nemotron/NemoHermes receipts, policy-block evidence, and explicit production boundaries.",
+    "presentation": "The v3 video is under two minutes, uses a clean browser surface, and keeps the proof arc in-frame from mission intake through renewal evidence."
+  }
+}

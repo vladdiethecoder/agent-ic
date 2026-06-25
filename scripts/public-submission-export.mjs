@@ -25,6 +25,7 @@ const TOP_LEVEL_FILES = [
   'README.md',
   'STORYBOARD.md',
   'SUBMISSION.md',
+  'SUBMISSION_MANIFEST.json',
   'VALIDATION.md',
   'eslint.config.mjs',
   'middleware.js',

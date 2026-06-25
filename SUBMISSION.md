@@ -41,6 +41,7 @@ Enterprises do not need another isolated AI agent — they need a governed funct
 - [x] Record browser-chrome demo video from `/trial`
 - [x] Run image/video-analysis QA: `demo-out/video-qa-report-winning-v3.json` and `demo-out/frame-review-winning-v3.json`
 - [x] Prepare stripped public repo export: `.agent-ic/agent-ic-public-submission.tar.gz`
+- [x] Add machine-readable judge proof map: `SUBMISSION_MANIFEST.json`
 - [x] Push stripped public repo to `https://github.com/vladdiethecoder/agent-ic`
 - [x] Confirm v3 video has no QR end card; public repo is carried in tweet copy and judge docs
 - [ ] Tweet demo video tagging @NousResearch
@@ -66,7 +67,7 @@ The preflight verifies the primary video hash, duration, codecs, v3 sidecar, vid
 
 ## Current Hackathon Requirements
 
-Source checked June 25, 2026: Hermes Agent Accelerated Business Hackathon, presented by NVIDIA, Stripe, and Nous Research (`https://digg.com/tech/hz8d871s`, mirroring the current Nous/X announcement).
+Source checked June 25, 2026: Hermes Agent Accelerated Business Hackathon, presented by NVIDIA, Stripe, and Nous Research (`https://x.com/NousResearch/status/2069150335386456283`, mirrored at `https://digg.com/tech/hz8d871s`).
 
 - Required public artifact: tweet a 1-3 minute demo video tagging `@NousResearch` with a short writeup.
 - Required follow-through: drop the tweet link in the Discord submissions channel and fill out the Typeform.

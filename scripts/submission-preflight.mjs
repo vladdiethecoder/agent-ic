@@ -9,7 +9,10 @@ const VIDEO_QA = 'demo-out/video-qa-report-winning-v3.json';
 const FRAME_QA = 'demo-out/frame-review-winning-v3.json';
 const SIDECAR = 'demo-out/stage-events-winning-v3.json';
 const CONTACT_SHEET = 'demo-out/video-qa-contact-sheet-winning-v3.jpg';
-const REQUIRED_DOCS = ['SUBMISSION.md', 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md'];
+const SUBMISSION_MANIFEST = 'SUBMISSION_MANIFEST.json';
+const PRIMARY_ANNOUNCEMENT = 'https://x.com/NousResearch/status/2069150335386456283';
+const ANNOUNCEMENT_MIRROR = 'https://digg.com/tech/hz8d871s';
+const REQUIRED_DOCS = ['SUBMISSION.md', 'FINAL_SUBMISSION_PACKET.md', 'VALIDATION.md', 'README.md', 'JUDGE_QUICKSTART.md', SUBMISSION_MANIFEST];
 const PUBLIC_REPO_URL = 'https://github.com/vladdiethecoder/agent-ic';
 
 const checks = [];
@@ -58,6 +61,7 @@ if (sidecar) {
 const submission = readText('SUBMISSION.md');
 const finalPacket = readText('FINAL_SUBMISSION_PACKET.md');
 const judgeQuickstart = readText('JUDGE_QUICKSTART.md');
+const submissionManifest = readJson(SUBMISSION_MANIFEST);
 for (const doc of REQUIRED_DOCS) check(`${doc} exists`, existsSync(doc), doc);
 if (submission) {
   const tweet = extractFirstCodeBlockAfter(submission, '## Judge-Facing Tweet Copy');
@@ -78,6 +82,17 @@ if (judgeQuickstart) {
   check('judge quickstart names public repo', judgeQuickstart.includes(PUBLIC_REPO_URL), PUBLIC_REPO_URL);
   check('judge quickstart explains public repo media exclusion', /does not include generated videos/i.test(judgeQuickstart), 'public repo media exclusion');
   check('judge quickstart maps judging criteria', /Usefulness:[\s\S]*Viability:[\s\S]*Presentation:/i.test(judgeQuickstart), 'criteria map');
+}
+
+check('submission manifest parses', Boolean(submissionManifest), SUBMISSION_MANIFEST);
+if (submissionManifest) {
+  check('submission manifest names public repo', submissionManifest.project?.publicRepo === PUBLIC_REPO_URL, submissionManifest.project?.publicRepo);
+  check('submission manifest names primary announcement', submissionManifest.hackathon?.primaryAnnouncement === PRIMARY_ANNOUNCEMENT, submissionManifest.hackathon?.primaryAnnouncement);
+  check('submission manifest names announcement mirror', submissionManifest.hackathon?.announcementMirror === ANNOUNCEMENT_MIRROR, submissionManifest.hackathon?.announcementMirror);
+  check('submission manifest names primary video', submissionManifest.submissionVideo?.path === VIDEO, submissionManifest.submissionVideo?.path);
+  check('submission manifest names primary video hash', submissionManifest.submissionVideo?.sha256 === VIDEO_SHA256, submissionManifest.submissionVideo?.sha256);
+  check('submission manifest keeps OCR diagnostic-only', /diagnostic only/i.test(submissionManifest.validation?.videoQa?.ocrPolicy || ''), submissionManifest.validation?.videoQa?.ocrPolicy);
+  check('submission manifest maps judging criteria', ['usefulness', 'viability', 'presentation'].every((key) => Boolean(submissionManifest.judgeMap?.[key])), JSON.stringify(Object.keys(submissionManifest.judgeMap || {})));
 }
 
 const docsText = REQUIRED_DOCS.map((file) => readText(file)).join('\n');
