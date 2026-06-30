@@ -37,7 +37,7 @@ frameworks and identifies what is implemented vs on the roadmap.
 | 6.2 | AI Objectives | Procurement-grade decisions: CONTINUE / REVISE / KILL | **Implemented** |
 | 7.2 | Competence | Role-based access: buyer, reviewer, approver, auditor | **Implemented** |
 | 7.4 | Communication | Procurement recommendation with business case narrative | **Implemented** |
-| 8.1 | Operational Control | OpenShell sandbox enforcement, network policy, spend caps | **Implemented** |
+| 8.1 | Operational Control | OpenShell receipts when observed; local deny-by-default policy gate, network policy, and spend caps otherwise | **Implemented with labeled runtime boundary** |
 | 8.2 | AI System Assessment | Trial evidence, vendor claim validation, metrics | **Implemented** |
 | 8.3 | Impact Assessment | Risk-at-scale analysis, waste assessment, opportunity cost | **Implemented** |
 | 9.1 | Monitoring | Renewal ledger, longitudinal trend tracking | **Implemented** |
@@ -66,14 +66,14 @@ frameworks and identifies what is implemented vs on the roadmap.
 
 ## Implementation Priority
 
-### Phase 1 (Current — Hackathon)
+### Phase 1 (Current prototype)
 - Policy enforcement via OpenShell
 - Evidence ledger with hashes
 - RBAC model
 - Health endpoint
 - Fail-closed architecture
 
-### Phase 2 (Post-Hackathon)
+### Phase 2 (Post-prototype)
 - SOC 2 Type II audit preparation
 - SSO/SAML integration
 - Immutable audit log (WORM storage)

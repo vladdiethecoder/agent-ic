@@ -1,4 +1,5 @@
 import { readAudit, subscribeAuditStream } from '../../../lib/auditStore.js';
+import { requireApiAccessAsync, requireTenantScope, tenantFromUrl } from '../../../lib/authz.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,11 @@ function sendEvent(controller, entry) {
 }
 
 export async function GET(request) {
+  const access = await requireApiAccessAsync(request, 'view_audit_log');
+  if (!access.ok) return access.response;
+  const tenantScope = requireTenantScope(access.principal, tenantFromUrl(request));
+  if (!tenantScope.ok) return tenantScope.response;
+
   const { searchParams } = new URL(request.url);
   const sinceId = searchParams.get('sinceId');
   const runId = searchParams.get('runId');
@@ -59,7 +65,7 @@ export async function GET(request) {
       }
 
       // Replay historical rows newer than sinceId in chronological order.
-      const existing = readAudit();
+      const existing = readAudit({ tenantId: access.principal.tenantId });
       const historical = existing
         .filter((entry) => idSequence(entry.id) > sinceSeq && matchesRun(entry))
         .sort((a, b) => idSequence(a.id) - idSequence(b.id));
@@ -69,7 +75,7 @@ export async function GET(request) {
 
       // Push future rows as they are appended.
       unsubscribe = subscribeAuditStream((entry) => {
-        if (matchesRun(entry)) sendEvent(controller, entry);
+        if (entry.tenantId === access.principal.tenantId && matchesRun(entry)) sendEvent(controller, entry);
       });
 
       // Close after timeout or when the client disconnects.

@@ -4,7 +4,7 @@
 
 Agent IC is an enterprise solution for buying agentic services with governance. It gives an enterprise a controlled way to trial an outside or internal worker agent: approve a bounded spend envelope, restrict tools and data access, observe the service doing real work, block unsafe or over-budget actions, import evidence, and decide whether the service earns more budget or autonomy.
 
-The submission thesis is:
+The product thesis is:
 
 > Enterprises will not buy autonomous agents at scale without a control plane that governs spend, actions, evidence, and renewal decisions.
 
@@ -14,7 +14,7 @@ Agent IC is that control plane.
 
 - Demonstrate an enterprise evaluating an agentic service before expanding spend.
 - Show a governed service trial where the service receives a hard trial envelope, performs real work, hits a policy block, imports evidence, and receives a continue/revise/kill decision.
-- Show Stripe-backed test-mode spend authorization, NVIDIA/Nemotron-backed reasoning or evidence synthesis, Hermes skill/playbook reuse, and NemoHermes/OpenShell policy enforcement.
+- Show Stripe-backed test-mode spend authorization, NVIDIA/Nemotron-backed reasoning or evidence synthesis, Hermes skill/playbook reuse, and OpenShell/NemoHermes receipts only when observed; otherwise label local policy/playbook artifacts explicitly.
 - Make the blocked-action beat visible: at least one out-of-policy tool or spend request is denied before the trial can expand.
 - Produce a clear audit trail: buyer, service under test, mission, envelope, policy, approvals, blocked events, evidence, decision, and next cap.
 - Save the learned service-evaluation procedure as a reusable Hermes playbook.
@@ -32,7 +32,7 @@ Agent IC is that control plane.
 
 - Enterprise innovation, operations, procurement, or finance leaders deciding which agentic services deserve budget and autonomy.
 - Security and governance owners who need proof that agentic services can be constrained before they touch production systems.
-- Hackathon judges evaluating usefulness, viability, sponsor alignment, and presentation quality.
+- Enterprise evaluators reviewing governed agentic-service purchasing, proof quality, and operational fit.
 
 ## 5. Core Demo Scenario
 
@@ -92,7 +92,7 @@ Agent IC:
 ## 10. Resolved Product Decisions
 
 - Final product name: Agent IC.
-- Primary submission framing: enterprise control plane for purchasing and governing agentic services.
+- Primary product framing: enterprise control plane for purchasing and governing agentic services.
 - Primary workload: real public NHTSA ODI complaint rows, used to evaluate a complaint-triage agentic service.
 - Stripe mode: test-mode Checkout Session only; no production money movement.
 - Final video path: strict live proof when recording claims live provider receipts.

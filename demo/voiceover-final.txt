@@ -1,45 +1,13 @@
-Agent IC is not the worker agent. It is the control plane around a paid agentic service trial.
+Agent IC is an enterprise procurement control plane for agentic spend. It gives finance, security, and operations one governed way to decide which AI vendors earn budget, tools, data, and production access.
 
-[pause:0.35]
+Instead of approving a vendor agent on trust, Agent IC funds a bounded trial, enforces policy, measures evidence, validates claims, and carries the result into renewals.
 
-The buyer sets a $100 envelope before the worker can touch outside services.
+RouteGuard AI is one example. Before a fourteen point four K contract, Agent IC gives the trial a one-hundred-dollar Stripe test-mode cap and a governed workload.
 
-[pause:0.25]
+The decision is not just yes or no. Safe trial continues, but a one-hundred-fifty-dollar CARFAX enrichment is blocked by NVIDIA OpenShell because it exceeds the approved cap.
 
-The workload is real: public NHTSA ODI complaint rows for vehicle safety triage.
+Now the buyer sees value: 301 complaints auto-routed, 29 human-review cases, two thousand six hundred sixty-nine dollars net value, and six point one eight times risk-adjusted ROI.
 
-[pause:0.25]
+The proof remains attached to the decision: Nemotron classifies 3 sample complaints, 327 pattern-extended rows stay labeled, plus Stripe test-mode receipt, NHTSA hash, OpenShell 403, and Hermes CLI receipt.
 
-I click once, and the empty run starts turning into receipts.
-
-[pause:0.35]
-
-Hermes dispatches the playbook. Nemotron returns a request ID, a score, and a rationale.
-
-[pause:0.3]
-
-Stripe creates a test-mode Checkout Session. That is a bounded authorization, not live production spend.
-
-[pause:0.35]
-
-Then the worker-agent asks for a $150 CARFAX lookup. Agent IC blocks it at the $100 cap: HTTP 403.
-
-[pause:0.45]
-
-That is the product moment: useful work can continue, but the over-cap action cannot.
-
-[pause:0.35]
-
-Now Agent IC imports evidence: 330 complaints, 283 routed automatically, 47 left for human review.
-
-[pause:0.35]
-
-The cost view is deliberately plain. Baseline review is $3,036; governed service cost is $532.
-
-[pause:0.35]
-
-Run from playbook shows the saved SKILL.md can replay the same policy and evidence checks on another mission.
-
-[pause:0.35]
-
-The QR opens the GitHub receipt surface. The buyer can audit source, proof artifacts, policy, and renewal logic.
+That is the enterprise product. Every agent gets the same trial, policy enforcement, ROI proof, and renewal evidence before spend or production access expands.

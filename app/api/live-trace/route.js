@@ -2,10 +2,17 @@ import { existsSync, statSync, openSync, readSync, closeSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { clearLiveTrace, getTracePath } from '../../../lib/liveTrace.js';
 import { readJsonBody } from '../../../lib/validation.js';
+import { authContext, requireApiAccessAsync, requireTenantScope, tenantFromBody, tenantFromUrl } from '../../../lib/authz.js';
+import { appendAudit } from '../../../lib/auditStore.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
+  const access = await requireApiAccessAsync(request, 'view_audit_log');
+  if (!access.ok) return access.response;
+  const tenantScope = requireTenantScope(access.principal, tenantFromUrl(request));
+  if (!tenantScope.ok) return tenantScope.response;
+
   const tracePath = getTracePath();
   const url = new URL(request.url);
   const since = Number(url.searchParams.get('since')) || 0;
@@ -102,6 +109,10 @@ export async function POST(request) {
   const parsedBody = await readJsonBody(request);
   if (!parsedBody.ok) return parsedBody.response;
   const body = parsedBody.body;
+  const access = await requireApiAccessAsync(request, 'reset_trace');
+  if (!access.ok) return access.response;
+  const tenantScope = requireTenantScope(access.principal, tenantFromBody(body));
+  if (!tenantScope.ok) return tenantScope.response;
 
   if (body.reset !== true || body.confirmReset !== 'AGENT_IC_DEMO_RESET') {
     return Response.json(
@@ -111,6 +122,7 @@ export async function POST(request) {
   }
 
   clearLiveTrace();
+  appendAudit({ ...authContext(access.principal), kind: 'admin', action: 'live_trace_reset', detail: 'Live trace reset with confirmation token' });
   return Response.json({ trace: [] });
 }
 

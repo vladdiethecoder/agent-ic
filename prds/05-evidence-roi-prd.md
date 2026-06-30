@@ -50,4 +50,4 @@ The memo must include:
 - Decision recommendation can be traced back to workload rows, provider receipts, and policy receipts.
 - The ROI model is simple enough to explain in the video.
 - A negative or weak pilot can be killed without looking like a product failure.
-- The memo is exportable or copyable for the submission writeup.
+- The memo is exportable or copyable for the product memo.

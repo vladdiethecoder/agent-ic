@@ -15,9 +15,9 @@ Core thesis: Enterprises do not need another isolated AI agent — they need a g
 - Framework: Next.js 15.5.19 App Router
 - Runtime: Node.js 24+ with ES modules and `node --test`
 - UI: React 19.2.3, JSX, CSS modules/global CSS
-- AI: NVIDIA Nemotron (NIM) for classification and procurement synthesis
+- AI: NVIDIA Nemotron (NIM) for sample classification in the current v7 run; procurement synthesis is claimed only when a run records a synthesis receipt
 - Payments: Stripe test-mode Checkout Sessions
-- Policy: NVIDIA OpenShell v0.0.66 (genuine agent sandbox runtime)
+- Policy: NVIDIA OpenShell when observed; otherwise an explicitly labeled local deny-by-default policy gate
 - Skills: Hermes Agent playbook generation and reuse
 - Data: NHTSA ODI, NVD CVE, GitHub, SEC EDGAR (all public, free)
 
@@ -30,9 +30,9 @@ Core thesis: Enterprises do not need another isolated AI agent — they need a g
 - `vendorClaimValidator.js` — validates vendor marketing claims against measured trial results
 - `intakeAnalyzer.js` — mission-statement-driven intake with domain keyword matching
 - `procurementDecisionEngine.js` — procurement-grade decisions with sign/don't-sign recommendations, risk-at-scale analysis, waste assessment
-- `trialOrchestrator.js` — 8-phase orchestration: intake → Stripe → worker dispatch → OpenShell policy → metrics → Nemotron synthesis → playbook → ledger recording
+- `trialOrchestrator.js` — 8-phase orchestration: intake → Stripe → worker dispatch → policy enforcement → metrics → deterministic decision or receipt-backed Nemotron synthesis → playbook → ledger recording
 - `workerAgent.js` — real data processing (NHTSA, GitHub, NVD, invoices) with Nemotron or deterministic classification
-- `openShellIntegration.js` — genuine NVIDIA OpenShell enforcement (creates real Docker sandboxes, applies network policy)
+- `openShellIntegration.js` — attempts NVIDIA OpenShell sandbox enforcement when available; otherwise records local policy-gate proof without claiming sandbox enforcement
 - `renewalLedger.js` — multi-cycle evidence accumulation with monthly renewal decisions and trend analysis
 
 ### API Routes
@@ -62,7 +62,7 @@ All npm scripts that invoke Next.js go through `scripts/safe-next.mjs` because t
 ```bash
 npm install
 npm run dev          # Start dev server
-npm test             # 100 tests
+npm test             # 206 tests
 npm run build        # Production build
 npm run smoke        # API smoke tests
 npm run smoke:browser
@@ -80,7 +80,7 @@ STRIPE_SECRET_KEY=sk_test-...
 AGENT_IC_DEMO_MODE=false
 ```
 
-NVIDIA OpenShell is installed system-wide. Verify with `openshell status`.
+NVIDIA OpenShell is optional at runtime. If installed, verify with `openshell status`; otherwise Agent IC labels local policy-gate enforcement instead of claiming sandbox proof.
 
 ## Code Style Guidelines
 

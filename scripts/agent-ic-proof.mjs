@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
-const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const WORKSPACE_ROOT = path.resolve(SCRIPT_DIR, '..');
-const INTERNAL_BASE_URL = (process.env.AGENT_IC_INTERNAL_BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
-const STRIPE_ID_FILE = process.env.AGENT_IC_STRIPE_ID_FILE || '/tmp/agent-ic-final-stripe-session';
-const GATE_FILE = process.env.AGENT_IC_GATE_FILE || '/tmp/agent-ic-final-gate.json';
+const BASE_URL = (process.env.AGENT_IC_BASE_URL || process.env.AGENT_IC_INTERNAL_BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
+const PROOF_CASE_ID = process.env.AGENT_IC_PROOF_CASE_ID || 'safety-ops-complaint-triage';
+const PROOF_MISSION = process.env.AGENT_IC_PROOF_MISSION || 'Evaluate RouteGuard AI for complaint triage before signing a $14,400 annual contract';
+const PROOF_RUN_ID = process.env.AGENT_IC_PROOF_RUN_ID || '';
+const STRICT_LIVE = process.env.AGENT_IC_PROOF_REQUIRE_LIVE === 'true';
 
 function maskId(id) {
   if (!id) return null;
@@ -24,12 +21,8 @@ function print(value) {
   process.stdout.write(`${JSON.stringify(value, null, 2)}\n`);
 }
 
-async function loadText(file) {
-  return fs.readFile(file, 'utf8');
-}
-
 async function fetchJson(pathname, options = {}) {
-  const response = await fetch(`${INTERNAL_BASE_URL}${pathname}`, options);
+  const response = await fetch(`${BASE_URL}${pathname}`, options);
   const json = await response.json().catch(() => ({}));
   if (!response.ok) {
     throw new Error(json.message || json.error || `HTTP ${response.status}`);
@@ -37,94 +30,173 @@ async function fetchJson(pathname, options = {}) {
   return json;
 }
 
+async function createTrial({ missionStatement = PROOF_MISSION, caseId = PROOF_CASE_ID } = {}) {
+  return fetchJson('/api/enterprise-trial', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ caseId, missionStatement }),
+  });
+}
+
+async function loadTrial() {
+  if (PROOF_RUN_ID) {
+    const stored = await fetchJson(`/api/trials?runId=${encodeURIComponent(PROOF_RUN_ID)}`);
+    if (!stored.trial) throw new Error(`Stored trial not found: ${PROOF_RUN_ID}`);
+    return stored.trial;
+  }
+  return createTrial();
+}
+
+function requireStrictLive(condition, message) {
+  if (STRICT_LIVE && !condition) throw new Error(message);
+}
+
+function shortHash(value) {
+  if (!value) return null;
+  return String(value).slice(0, 16);
+}
+
 async function proofStripe() {
-  const sessionId = (await loadText(STRIPE_ID_FILE)).trim();
-  if (!sessionId.startsWith('cs_test')) throw new Error('Stripe test-mode session id is missing');
-  const result = await fetchJson(`/api/retrieve-checkout-session?session_id=${encodeURIComponent(sessionId)}`);
+  const trial = await loadTrial();
+  const stripe = trial.stripe || {};
+  const stripeReceiptId = stripe.sessionId || stripe.sessionIdMasked || null;
+  const hasTestSession = stripe.mode === 'live' && stripe.testMode === true && typeof stripeReceiptId === 'string' && stripeReceiptId.startsWith('cs_test');
+  requireStrictLive(hasTestSession, 'Stripe test-mode Checkout Session receipt is missing');
   print({
     provider: 'Stripe',
-    proof: 'Checkout Session create + retrieve',
-    sessionId: maskId(result.sessionId || result.id || sessionId),
-    mode: result.mode,
-    status: result.status,
-    paymentStatus: result.paymentStatus,
-    amountTotalCents: result.amountTotal,
-    currency: result.currency,
-    metadata: {
-      proposalId: result.metadata?.proposal_id || null,
-      spendCapDollars: result.metadata?.autonomous_spend_cap_dollars || null,
-    },
+    proof: hasTestSession ? 'Checkout Session create recorded in test mode' : 'bounded local spend envelope fallback',
+    state: hasTestSession ? 'test-mode-session-recorded' : 'unavailable-or-fallback',
+    runId: trial.runId,
+    sessionId: stripe.sessionId ? maskId(stripe.sessionId) : stripe.sessionIdMasked || null,
+    mode: stripe.mode || 'unavailable',
+    testMode: stripe.testMode === true,
+    amountDollars: stripe.amountDollars,
+    retrievalStatus: stripe.retrieval?.status || null,
+    paymentStatus: stripe.retrieval?.paymentStatus || stripe.retrieval?.payment_status || null,
+    limitation: hasTestSession && !stripe.sessionId ? 'Stored trial redacts raw Checkout Session id; masked test-mode receipt id retained.' : hasTestSession ? null : 'No live Stripe test-mode receipt was returned; this is not live money movement.',
   });
 }
 
 async function proofNemotron() {
-  const result = await fetchJson('/api/nemotron-smoke');
-  if (result.state !== 'live') throw new Error('Nemotron smoke is not live');
+  const trial = await loadTrial();
+  const classification = trial.workerResult?.evidence?.classificationMethod || trial.evidence?.classificationMethod || {};
+  const synthesis = trial.decision?.nemotronSynthesis || {};
+  const classificationRequestId = classification.nemotronRequestId || classification.nemotronRequestIdMasked || null;
+  const synthesisRequestId = synthesis.requestId || trial.decision?.nemotronRequestIdMasked || null;
+  const synthesisMode = synthesis.mode || trial.decision?.nemotronSynthesisMode || (synthesisRequestId ? 'live' : null);
+  const hasLiveClassification = classification.mode === 'nemotron-sample-plus-pattern-extension' && Boolean(classificationRequestId);
+  const hasLiveSynthesis = Boolean(synthesisRequestId) && synthesisMode !== 'deterministic-fallback';
+  requireStrictLive(hasLiveClassification || hasLiveSynthesis, 'Nemotron live receipt is missing');
   print({
     provider: 'NVIDIA Nemotron',
-    state: result.state,
-    model: result.model,
-    requestId: maskId(result.requestId),
-    latencyMs: result.latencyMs,
+    proof: hasLiveClassification || hasLiveSynthesis ? 'live provider receipt on trial evidence' : 'deterministic fallback only',
+    state: hasLiveClassification || hasLiveSynthesis ? 'live-receipt-recorded' : 'deterministic-fallback',
+    runId: trial.runId,
+    classificationMode: classification.mode || 'unknown',
+    nemotronClassified: classification.nemotronClassified || 0,
+    patternExtended: classification.patternExtended || 0,
+    deterministicClassified: classification.deterministicClassified || 0,
+    classificationRequestId: classification.nemotronRequestId ? maskId(classification.nemotronRequestId) : classification.nemotronRequestIdMasked || null,
+    synthesisMode,
+    synthesisRequestId: synthesis.requestId ? maskId(synthesis.requestId) : trial.decision?.nemotronRequestIdMasked || null,
+    unavailableReason: classification.unavailableReason || synthesis.unavailableReason || null,
   });
 }
 
 async function proofHermes() {
-  const result = await fetchJson('/api/proof-report');
-  const hermes = result.receipts?.hermes || {};
-  if (hermes.state !== 'recorded') {
-    throw new Error('Hermes dispatch receipt is missing');
-  }
+  const trial = await loadTrial();
+  const hermes = trial.hermesExecutionReceipt || {};
+  const live = hermes.ok === true && ['nemohermes-sandbox', 'hermes-gateway', 'hermes-cli'].includes(hermes.skillSource);
+  requireStrictLive(live, 'Hermes live dispatch receipt is missing');
   print({
     provider: 'Hermes Agent',
-    proof: hermes.skillSource === 'nemohermes-sandbox' ? 'NemoHermes sandbox dispatch' : 'gateway task dispatch',
-    taskId: hermes.taskIdMasked,
-    hermesSessionId: hermes.hermesSessionIdMasked,
-    sandboxId: hermes.sandboxId,
-    selectedSkills: hermes.selectedSkills,
-    summary: hermes.outputSummary,
+    proof: live ? (hermes.skillSource === 'nemohermes-sandbox' ? 'NemoHermes sandbox dispatch' : hermes.skillSource === 'hermes-cli' ? 'Hermes CLI session dispatch' : 'gateway task dispatch') : 'local playbook artifact handoff',
+    state: live ? 'recorded' : 'handoff-artifact',
+    runId: trial.runId,
+    skillSource: hermes.skillSource || 'local-playbook',
+    taskId: hermes.taskIdMasked || maskId(hermes.taskId),
+    hermesSessionId: hermes.hermesSessionIdMasked || maskId(hermes.hermesSessionId),
+    sandboxId: maskId(hermes.sandboxId),
+    outputSha256: shortHash(hermes.outputSha256),
+    selectedSkills: hermes.selectedSkills || trial.playbook?.selectedSkills || [],
+    summary: hermes.outputSummary || trial.playbook?.executionSummary || null,
+    limitation: live ? null : hermes.error || 'Hermes live dispatch not configured; local playbook generated instead.',
   });
 }
 
 async function proofPolicy() {
-  const text = await loadText(GATE_FILE);
-  const result = JSON.parse(text);
-  if (!result.externalLive) {
-    throw new Error('External NemoHermes/OpenShell receipt is missing');
+  const trial = await loadTrial();
+  const policyBlock = trial.policyBlock || {};
+  const result = policyBlock.result || policyBlock;
+  const allowed = result.allowedAction || null;
+  if (!(result.blocked === true && result.status === 403 && allowed?.status === 200)) {
+    throw new Error('Policy proof requires one allowed action and one denied action receipt');
   }
   print({
-    provider: 'NemoHermes / OpenShell',
-    proof: 'external sandbox policy block',
-    state: result.governance?.state || 'live',
-    httpStatus: result.gate?.status || 403,
-    policy: result.gate?.policy || 'openshell_network_policy',
-    attemptedAmountDollars: result.metrics?.attemptedAmount || result.gate?.attemptedAmount,
-    capDollars: result.metrics?.cap || result.gate?.cap,
-    actor: result.gate?.actor || 'NemoHermes/OpenShell broker',
+    provider: result.enforcementEngine || 'policy-gate',
+    proof: 'bounded authority: allowed workload read + denied over-cap tool call',
+    runId: trial.runId,
+    verificationStatus: result.verificationStatus,
+    enforcementMode: result.enforcementMode || result.enforcementEngine,
+    deniedAction: {
+      tool: result.tool || policyBlock.blockedTool?.name || policyBlock.blockedTool,
+      status: result.status,
+      attemptedAmountDollars: result.attemptedAmount,
+      capDollars: result.cap,
+      policyRule: result.policyRule,
+    },
+    allowedAction: {
+      tool: allowed.tool,
+      status: allowed.status,
+      evidenceHash: allowed.evidenceHash || null,
+      evidenceSource: allowed.evidenceSource || null,
+    },
+    upstreamPolicyAttempt: result.upstreamPolicyAttempt ? {
+      verificationStatus: result.upstreamPolicyAttempt.verificationStatus,
+      enforcementEngine: result.upstreamPolicyAttempt.enforcementEngine,
+      status: result.upstreamPolicyAttempt.status,
+    } : null,
   });
 }
 
 async function proofPlaybook() {
-  const result = await fetchJson('/api/playbook?version=v1');
-  const content = result.content || '';
+  const trial = await loadTrial();
+  const playbook = trial.playbook || {};
+  const stepCount = Array.isArray(playbook.steps) ? playbook.steps.length : Number(playbook.steps || 0);
+  if (!playbook.name || stepCount <= 0) throw new Error('Generated playbook artifact is missing from trial result');
+  const content = JSON.stringify(playbook);
   print({
-    artifact: 'SKILL.md',
-    filename: result.filename,
-    publicPath: result.filepath || 'skills/governed-agentic-service-trial-v1.SKILL.md',
+    artifact: 'trial playbook',
+    runId: trial.runId,
+    name: playbook.name,
+    version: playbook.version,
+    steps: stepCount,
+    hermesNative: playbook.hermesNative === true,
+    selectedSkills: playbook.selectedSkills || [],
     sha256: createHash('sha256').update(content).digest('hex').slice(0, 16),
-    containsPlaybook: content.includes('Bounded Capital Experiment Playbook'),
+    source: playbook.hermesNative ? 'Hermes live dispatch receipt' : 'local generated artifact',
   });
 }
 
 async function proofRerun() {
-  const result = await fetchJson('/api/run-from-playbook', { method: 'POST' });
+  const first = await loadTrial();
+  const second = await createTrial({
+    caseId: first.caseId || PROOF_CASE_ID,
+    missionStatement: `${first.missionStatement || PROOF_MISSION} Re-run from the generated governed-trial playbook context.`,
+  });
+  const firstHash = first.workerResult?.evidence?.dataHash || first.evidence?.dataHash || null;
+  const secondHash = second.workerResult?.evidence?.dataHash || null;
   print({
-    command: 'Run from playbook',
-    ranFromPlaybook: Boolean(result.ranFromPlaybook),
-    playbookSource: result.playbookSource,
-    secondMission: result.playbookMission,
-    verdict: result.decision?.verdict,
-    nextCapDollars: result.decision?.nextCap,
+    command: 'Repeat governed trial from generated playbook context',
+    firstRunId: first.runId,
+    secondRunId: second.runId,
+    sameCase: first.caseId === second.caseId,
+    sameEvidenceHash: firstHash === secondHash,
+    firstVerdict: first.decision?.verdict,
+    secondVerdict: second.decision?.verdict,
+    firstDataHash: firstHash,
+    secondDataHash: secondHash,
+    secondRenewalAction: second.renewal?.action || null,
   });
 }
 

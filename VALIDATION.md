@@ -1,62 +1,39 @@
 # Validation Checklist
 
-Do not mark the demo complete unless every gate below passes.
+Use this checklist before calling a local Agent IC build healthy.
 
-## Code Gates
+## Code gates
 
 ```bash
+npm run lint
 npm test
 npm run build
-npm run smoke
-npm run smoke:browser
 ```
 
-## Final Video Gate
+## Live local smoke gates
+
+Start the app first, then run:
 
 ```bash
-npm run demo:video
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:api
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:browser
 ```
 
-Required outputs:
+## Release hardening gate
 
-- `demo-out/agent-ic-demo-final.mp4`
-- `demo-out/provenance-final.json`
-- `demo-out/stage-events-final.json`
-- `demo-out/video-qa-report-final.json`
-- `demo-out/frame-review-final.json`
+```bash
+npm run release:check
+```
 
-## Product Thesis Requirements
+## Product invariants
 
-- The video must show Agent IC governing an agentic service purchased or trialed by an enterprise.
-- The workload must be real, inspectable, or explicitly labeled rehearsal data. The primary submission workload is the public NHTSA ODI complaint snapshot under `data/nhtsa-complaints-run/`.
-- The worker agent or service must perform visible work under Agent IC policy.
-- Agent IC must show the service envelope, allowed tools, blocked tools, spend cap, policy receipt, evidence, and final renewal/expand/kill decision.
-- The video must not read as a dataset analysis tool, claims bot, RMA copilot, or generic dashboard.
-
-## Frame-By-Frame Requirements
-
-- The first frames show a clean pre-run state.
-- A visible cursor clicks `Run service trial`.
-- Provider states do not show completed live latency before the run starts.
-- Hermes proof shows either a gateway task id or a NemoHermes sandbox session id.
-- Stripe proof shows `cs_test...`, dollar-denominated test-mode authorization, and retrieve/status metadata.
-- Nemotron proof shows request ID, readable rationale, and timing captured in the proof report.
-- NemoHermes/OpenShell proof shows HTTP `403` only when the external sandbox receipt is present.
-- Evidence import displays source, row count, hash, computed routing metrics, measured runtime, and service outcome.
-- `SKILL.md` is shown and `Run from playbook` executes a second governed service trial.
-- No visible local hostnames, local ports, private workspace paths, DevTools, fake/demo markers, raw keys, or full long IDs.
-- No hover status bubble exposes local API URLs.
-- No raw cents language appears in captions or primary UI.
-- No old Atlas Freight proof-run language appears in the final submission video.
-- No audio silence segment lasts 4 seconds or longer.
-- Runtime is 60-90 seconds, with the submission cut targeted near 65 seconds.
-- The frame-review gate must report `PASS`; use ChatGPT 5.5 or the configured OpenAI-compatible vision endpoint for an independent harsh review when available.
-
-## Fail-Closed Rules
-
-- Missing Nemotron live request ID fails strict recording.
-- Missing Hermes gateway task id or NemoHermes sandbox session id fails strict recording.
-- Missing Stripe test-mode create/retrieve proof fails strict recording.
-- Missing external NemoHermes/OpenShell 403 receipt fails strict recording.
-- Local policy proxy output cannot satisfy the external-live policy proof.
-- Frame review cannot be skipped for a submission candidate.
+- Agent IC is the governance/procurement layer, not the vendor agent.
+- A governed trial must show buyer, vendor, contract at risk, spend envelope, policy rules, evidence, ROI, and decision.
+- At least one allowlisted action and one denied action must be evaluated for a proof run.
+- Missing or malformed evidence cannot silently produce an approved/expanded result.
+- Stripe live-money movement is not claimed from test-mode receipts.
+- OpenShell proof is claimed only from observed sandbox/policy enforcement receipts.
+- Hermes proof is claimed only from an observed Hermes gateway, sandbox, or CLI receipt.
+- Nemotron proof is claimed only from per-run provider request IDs.
+- Public data snapshots must include source, row count, and hash provenance.

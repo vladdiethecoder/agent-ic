@@ -2,93 +2,91 @@
 
 **Fund the right AI pilots. Stop the wrong ones. Prove every dollar with evidence.**
 
-Agent IC is an enterprise procurement control plane for agentic services. It helps CFOs and enterprise operators decide which vendor AI agents deserve budget, tools, and production access — before signing a contract.
+Agent IC is an enterprise procurement control plane for agentic services. It helps finance, security, operations, and procurement teams decide which vendor AI agents deserve budget, tools, data access, and production access.
 
-The product is not another AI agent. It is the governance layer that funds a bounded trial of any vendor's agentic service, governs its tools and spend, blocks unsafe actions, measures real outcomes on real data, validates vendor claims, and produces a procurement-grade decision: sign, revise, or kill.
+The product is not another worker agent. It is the governed buying layer around every agent an enterprise wants to adopt.
 
-## Core Thesis
+## Product thesis
 
-Enterprises do not need another isolated AI agent — they need a governed function that decides which agents deserve budget, tools, and production access.
+Enterprises will not buy autonomous agentic services at scale without a control plane that governs spend, actions, evidence, and renewal decisions.
 
-Agent IC is that function.
+Agent IC is that control plane.
 
-## How It Works
+## How it works
 
-1. **Intake**: A buyer describes a business problem and names the vendor service they are considering.
-2. **Trial Plan**: Agent IC generates a governed trial plan — spend envelope, allowed tools, policy rules, evidence metrics.
-3. **Fund**: A Stripe test-mode Checkout Session creates a bounded spend authorization.
-4. **Dispatch**: The vendor service processes real public data inside an NVIDIA OpenShell sandbox.
-5. **Govern**: OpenShell enforces network policy — blocks paid enrichment, data exfiltration, and unauthorized actions with genuine NVIDIA-engine 403s.
-6. **Measure**: Eight enterprise metrics computed from real trial evidence: profitability, waste ratio, risk-adjusted ROI, throughput, vendor claim validation, annualized value, opportunity cost, time-to-value.
-7. **Validate**: Vendor marketing claims are checked against measured results. Did the vendor deliver what they promised?
-8. **Decide**: Nemotron synthesizes a procurement recommendation: should the buyer sign the contract? At what tier?
-9. **Renew**: Evidence accumulates across monthly cycles. The renewal ledger tracks trends and recommends expand, hold, downgrade, or cancel.
+1. **Intake** — capture the buyer mission, vendor agent, contract at risk, success metrics, and allowed scope.
+2. **Bounded spend** — create a Stripe test-mode Checkout envelope for a capped trial budget.
+3. **Governed execution** — run the vendor-agent workload against inspectable data under policy.
+4. **Policy enforcement** — allow approved evidence reads and block out-of-policy spend/tool requests with NVIDIA OpenShell when observed, otherwise fail closed or label local policy-gate proof explicitly.
+5. **Evidence and ROI** — compute named-input profitability, waste, risk-adjusted ROI, throughput, vendor claim validation, annualized value, opportunity cost, and time-to-value.
+6. **Procurement decision** — issue continue, revise, or kill recommendations with receipts rather than model opinion alone.
+7. **Renewal ledger** — carry observed evidence into monthly renewal and expansion decisions.
 
-## Enterprise Cases
+## Enterprise cases
 
-Four vendor products being trialed across diverse enterprise domains:
+| Domain | Vendor product | Data source | Example blocked action |
+|---|---|---|---|
+| Safety Ops | RouteGuard AI | NHTSA ODI complaints | $150 CARFAX enrichment above a $100 cap |
+| Engineering | CodeShield Pro | GitHub PRs | Auto-merge/write without approval |
+| Security Ops | ThreatScope AI | NVD CVEs | External webhook/data exfiltration |
+| Finance Ops | InvoiceMind | Invoices + SEC EDGAR | Payment approval above threshold |
 
-| Domain | Vendor Product | Real Data Source | Policy Block |
-|--------|---------------|-----------------|--------------|
-| Safety Ops | RouteGuard AI (Sentinel Routing) | NHTSA ODI Complaints API | $150 CARFAX enrichment over $100 cap |
-| Engineering | CodeShield Pro (Refactor Labs) | GitHub Pull Request API | Auto-merge to production (write without approval) |
-| Security Ops | ThreatScope AI (CypherSec) | NVD CVE API | External webhook POST (data exfiltration) |
-| Finance Ops | InvoiceMind (LedgerFlow) | Invoice dataset + SEC EDGAR | Payment approval above $5,000 threshold |
+## Primary surfaces
 
-Each case uses real public data, real Nemotron reasoning, genuine OpenShell policy enforcement, and produces defensible ROI where every dollar traces to a receipt.
+- `/trial` — enterprise trial console
+- `/admin` — operational/admin console
+- `/api/enterprise-trial` — governed trial execution
+- `/api/renewals` — accumulated vendor renewal evidence
+- `/api/proof-report` — masked proof and provider-state audit surface
 
-## Technology Stack
+## Integration truth model
 
-- Framework: Next.js 15 App Router
-- Runtime: Node.js 24+ with ES modules
-- AI: NVIDIA Nemotron (NIM) for classification and procurement decision synthesis
-- Payments: Stripe test-mode Checkout Sessions
-- Policy: NVIDIA OpenShell v0.0.66 (genuine agent sandbox runtime)
-- Skills: Hermes Agent playbook generation and reuse
-- Data: NHTSA ODI, NVD CVE, GitHub, SEC EDGAR (all public, free, no auth)
+- **Stripe** is used in test mode for bounded spend-envelope receipts.
+- **NVIDIA Nemotron** is live only when a run records a provider request ID.
+- **NVIDIA OpenShell** is claimed only when a run records observed sandbox/policy enforcement such as an HTTP 403 denial receipt.
+- **Hermes** is live only when a run records a Hermes gateway, sandbox, or CLI receipt.
+- **Public data** is treated as inspectable evidence with source paths, row counts, and hashes.
 
-## Commands
+## Development
+
+All Next.js scripts go through `scripts/safe-next.mjs` because this workspace path can contain shell-hostile characters.
 
 ```bash
 npm install
-npm run dev          # Start dev server
-npm test             # Run test suite (100 tests)
-npm run build        # Production build
-npm run smoke        # API smoke tests
-npm run smoke:browser # Browser smoke tests
+npm run dev
+npm test
+npm run lint
+npm run build
 ```
 
-## Active Surfaces
+Live local smoke checks require the app server to be running:
 
-- `/trial` — Enterprise trial console (primary)
-- `/run` — Legacy v17 console (compatibility)
-- `/api/enterprise-trial` — Run a governed enterprise trial
-- `/api/renewals` — Vendor renewal history and accumulated evidence
-- `/api/proof-report` — Masked proof receipts for audit
+```bash
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:api
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:browser
+```
+
+Broader release hardening:
+
+```bash
+npm run release:check
+```
 
 ## Environment
 
-`.env.local` may contain live credentials. Never commit or display those values.
+`.env.local` may contain live credentials. Do not commit or print those values.
+
+Common variables:
 
 ```bash
 STRIPE_SECRET_KEY=sk_test_...
 NEMOTRON_API_KEY=nvapi-...
 NEMOTRON_BASE_URL=https://integrate.api.nvidia.com/v1
 NEMOTRON_MODEL=nvidia/nemotron-3-super-120b-a12b
+AGENT_IC_DEMO_MODE=false
 ```
 
-NVIDIA OpenShell is installed system-wide (`openshell` binary). No env var needed.
+## Production boundary
 
-## Verification
-
-```bash
-npm test
-npm run build
-npm run smoke
-```
-
-## Submission
-
-Hackathon: Hermes Agent Accelerated Business Hackathon (NVIDIA x Stripe x Nous Research)
-Judging: Usefulness, Viability, Presentation
-Deadline: EOD June 30, 2026
+Agent IC is a working enterprise prototype with substantial local controls and proof gates. Full production deployment still requires deployed SSO/OIDC, production database/object storage, formal migrations, deployed observability, compliance signoff, and production smoke evidence.

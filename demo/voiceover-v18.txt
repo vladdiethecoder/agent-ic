@@ -1,21 +1,13 @@
-Agent IC is the control plane that decides which AI agents deserve your budget.
+Agent IC is an enterprise procurement control plane for agentic spend. It gives finance, security, and operations one governed way to decide which AI vendors earn budget, tools, data, and production access.
 
-RouteGuard AI claims ninety percent accuracy on complaint triage. Before signing a fourteen-thousand-dollar contract — Agent IC runs a governed trial.
+Instead of approving a vendor agent on trust, Agent IC funds a bounded trial, enforces policy, measures evidence, validates claims, and carries the result into renewals.
 
-A one-hundred-dollar Stripe envelope funds the spend cap. Three hundred thirty public NHTSA complaints. NVIDIA OpenShell network policy.
+RouteGuard AI is one example. Before a fourteen point four K contract, Agent IC gives the trial a one-hundred-dollar Stripe test-mode cap and a governed workload.
 
-The worker routes three hundred one complaints automatically. Twenty-nine go to human review. Nemotron classifies twelve sample complaints, then extends the pattern across the full dataset.
+The decision is not just yes or no. Safe trial continues, but a one-hundred-fifty-dollar CARFAX enrichment is blocked by NVIDIA OpenShell because it exceeds the approved cap.
 
-Then it tries a hundred-and-fifty-dollar CARFAX lookup. OpenShell blocks it. Spend cap exceeded.
+Now the buyer sees value: 301 complaints auto-routed, 29 human-review cases, two thousand six hundred sixty-nine dollars net value, and six point one eight times risk-adjusted ROI.
 
-Three headline metrics from the trial: net value two thousand five hundred dollars. Waste ratio five percent. Risk-adjusted ROI four-x.
+The proof remains attached to the decision: Nemotron classifies 3 sample complaints, 327 pattern-extended rows stay labeled, plus Stripe test-mode receipt, NHTSA hash, OpenShell 403, and Hermes CLI receipt.
 
-One of one measurable vendor claims validated. Ninety-one percent accuracy against the promised ninety.
-
-Decision: continue. The service generates more than twice its annual cost in value.
-
-The renewal ledger accumulates across monthly cycles. Vendors that prove their value earn expanded envelopes. Those that fall short lose funding.
-
-Four enterprise domains. Four vendor products. One control plane.
-
-Agent IC: fund the right AI pilots. Stop the wrong ones.
+That is the enterprise product. Every agent gets the same trial, policy enforcement, ROI proof, and renewal evidence before spend or production access expands.

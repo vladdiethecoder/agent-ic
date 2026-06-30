@@ -6,7 +6,7 @@
 # Allows: NHTSA API, NVIDIA NIM, local evidence write
 # Blocks: All other outbound (CARFAX, Slack, payment endpoints, etc.)
 
-version: "1"
+version: 1
 metadata:
   name: agent-ic-governed-trial
   description: "Agent IC enterprise trial policy — allow public data + Nemotron, block paid enrichment and data exfiltration"

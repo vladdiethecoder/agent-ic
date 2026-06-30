@@ -57,5 +57,5 @@ Every decision must include:
 
 - Given the default service trial, the runtime produces a complete charter, event stream, evidence summary, and decision memo.
 - No spend-capable step can execute before approval.
-- The final decision is deterministic enough for local rehearsal, while the submission path cites real or inspectable workload evidence.
+- The final decision is deterministic enough for local rehearsal, while the proof path cites real or inspectable workload evidence.
 - Errors become timeline events rather than silent failures.

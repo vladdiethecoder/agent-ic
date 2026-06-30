@@ -42,14 +42,14 @@ Implementation is gated until the user explicitly approves build work. These PRD
 - Add copy/export path for the memo and board packet.
 - Acceptance: final recommendation cites source rows, routing coverage, review queue, spend, policy incidents, and provider receipts; packet is forwardable.
 
-## 7. Milestone 6: Submission Polish
+## 7. Milestone 6: Product Polish
 
 - Tighten UI for recording.
 - Keep the final scenario on agentic-service procurement with public workload evidence.
 - Rehearse the blocked-action beat until it is presenter-safe.
 - Run full rehearsal loop.
 - Record a 60-90 second proof video.
-- Prepare tweet, Discord submission link, and Typeform responses.
+- Prepare product launch notes and enterprise evaluation materials.
 
 ## 8. Verification Checklist
 
