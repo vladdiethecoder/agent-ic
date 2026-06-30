@@ -100,7 +100,7 @@ Success:
 - Includes `stripe`, `workerResult.evidence`, `policyBlock`, `decision`, `playbook`, `governance`, `roiMethodology`, and renewal context.
 - Unknown case id returns HTTP 404 with a structured error.
 - Missing mission and case id returns HTTP 400.
-- Claimed live providers must have receipts; unavailable providers must be labeled honestly.
+- Claimed live providers must have receipts; unavailable providers must be labeled honestly. When `requireLiveProof` is true, the trial must fail closed unless it has a Stripe Checkout receipt, Nemotron classification request id, verified OpenShell 403 policy receipt, and Hermes dispatch receipt.
 
 ### `GET /api/renewals`
 

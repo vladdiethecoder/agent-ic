@@ -11,7 +11,7 @@ This file is a runtime proof contract for the product. It is not a marketing che
 - OpenShell is external sandbox proof only when the run records an OpenShell sandbox or HTTP 403 denial receipt. If OpenShell is unavailable, Agent IC may still enforce through the local deny-by-default policy gate, but the receipt must say policy-gate rather than sandbox enforcement.
 - Hermes orchestration is live only when the run records a Hermes gateway, sandbox, or CLI receipt. Without that receipt, the product keeps a Hermes-compatible `SKILL.md` handoff package and labels it as a package.
 - Workload evidence is valid only when the run cites source artifact names, row counts, hashes, and source metadata.
-- Missing, malformed, unavailable, or unverified evidence must not silently produce an approved or proven result.
+- Missing, malformed, unavailable, or unverified evidence must not silently produce an approved or proven result. Strict proof mode requires all core provider receipts: Stripe Checkout, Nemotron classification, OpenShell 403 enforcement, and Hermes dispatch.
 
 ## Audit surface
 

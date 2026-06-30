@@ -79,7 +79,7 @@ Agent IC:
 - At least one out-of-policy action is demonstrably blocked before the service can earn more budget.
 - Decisions must cite run evidence, not just model opinion.
 - The product must never expose raw keys, cards, tokens, private account data, local ports, or private workspace paths.
-- The system must fail closed if strict live proof is requested and credentials, policy, payment, or sandbox steps are unavailable.
+- The system must fail closed if strict live proof is requested and any core receipt is unavailable: Stripe Checkout, Nemotron classification request id, verified OpenShell 403 enforcement, or Hermes dispatch.
 
 ## 9. Success Metrics
 

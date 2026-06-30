@@ -269,7 +269,7 @@ test('enterprise trial records live Hermes receipt when configured', async () =>
     stripe: {
       available: true,
       create: async () => ({
-        mode: 'live',
+        mode: 'non-production',
         checkout: { id: 'cs_test_enterprise_hermes_receipt', status: 'open' },
         retrieval: { id: 'cs_test_enterprise_hermes_receipt', status: 'open' },
       }),
@@ -296,7 +296,8 @@ test('enterprise trial records live Hermes receipt when configured', async () =>
         blocked: true,
         status: 403,
         enforced: true,
-        enforcementEngine: 'policy-gate',
+        verificationStatus: 'verified',
+        enforcementEngine: 'NVIDIA OpenShell',
         attemptedAmount: caseDef.policyEnvelope.blockedTool.attemptedAmount,
         cap: caseDef.policyEnvelope.spendCap,
         policyRule: caseDef.policyEnvelope.blockedTool.policyRule,
@@ -335,10 +336,9 @@ test('enterprise trial records live Hermes receipt when configured', async () =>
   assert.equal(result.playbook.hermesNative, true);
   assert.equal(result.policyBlock.result.allowedAction.status, 200);
   assert.equal(result.policyBlock.result.allowedAction.decision, 'allowed');
-  assert.equal(result.playbook.openShellVerified, false);
-  assert.equal(result.playbook.enforcementMode, 'policy-gate');
-  assert.equal(result.playbook.steps.some((step) => step.includes('governed sandbox with OpenShell network policy')), false);
-  assert.ok(result.playbook.steps.some((step) => step.includes('policy-gate') && step.includes('no OpenShell sandbox enforcement receipt')));
+  assert.equal(result.playbook.openShellVerified, true);
+  assert.equal(result.playbook.enforcementMode, 'NVIDIA OpenShell');
+  assert.ok(result.playbook.steps.some((step) => step.includes('OpenShell sandbox') && step.includes('container network policy')));
 });
 
 test('enterprise trial labels deterministic synthesis fallback instead of failing when Nemotron synthesis is unusable', async () => {
@@ -438,7 +438,7 @@ test('enterprise trial rejects permissive synthesis when worker model evidence f
   assert.match(result.decision.businessCase, /Do not sign or expand yet/);
 });
 
-test('enterprise trial fails closed when live Hermes proof is required but unavailable', async () => {
+test('enterprise trial fails closed when strict provider proof lacks Hermes receipt', async () => {
   const { runEnterpriseTrial } = await import('../lib/trialOrchestrator.js');
   await assert.rejects(
     runEnterpriseTrial({
@@ -446,6 +446,10 @@ test('enterprise trial fails closed when live Hermes proof is required but unava
       caseId: 'safety-ops-complaint-triage',
       integrations: {
         openShell: { skip: true },
+        stripe: {
+          available: true,
+          create: async () => ({ mode: 'non-production', checkout: { id: 'cs_test_unit_strict_hermes' } }),
+        },
         nemotron: {
           available: true,
           classify: async () => ({
@@ -468,7 +472,8 @@ test('enterprise trial fails closed when live Hermes proof is required but unava
             blocked: true,
             status: 403,
             enforced: true,
-            enforcementEngine: 'policy-gate',
+            verificationStatus: 'verified',
+            enforcementEngine: 'NVIDIA OpenShell',
             attemptedAmount: caseDef.policyEnvelope.blockedTool.attemptedAmount,
             cap: caseDef.policyEnvelope.spendCap,
             policyRule: caseDef.policyEnvelope.blockedTool.policyRule,
@@ -479,7 +484,56 @@ test('enterprise trial fails closed when live Hermes proof is required but unava
       tenantId: 'unit-hermes-fail-tenant',
       userId: 'unit-test',
     }),
-    /Live Hermes proof required/
+    /Strict provider proof required.*Hermes dispatch receipt/
+  );
+});
+
+test('enterprise trial strict provider proof requires spend receipt before approval', async () => {
+  const { runEnterpriseTrial } = await import('../lib/trialOrchestrator.js');
+  await assert.rejects(
+    runEnterpriseTrial({
+      missionStatement: 'Evaluate RouteGuard AI for complaint triage before signing',
+      caseId: 'safety-ops-complaint-triage',
+      integrations: {
+        openShell: { skip: true },
+        nemotron: {
+          available: true,
+          classify: async () => ({
+            ok: true,
+            requestId: 'chatcmpl-enterprise-no-stripe-worker',
+            text: JSON.stringify(Array.from({ length: 12 }, () => (
+              { queue: 'technical', confidence: 0.95, rationale: 'sample classification' }
+            ))),
+          }),
+        },
+        policyGate: {
+          available: true,
+          evaluate: async ({ caseDef }) => ({
+            blocked: true,
+            status: 403,
+            enforced: true,
+            verificationStatus: 'verified',
+            enforcementEngine: 'NVIDIA OpenShell',
+            attemptedAmount: caseDef.policyEnvelope.blockedTool.attemptedAmount,
+            cap: caseDef.policyEnvelope.spendCap,
+            policyRule: caseDef.policyEnvelope.blockedTool.policyRule,
+          }),
+        },
+        hermes: {
+          available: true,
+          dispatch: async () => ({
+            ok: true,
+            skillSource: 'hermes-cli',
+            hermesSessionId: 'unit-hermes-session-strict-no-stripe',
+            outputSummary: 'Hermes receipt recorded for strict proof test.',
+          }),
+        },
+      },
+      requireLiveProof: true,
+      tenantId: 'unit-strict-stripe-fail-tenant',
+      userId: 'unit-test',
+    }),
+    /Strict provider proof required.*Stripe Checkout receipt/
   );
 });
 
