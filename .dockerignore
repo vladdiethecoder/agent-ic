@@ -1,0 +1,13 @@
+.git
+.next
+node_modules
+demo-out
+.agent-ic
+.playwright-mcp
+.venv
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+coverage

@@ -1,0 +1,33 @@
+{
+  "service": "agent-ic",
+  "runtime": "nodejs-24-nextjs",
+  "container": {
+    "dockerfile": "Dockerfile",
+    "nonRootUser": "agentic",
+    "port": 3000,
+    "healthcheck": "/api/health",
+    "readiness": "/api/ready"
+  },
+  "requiredSecrets": [
+    "NEMOTRON_API_KEY",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "AGENT_IC_AUTH_HS256_SECRET or OIDC/JWKS configuration",
+    "AGENT_IC_AUDIT_SIGNING_KEY",
+    "AGENT_IC_SCIM_BEARER_TOKEN",
+    "AGENT_IC_SCIM_TENANT_ID",
+    "DATABASE_URL or AGENT_IC_DATA_STORE_URL"
+  ],
+  "requiredControls": [
+    "SSO/JWT authentication",
+    "SCIM/IdP membership lifecycle sync",
+    "tenant isolation",
+    "approval workflow",
+    "policy evaluation",
+    "Stripe webhook verification",
+    "audit-chain verification",
+    "metrics export",
+    "backup/restore procedure"
+  ],
+  "notes": "Example manifest only. Full production deployment still requires platform-specific manifests, DB migrations, rollback automation, image scanning, and deployed smoke tests."
+}

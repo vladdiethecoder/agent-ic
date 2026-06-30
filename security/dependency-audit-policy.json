@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "description": "Allowed dependency vulnerability exceptions for Agent IC production release checks. Keep this list empty unless a risk is explicitly accepted with expiry and mitigation.",
+  "failOnSeverities": ["high", "critical"],
+  "omitDevDependencies": true,
+  "allowedAdvisories": []
+}

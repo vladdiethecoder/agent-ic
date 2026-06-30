@@ -1,0 +1,92 @@
+# Agent IC — Governed Service Trial Policy
+#
+# This policy is loaded into an NVIDIA OpenShell sandbox to enforce
+# the spend and network constraints of an Agent IC governed trial.
+#
+# Allows: NHTSA API, NVIDIA NIM, local evidence write
+# Blocks: All other outbound (CARFAX, Slack, payment endpoints, etc.)
+
+version: 1
+metadata:
+  name: agent-ic-governed-trial
+  description: "Agent IC enterprise trial policy — allow public data + Nemotron, block paid enrichment and data exfiltration"
+
+# Network policy — hot-reloadable at runtime
+network:
+  # Default: deny everything
+  default: deny
+
+  # Allowlisted endpoints for the governed trial
+  allow:
+    # Public data sources (read-only)
+    - host: api.nhtsa.gov
+      paths: ["/complaints/*"]
+      methods: [GET]
+
+    - host: services.nvd.nist.gov
+      paths: ["/rest/json/cves/*"]
+      methods: [GET]
+
+    - host: api.github.com
+      paths: ["/repos/*", "/pulls*"]
+      methods: [GET]
+
+    - host: data.sec.gov
+      paths: ["/submissions/*"]
+      methods: [GET]
+
+    # NVIDIA Nemotron NIM for classification/evaluation
+    - host: integrate.api.nvidia.com
+      paths: ["/v1/chat/completions", "/v1/completions"]
+      methods: [POST]
+
+  # Explicitly blocked — these trigger the policy gate 403
+  block:
+    # Paid enrichment services (over-cap spend)
+    - host: www.carfax.com
+      reason: "Paid enrichment over spend cap"
+
+    - host: api.carfax.com
+      reason: "Paid enrichment over spend cap"
+
+    # Data exfiltration vectors
+    - host: hooks.slack.com
+      reason: "Data exfiltration prevention — no outbound to external messaging"
+
+    - host: discord.com
+      paths: ["/api/webhooks/*"]
+      reason: "Data exfiltration prevention"
+
+    - host: "*.atlassian.net"
+      reason: "Data exfiltration prevention — no outbound to external ticketing"
+
+    # Payment/banking systems (write actions blocked)
+    - host: "*.internal"
+      paths: ["/api/*/payments/*"]
+      methods: [POST, PUT]
+      reason: "Payment approval above threshold requires human sign-off"
+
+# Filesystem policy — locked at sandbox creation
+filesystem:
+  default: deny
+  allow:
+    # Worker agent can read trial data
+    - path: "/workspace/data/"
+      mode: ro
+
+    # Worker agent can write evidence
+    - path: "/workspace/evidence/"
+      mode: rw
+
+    # Read-only access to case definition
+    - path: "/workspace/case.json"
+      mode: ro
+
+# Process policy — locked at sandbox creation
+process:
+  default: deny
+  allow:
+    - binary: "node"
+    - binary: "python3"
+    - binary: "curl"
+    - binary: "cat"
