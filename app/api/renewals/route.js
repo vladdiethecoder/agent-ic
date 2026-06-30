@@ -24,10 +24,10 @@ export async function GET(request) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
   const all = url.searchParams.get('all') === 'true';
-  const seed = url.searchParams.get('seed') === 'true';
+  const seedIllustrative = url.searchParams.get('illustrative') === 'true';
 
-  // Seed illustrative history if requested
-  if (seed) {
+  // Load illustrative history only when explicitly requested
+  if (seedIllustrative) {
     for (const c of enterpriseCases) {
       seedIllustrativeRenewalHistory(c.id, c, { tenantId: access.principal.tenantId });
     }
@@ -54,7 +54,7 @@ export async function GET(request) {
 
 /**
  * POST /api/renewals
- * Actions: seed (create illustrative history), clear (reset ledger)
+ * Actions: seedIllustrative (create explicitly illustrative history), clear (reset ledger)
  */
 export async function POST(request) {
   const parsedBody = await readJsonBody(request);
@@ -66,13 +66,13 @@ export async function POST(request) {
   const tenantScope = requireTenantScope(access.principal, tenantFromBody(body));
   if (!tenantScope.ok) return tenantScope.response;
 
-  if (body.action === 'seed') {
+  if (body.action === 'seedIllustrative') {
     for (const c of enterpriseCases) {
       seedIllustrativeRenewalHistory(c.id, c, { tenantId: access.principal.tenantId });
     }
     const relationships = getAllVendorRelationships({ tenantId: access.principal.tenantId });
-    appendAudit({ ...authContext(access.principal), kind: 'renewal', action: 'renewals_seeded', detail: 'Illustrative renewal relationships seeded for product navigation', relationshipCount: relationships.length });
-    return NextResponse.json({ auth: authContext(access.principal), status: 'seeded', relationships });
+    appendAudit({ ...authContext(access.principal), kind: 'renewal', action: 'renewals_illustrative_seeded', detail: 'Illustrative renewal relationships seeded for product navigation', relationshipCount: relationships.length });
+    return NextResponse.json({ auth: authContext(access.principal), status: 'illustrative_seeded', relationships });
   }
 
   if (body.action === 'clear') {
@@ -81,5 +81,5 @@ export async function POST(request) {
     return NextResponse.json({ auth: authContext(access.principal), status: 'cleared' });
   }
 
-  return jsonError(400, 'invalid_action', 'Use action: seed or clear');
+  return jsonError(400, 'invalid_action', 'Use action: seedIllustrative or clear');
 }

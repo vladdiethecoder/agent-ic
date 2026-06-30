@@ -90,13 +90,13 @@ test('renewal mutation appends tenant-scoped audit row', async () => {
       'content-type': 'application/json',
       authorization: authHeader({ sub: 'owner_1', tenantId: 'tenant_a', role: 'owner' }),
     },
-    body: JSON.stringify({ action: 'seed', tenantId: 'tenant_a' }),
+    body: JSON.stringify({ action: 'seedIllustrative', tenantId: 'tenant_a' }),
   }));
 
   assert.equal(response.status, 200);
   const rows = audit.readAudit({ tenantId: 'tenant_a' });
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].action, 'renewals_seeded');
+  assert.equal(rows[0].action, 'renewals_illustrative_seeded');
   assert.equal(rows[0].userId, 'owner_1');
   assert.equal(audit.verifyAuditChain({ tenantId: 'tenant_a' }).ok, true);
 });

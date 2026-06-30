@@ -114,7 +114,7 @@ Success:
 
 Actions:
 
-- `{ "action": "seed" }` creates explicitly labeled illustrative renewal history for product navigation.
+- `{ "action": "seedIllustrative" }` creates explicitly labeled illustrative renewal history for product navigation.
 - `{ "action": "clear" }` clears the local renewal ledger.
 - Unknown action returns HTTP 400.
 

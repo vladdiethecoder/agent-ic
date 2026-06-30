@@ -181,8 +181,7 @@ export default function AgentICTrialConsole() {
       setLoadingStage('');
       setReasoningTrace([]);
       setPhase('result');
-      fetch('/api/renewals', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'seed' }) })
-        .then(() => fetch('/api/renewals?all=true'))
+      fetch('/api/renewals?all=true')
         .then((renewalRes) => renewalRes.json())
         .then((renewalData) => setRenewals(renewalData.relationships || []))
         .catch(() => {});
@@ -201,8 +200,6 @@ export default function AgentICTrialConsole() {
     setPhase('renewals');
     setLoading(!renewals || renewals.length === 0);
     try {
-      // Seed illustrative history if empty, then load
-      await fetch('/api/renewals', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'seed' }) });
       const res = await fetch('/api/renewals?all=true');
       const data = await res.json();
       setRenewals(data.relationships || []);
@@ -212,6 +209,28 @@ export default function AgentICTrialConsole() {
       setLoading(false);
     }
   }, [renewals]);
+
+  const loadIllustrativeRenewals = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const seeded = await fetch('/api/renewals', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'seedIllustrative' }),
+      });
+      if (!seeded.ok) {
+        const err = await seeded.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${seeded.status}`);
+      }
+      const data = await seeded.json();
+      setRenewals(data.relationships || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // ─── Intake Phase ──────────────────────────────────────────
   if (phase === 'intake') {
@@ -395,6 +414,7 @@ export default function AgentICTrialConsole() {
               <div className="ic-panel-body" style={{ textAlign: 'center', padding: '40px' }}>
                 <p style={{ color: 'var(--ic-text-muted)' }}>No vendor relationships yet. Run a trial first.</p>
                 <button className="ic-btn-primary" style={{ marginTop: '16px' }} onClick={() => setPhase('intake')}>Start a Trial</button>
+                <button className="ic-btn-secondary" style={{ marginTop: '12px', marginLeft: '12px' }} onClick={loadIllustrativeRenewals}>Load Illustrative History</button>
               </div>
             </div>
           )}
@@ -690,7 +710,7 @@ function TrialResult({ result, onReset }) {
             <ReceiptCard label="Accumulated value" value={money.format(renewalValue)} detail={`${renewalCases} processed items`} tone="positive" />
             <ReceiptCard label="Policy history" value={`${renewalPolicyBlocks} blocked / ${renewalBypasses} bypassed`} detail={`next cap ${money.format(renewalNextCap)}`} tone={renewalBypasses > 0 ? 'blocked' : 'positive'} />
           </div>
-          <div className="ic-proof-report-note">Vendor Renewals labels seeded history as illustrative; this card is tied to the current observed trial cycle and run ID.</div>
+          <div className="ic-proof-report-note">Vendor Renewals shows observed history by default; illustrative history is loaded only by explicit user action. This card is tied to the current observed trial cycle and run ID.</div>
         </div>
       </div>
 

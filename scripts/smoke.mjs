@@ -61,13 +61,11 @@ async function main() {
   const rawArtifact = evidenceList.artifacts.find((artifact) => artifact.kind === 'worker-results');
   assert(rawArtifact?.sha256, 'worker-results artifact hash');
 
-  const renewals = await json(`${base}/api/renewals`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'seed' }),
-  });
+  const renewals = await json(`${base}/api/renewals?all=true`);
   assert(Array.isArray(renewals.relationships), 'renewal relationships array');
-  assert(renewals.relationships.length >= 4, 'renewal relationships seeded');
+  const observedRelationship = renewals.relationships.find((relationship) => relationship.caseId === trial.caseId && Number(relationship.observedCycles || 0) > 0);
+  assert(observedRelationship, 'observed trial is carried into renewal relationships without illustrative seeding');
+  assert(observedRelationship.historyMode === 'observed_trial' || observedRelationship.historyMode === 'mixed_observed_and_illustrative', 'renewal relationship labels observed evidence basis');
 
   console.log(JSON.stringify({
     ok: true,
@@ -94,6 +92,7 @@ async function main() {
     storedTrial: storedTrial.trial.runId,
     evidenceArtifacts: evidenceList.artifacts.length,
     renewalRelationships: renewals.relationships.length,
+    observedRenewalCaseId: observedRelationship.caseId,
   }, null, 2));
 }
 
