@@ -32,7 +32,7 @@ npm run release:check
 - A governed trial must show buyer, vendor, contract at risk, spend envelope, policy rules, evidence, ROI, and decision.
 - At least one allowlisted action and one denied action must be evaluated for a proof run.
 - Missing or malformed evidence cannot silently produce an approved/expanded result.
-- Stripe live-money movement is not claimed from test-mode receipts.
+- Stripe live-money movement is not claimed from non-production receipts.
 - OpenShell proof is claimed only from observed sandbox/policy enforcement receipts.
 - Hermes proof is claimed only from an observed Hermes gateway, sandbox, or CLI receipt.
 - Nemotron proof is claimed only from per-run provider request IDs.

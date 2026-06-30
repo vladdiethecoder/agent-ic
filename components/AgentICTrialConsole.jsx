@@ -22,6 +22,52 @@ const STAGES = [
 const DEFAULT_CASE_ID = 'safety-ops-complaint-triage';
 const DEFAULT_MISSION = 'Evaluate RouteGuard AI for complaint triage before signing a $14,400 annual contract';
 
+function traceProgress(type) {
+  const checkpoints = [
+    ['intake', 12],
+    ['stripe', 24],
+    ['openshell.sandbox', 34],
+    ['worker.dispatch.start', 42],
+    ['worker.progress', 52],
+    ['worker.dispatch.complete', 62],
+    ['policy.test', 74],
+    ['metrics.computed', 82],
+    ['nemotron.synthesis', 88],
+    ['hermes.dispatch', 92],
+    ['evidence.artifacts', 96],
+    ['ledger.recorded', 98],
+  ];
+  const match = checkpoints.find(([prefix]) => String(type || '').startsWith(prefix) || String(type || '').includes(prefix));
+  return match ? match[1] : null;
+}
+
+function traceLabel(event) {
+  const type = String(event?.type || 'trace');
+  const body = event?.body || {};
+  if (type === 'intake.start') return { text: 'Buyer mission accepted by server intake', detail: 'server intake opened', counterPatch: {} };
+  if (type === 'intake.complete') return { text: `Matched ${body.vendor || 'vendor agent'} to governed case`, detail: body.trialPlanSummary || 'intake complete' };
+  if (type === 'stripe.create.request') return { text: `Spend envelope requested: ${money.format(Number(body.cap || 0))} cap`, detail: 'Stripe Checkout request submitted', counterPatch: { stripe: 'requested' } };
+  if (type === 'stripe.create.response') return { text: 'Spend envelope receipt recorded', detail: body.sessionId ? 'Checkout Session receipt returned and masked' : 'Checkout response recorded', counterPatch: { stripe: 'recorded' } };
+  if (type === 'stripe.create.error') return { text: 'Spend envelope provider unavailable; run remains capped by policy', detail: body.error || 'Stripe adapter returned no receipt', counterPatch: { stripe: 'unavailable' } };
+  if (type === 'openshell.sandbox.created') return { text: 'OpenShell sandbox created for policy test', detail: body.policyEngine || 'sandbox ready', counterPatch: { policyEngine: 'OpenShell' } };
+  if (type === 'openshell.sandbox.failed' || type === 'openshell.unavailable') return { text: 'OpenShell receipt unavailable; local policy gate must enforce', detail: body.error || body.reason || 'sandbox unavailable', counterPatch: { policyEngine: 'policy gate' } };
+  if (type === 'worker.dispatch.start') return { text: `Worker run started against ${body.dataSource || 'evidence source'}`, detail: body.task || 'worker dispatched' };
+  if (type === 'worker.progress') return { text: body.message || 'Worker progress recorded', detail: body.stage || 'worker progress' };
+  if (type === 'worker.dispatch.complete') return { text: `Evidence processed: ${body.casesProcessed || 0} rows from ${body.source || 'source'}`, detail: `hash ${maskId(body.hash || 'pending')}`, counterPatch: { fetched: Number(body.casesProcessed || 0), total: Number(body.casesProcessed || 0), source: body.source || 'evidence' } };
+  if (type === 'policy.test.start') return { text: `Denied action under evaluation: ${body.blockedTool || 'blocked tool'}`, detail: body.policyRule || 'policy rule active', counterPatch: { policyStatus: 'checking' } };
+  if (type === 'policy.test.result' || type === 'policy.test.complete') return { text: `Denied action ${body.blocked ? 'blocked' : 'not blocked'} with status ${body.status || 'recorded'}`, detail: body.engine || 'policy engine recorded', counterPatch: { policyStatus: body.blocked ? 'blocked' : 'review', deniedStatus: body.status || null } };
+  if (type === 'metrics.computed') return { text: `Procurement metrics computed: ${body.verdict || 'decision pending'}`, detail: body.netValue ? `net value ${money.format(Number(body.netValue))}` : 'metrics complete' };
+  if (type === 'nemotron.synthesis.complete') return { text: body.requestId ? 'Nemotron synthesis receipt recorded' : 'Deterministic decision retained without model synthesis receipt', detail: body.mode || 'synthesis complete', counterPatch: { classified: body.requestId ? 'receipt' : 'not used' } };
+  if (type === 'hermes.dispatch.response') return { text: body.ok ? 'Hermes execution receipt recorded' : 'Hermes handoff package retained', detail: body.skillSource || body.error || 'Hermes result' };
+  if (type === 'evidence.artifacts.recorded') return { text: `Evidence artifacts stored: ${body.count || 0}`, detail: Array.isArray(body.hashes) ? body.hashes.join(', ') : 'artifacts recorded' };
+  if (type === 'ledger.recorded') return { text: 'Renewal ledger updated from observed trial cycle', detail: body.cycleId ? `cycle ${maskId(body.cycleId)}` : 'ledger recorded' };
+  if (type.startsWith('stage.')) {
+    const stage = type.replace('stage.', '');
+    return { text: `${stage} stage: ${String(body.status || 'updated').replace(/_/g, ' ')}`, detail: stage };
+  }
+  return null;
+}
+
 export default function AgentICTrialConsole() {
   const [phase, setPhase] = useState('intake');
   const [loading, setLoading] = useState(false);
@@ -54,167 +100,108 @@ export default function AgentICTrialConsole() {
     setLoading(true);
     setError(null);
     setPhase('running');
-    setLoadingStage('Analyzing mission statement...');
+    setLoadingStage('Starting governed server run...');
     setReasoningTrace([]);
     setElapsedTime(0);
-    setTrialProgress(0);
-    maxProgressRef.current = 0;
-    setLiveCounters(null);
-    setLiveLog([{ text: 'Mission received from buyer intake', ts: Date.now() }]);
+    setTrialProgress(3);
+    maxProgressRef.current = 3;
+    setLiveCounters({ fetched: null, classified: null, total: null, policyStatus: 'waiting', stripe: 'pending' });
+    setLiveLog([{ text: 'Buyer mission submitted to Agent IC API', ts: Date.now() }]);
 
-    // Live elapsed counter — updates every 100ms so the loading screen never freezes
     const elapsedStart = Date.now();
     const elapsedTimer = setInterval(() => {
       setElapsedTime(((Date.now() - elapsedStart) / 1000).toFixed(1));
     }, 100);
 
-    // ── Continuously alive operations feed ──────────────────────
-    // This is an in-flight progress model only. Final receipt values are
-    // rendered exclusively from the API response after the governed trial
-    // completes; no loading checkpoint is treated as proof.
-    const phases = [
-      { name: 'intake',     label: 'Analyzing mission statement...',      detail: 'Buyer intake and case matching',       logEvery: 1.5, logs: ['Parsing mission statement', 'Matching Safety Ops case', 'RouteGuard AI selected'] },
-      { name: 'fund',       label: 'Opening bounded spend envelope...',    detail: 'Stripe test-mode envelope request',     logEvery: 1.5, logs: ['Stripe test-mode envelope requested', 'Spend cap target: $100', 'Trial budget bounded before tools run'] },
-      { name: 'dispatch',   label: 'Dispatching worker agent...',          detail: 'Public workload processing',          logEvery: 2.0, logs: ['Worker agent request submitted', 'NHTSA workload read in progress', 'Evidence hash will attach with result'] },
-      { name: 'classify',   label: 'Classifying complaints...',            detail: 'Nemotron sample + pattern extension',  logEvery: 2.0, logs: ['Nemotron sample classification requested', 'Pattern extension separated from model sample', 'Routing counts accumulating'] },
-      { name: 'govern',     label: 'Checking spend and tool policy...',     detail: 'Policy gate cap check',               logEvery: 1.5, logs: ['Spend cap check: $100', 'Paid enrichment request intercepted', 'Over-cap request denied by policy gate'] },
-      { name: 'evaluate',   label: 'Computing procurement metrics...',      detail: '8 enterprise metrics',                logEvery: 1.5, logs: ['Net value target: $2,669', 'Waste ratio target: 5%', 'Risk-adjusted ROI target: 6.18x'] },
-      { name: 'synthesize', label: 'Preparing buyer recommendation...',     detail: 'Procurement decision path',           logEvery: 1.5, logs: ['Decision will show allowed scope', 'Receipts grouped by provider', 'Renewal posture updates after trial'] },
-    ];
-
-    const phaseSchedule = [
-      { until: 1.8, index: 0 },
-      { until: 3.2, index: 1 },
-      { until: 6.4, index: 2 },
-      { until: 9.4, index: 3 },
-      { until: 11.8, index: 4 },
-      { until: 13.8, index: 5 },
-      { until: Infinity, index: 6 },
-    ];
-
-    const operationTimeline = [
-      { at: 0.8, text: 'Mission received from buyer intake' },
-      { at: 1.7, text: 'Safety Ops case selected: RouteGuard AI' },
-      { at: 2.9, text: 'Spend envelope request sent: $100 cap' },
-      { at: 4.5, text: 'Worker dispatch request submitted' },
-      { at: 6.5, text: 'NHTSA workload read started' },
-      { at: 8.5, text: 'Complaint corpus target: 330 rows' },
-      { at: 10.0, text: 'Nemotron sample classification requested' },
-      { at: 12.5, text: 'Pattern-extension counts separated from sample' },
-      { at: 14.0, text: 'Paid-enrichment policy check active' },
-      { at: 16.5, text: 'Over-cap CARFAX request intercepted' },
-      { at: 18.5, text: 'Procurement metrics inputs assembled' },
-      { at: 20.5, text: 'Buyer recommendation view preparing' },
-    ];
-
-    const trace = [];
-    const timers = [];
-    let lastPhaseIdx = -1;
-
-    function pushLogLine(msg, detail) {
-      setLoadingStage(msg);
-      trace.push({ msg, detail, status: 'complete' });
-      setReasoningTrace([...trace]);
-    }
-
-    // Progress + counter updater (runs every 200ms, keeps screen alive)
-    const progressTimer = setInterval(() => {
-      const elapsed = (Date.now() - elapsedStart) / 1000;
-      // Progress advances through the visible run but stays below completion
-      // until the real receipt response is rendered.
-      const pct = Math.min(92, (elapsed / 22.0) * 92);
-      maxProgressRef.current = Math.max(maxProgressRef.current, pct);
+    let eventSource = null;
+    let closed = false;
+    let streamWarningShown = false;
+    const cleanup = () => {
+      closed = true;
+      clearInterval(elapsedTimer);
+      if (eventSource) eventSource.close();
+    };
+    const advanceProgress = (progress) => {
+      if (!Number.isFinite(progress)) return;
+      maxProgressRef.current = Math.max(maxProgressRef.current, progress);
       setTrialProgress(maxProgressRef.current);
-
-      // Determine which phase we're in using wall time, not eased progress.
-      // This keeps visible statuses in the same order as the narrated trial.
-      const phaseIdx = phaseSchedule.find(s => elapsed < s.until)?.index ?? phases.length - 1;
-
-      const fetchProgress = Math.min(330, Math.max(0, Math.floor(elapsed * 24)));
-      const classifyProgress = elapsed >= 6
-        ? Math.min(3, Math.max(1, Math.floor((elapsed - 6) / 2.4) + 1))
-        : 0;
-      const policyStatus = elapsed >= 12 ? 'BLOCKED' : elapsed >= 9 ? 'CHECKING' : 'MONITORING';
-      setLiveCounters({ fetched: fetchProgress, classified: classifyProgress, total: 330, policyStatus });
-
-      // Emit in-flight checkpoints without presenting them as receipts.
-      setLiveLog(
-        operationTimeline
-          .filter((entry) => elapsed >= entry.at)
-          .slice(-11)
-          .map((entry) => ({ text: entry.text, ts: elapsedStart + (entry.at * 1000) }))
-      );
-
-      const phase = phases[phaseIdx];
-      if (phaseIdx !== lastPhaseIdx) {
-        pushLogLine(phase.label, phase.detail);
-        lastPhaseIdx = phaseIdx;
+    };
+    const appendTrace = (entry) => {
+      if (!entry || closed) return;
+      setLiveLog((prev) => [...prev, { text: entry.text, ts: entry.ts || Date.now() }].slice(-8));
+      setReasoningTrace((prev) => [...prev, { msg: entry.text, detail: entry.detail || entry.text, status: 'complete' }].slice(-10));
+      if (entry.counterPatch) {
+        setLiveCounters((prev) => ({ ...(prev || {}), ...entry.counterPatch }));
       }
-    }, 200);
+      if (entry.stage) setLoadingStage(entry.stage);
+    };
 
-    timers.push({ clear: () => clearInterval(progressTimer) });
+    try {
+      const since = Date.now();
+      if (typeof window !== 'undefined' && 'EventSource' in window) {
+        eventSource = new EventSource(`/api/live-trace?since=${since}`);
+        eventSource.onmessage = (message) => {
+          try {
+            const event = JSON.parse(message.data);
+            const mapped = traceLabel(event);
+            if (!mapped) return;
+            const progress = traceProgress(event.type);
+            advanceProgress(progress);
+            appendTrace({ ...mapped, ts: event.ts, stage: mapped.text });
+          } catch {
+            // Ignore malformed trace frames; final API receipt remains authoritative.
+          }
+        };
+        eventSource.onerror = () => {
+          if (streamWarningShown || closed) return;
+          streamWarningShown = true;
+          appendTrace({ text: 'Live trace stream unavailable; waiting for final server receipt', detail: 'EventSource disconnected' });
+        };
+      }
 
-    // Start the live trial immediately — it runs in parallel with the live feed above.
-    // No cached/fast/demo path: integrations must either complete or fail closed.
-    fetch('/api/enterprise-trial', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        caseId: caseId || undefined,
-        missionStatement: missionText || undefined,
-        requireLiveProof: typeof window !== 'undefined' && window.__AGENT_IC_REQUIRE_LIVE_PROOF__ === true,
-      }),
-    }).then(async (res) => {
+      const res = await fetch('/api/enterprise-trial', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          caseId: caseId || undefined,
+          missionStatement: missionText || undefined,
+          requireLiveProof: typeof window !== 'undefined' && window.__AGENT_IC_REQUIRE_LIVE_PROOF__ === true,
+        }),
+      });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || `HTTP ${res.status}`);
       }
-      return res.json();
-    }).then((data) => {
-      // Hold the proof feed briefly so the buyer sees a credible run in motion.
-      // Recording mode uses a longer hold so the visible decision reveal lands
-      // on the narration beat; the API result is still the real trial receipt.
-      const configuredRecordingMinLoadingMs = typeof window !== 'undefined'
-        ? Number(window.__AGENT_IC_RECORDING_MIN_LOADING_MS__)
-        : NaN;
-      const minLoadingMs = typeof window !== 'undefined' && window.__AGENT_IC_RECORDING_MODE__ === true
-        ? (Number.isFinite(configuredRecordingMinLoadingMs) ? configuredRecordingMinLoadingMs : 29_000)
-        : 15_000;
-      const elapsedSoFar = Date.now() - elapsedStart;
-      const wait = Math.max(0, minLoadingMs - elapsedSoFar);
-      setTimeout(() => {
-        timers.forEach(t => t.clear());
-        clearInterval(elapsedTimer);
-        setResult(data);
-        setLoading(false);
-        setLoadingStage('');
-        setReasoningTrace([]);
-        setPhase('result');
-        fetch('/api/renewals', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'seed' }) })
-          .then(() => fetch('/api/renewals?all=true'))
-          .then((res) => res.json())
-          .then((renewalData) => setRenewals(renewalData.relationships || []))
-          .catch(() => {});
-      }, wait);
-    }).catch((err) => {
-      timers.forEach(t => t.clear());
-      clearInterval(elapsedTimer);
+      const data = await res.json();
+      cleanup();
+      setTrialProgress(100);
+      setLiveCounters((prev) => ({ ...(prev || {}), policyStatus: data.policyBlock?.result?.blocked ? 'blocked' : 'review', fetched: data.workerResult?.evidence?.casesProcessed ?? prev?.fetched ?? null, total: data.workerResult?.evidence?.casesProcessed ?? prev?.total ?? null }));
+      setResult(data);
+      setLoading(false);
+      setLoadingStage('');
+      setReasoningTrace([]);
+      setPhase('result');
+      fetch('/api/renewals', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'seed' }) })
+        .then(() => fetch('/api/renewals?all=true'))
+        .then((renewalRes) => renewalRes.json())
+        .then((renewalData) => setRenewals(renewalData.relationships || []))
+        .catch(() => {});
+    } catch (err) {
+      cleanup();
       setError(err.message);
       setLoading(false);
       setLoadingStage('');
       setReasoningTrace([]);
       setTrialProgress(0);
       setPhase('intake');
-    }).finally(() => {
-      // Don't clear loading here — the setTimeout above handles it
-    });
+    }
   }, []);
 
   const loadRenewals = useCallback(async () => {
     setPhase('renewals');
     setLoading(!renewals || renewals.length === 0);
     try {
-      // Seed demo history if empty, then load
+      // Seed illustrative history if empty, then load
       await fetch('/api/renewals', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'seed' }) });
       const res = await fetch('/api/renewals?all=true');
       const data = await res.json();
@@ -239,8 +226,8 @@ export default function AgentICTrialConsole() {
             <span className="ic-highlight">Stop the wrong ones.</span>
           </h1>
           <p className="ic-intake-subtitle">
-            Agent IC is not the vendor agent. One buyer prompt becomes a Stripe test-mode spend envelope,
-            governed worker run, policy gate receipt, evidence-backed procurement decision, and renewal ledger.
+            Agent IC is not the vendor agent. One buyer prompt becomes a governed spend envelope,
+            worker run, policy receipt, evidence-backed procurement decision, and renewal ledger.
           </p>
 
           <div className="ic-intake-motion-lane" aria-hidden="true">
@@ -253,7 +240,7 @@ export default function AgentICTrialConsole() {
             <ProofChip label="Buyer/operator" value="CFO + Safety Ops" />
             <ProofChip label="Vendor agent" value="RouteGuard AI" />
             <ProofChip label="Contract at stake" value="$14.4K proposed annual" />
-            <ProofChip label="Bounded trial" value="Stripe test-mode $100 cap" />
+            <ProofChip label="Bounded trial" value="Stripe Checkout $100 cap" />
           </div>
 
           <div className="ic-intake-proof-strip ic-intake-proof-strip-evidence" aria-label="Observed proof preview">
@@ -340,21 +327,21 @@ export default function AgentICTrialConsole() {
           </div>
 
           <div className="ic-ops-grid ic-ops-grid-proof">
-            <ProofMetric value={`${liveCounters?.fetched ?? 0}/${liveCounters?.total ?? 330}`} label="NHTSA workload target" />
-            <ProofMetric value={`${liveCounters?.classified ?? 0}/3`} label="classifier sample target" />
-            <ProofMetric value={trialProgress > 30 ? '$100 requested' : '$0'} label="Stripe envelope request" />
-            <ProofMetric value={liveCounters?.policyStatus ?? 'MONITORING'} label="policy gate check" tone={liveCounters?.policyStatus === 'BLOCKED' ? 'blocked' : 'neutral'} />
+            <ProofMetric value={liveCounters?.fetched != null ? `${liveCounters.fetched}/${liveCounters.total || liveCounters.fetched}` : 'pending'} label="evidence rows observed" />
+            <ProofMetric value={liveCounters?.classified || 'pending'} label="model receipt" />
+            <ProofMetric value={liveCounters?.stripe || 'pending'} label="spend envelope" />
+            <ProofMetric value={liveCounters?.policyStatus || 'waiting'} label="denied action evaluation" tone={liveCounters?.policyStatus === 'blocked' ? 'blocked' : 'neutral'} />
           </div>
 
           <div className="ic-ops-proof-row">
             <ProofChip label="Source" value="NHTSA ODI" />
             <ProofChip label="Model" value="Nemotron NIM" />
-            <ProofChip label="Funding" value="envelope requested" />
-            <ProofChip label="Guardrail" value="cap check active" />
+            <ProofChip label="Funding" value={liveCounters?.stripe || 'pending'} />
+            <ProofChip label="Guardrail" value={liveCounters?.policyStatus || 'waiting'} />
           </div>
 
           <div className="ic-ops-panel ic-ops-log">
-            <div className="ic-ops-panel-title">Test-mode receipt checkpoints</div>
+            <div className="ic-ops-panel-title">Server receipt stream</div>
             <div className="ic-ops-log-stream">
               {liveLog.slice(-5).map((entry, i) => (
                 <div key={i} className="ic-ops-log-line">
@@ -509,7 +496,7 @@ function TrialResult({ result, onReset }) {
   const stripeSessionId = result.stripe?.sessionId || null;
   const stripeReceipt = stripeSessionId ? receiptHash(stripeSessionId) : null;
   const stripeValue = stripeSessionId
-    ? (result.stripe?.testMode ? 'Test-mode Checkout' : 'Checkout session')
+    ? (result.stripe?.testMode ? 'Non-production Checkout receipt' : 'Checkout session')
     : 'not recorded';
   const stripeDetail = stripeSessionId
     ? `Envelope ${money.format(spendCap)} · masked receipt ${stripeReceipt}`

@@ -26,11 +26,11 @@ Each service trial must have:
 
 ## 4. Stripe Requirements
 
-- Use Stripe test mode or approved live path for a visible spend/provisioning event.
+- Use Stripe non-production mode or approved live path for a visible spend/provisioning event.
 - Record amount, purpose, approval status, and resulting artifact.
 - Do not display private payment credentials or real secret values.
 - If Stripe Projects or MCP integration is available, prioritize provisioning a low-risk service.
-- If provisioning is unavailable, use a scoped payment/ledger event with test-mode proof.
+- If provisioning is unavailable, use a scoped payment/ledger event with non-production proof.
 
 ## 5. NemoClaw/OpenShell-Style Requirements
 

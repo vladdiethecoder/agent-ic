@@ -32,7 +32,7 @@ This is the initial production threat model for Agent IC. It supports the full p
 | Spend replay/idempotency failure | Double charge or stale approval reuse | Approval foundation | Idempotency keys, Stripe webhook verification, replay tests |
 | Policy bypass | Unsafe tool/network access | OpenShell/policy gate proof path | Policy builder/versioning/simulator and signed policy activation |
 | Provider outage | Trial failure or partial state | Fail-closed errors and readiness | Incident runbooks, retry budgets, circuit breakers |
-| Local artifact overclaim | Misleading demo/proof | Honest production docs and proof caveats | Fresh matched strict-live captures for public claims |
+| Local artifact overclaim | Misleading proof | Honest production docs and proof caveats | Fresh matched strict-live captures for public claims |
 
 ## Required Security Gates Before Production Claim
 

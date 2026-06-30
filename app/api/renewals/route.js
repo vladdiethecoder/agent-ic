@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server.js';
-import { getRenewalHistory, getAllVendorRelationships, seedDemoRenewalHistory, clearLedger } from '../../../lib/renewalLedger.js';
+import { getRenewalHistory, getAllVendorRelationships, seedIllustrativeRenewalHistory, clearLedger } from '../../../lib/renewalLedger.js';
 import { getCaseById, enterpriseCases } from '../../../lib/enterpriseCases.js';
 import { readJsonBody, jsonError } from '../../../lib/validation.js';
 import { authContext, requireApiAccessAsync, requireTenantScope, tenantFromBody, tenantFromUrl } from '../../../lib/authz.js';
@@ -26,10 +26,10 @@ export async function GET(request) {
   const all = url.searchParams.get('all') === 'true';
   const seed = url.searchParams.get('seed') === 'true';
 
-  // Seed demo history if requested
+  // Seed illustrative history if requested
   if (seed) {
     for (const c of enterpriseCases) {
-      seedDemoRenewalHistory(c.id, c, { tenantId: access.principal.tenantId });
+      seedIllustrativeRenewalHistory(c.id, c, { tenantId: access.principal.tenantId });
     }
   }
 
@@ -54,7 +54,7 @@ export async function GET(request) {
 
 /**
  * POST /api/renewals
- * Actions: seed (create demo history), clear (reset ledger)
+ * Actions: seed (create illustrative history), clear (reset ledger)
  */
 export async function POST(request) {
   const parsedBody = await readJsonBody(request);
@@ -68,7 +68,7 @@ export async function POST(request) {
 
   if (body.action === 'seed') {
     for (const c of enterpriseCases) {
-      seedDemoRenewalHistory(c.id, c, { tenantId: access.principal.tenantId });
+      seedIllustrativeRenewalHistory(c.id, c, { tenantId: access.principal.tenantId });
     }
     const relationships = getAllVendorRelationships({ tenantId: access.principal.tenantId });
     appendAudit({ ...authContext(access.principal), kind: 'renewal', action: 'renewals_seeded', detail: 'Illustrative renewal relationships seeded for product navigation', relationshipCount: relationships.length });

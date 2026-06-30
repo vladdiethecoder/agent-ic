@@ -1,10 +1,10 @@
 # Agent IC
 
-**Fund the right AI pilots. Stop the wrong ones. Prove every dollar with evidence.**
+**Govern vendor-agent spend, access, evidence, and renewal decisions.**
 
-Agent IC is an enterprise procurement control plane for agentic services. It helps finance, security, operations, and procurement teams decide which vendor AI agents deserve budget, tools, data access, and production access.
+Agent IC is an enterprise procurement control plane for agentic services. It helps finance, security, operations, and procurement teams decide which vendor AI agents deserve budget, tools, data access, and production privileges.
 
-The product is not another worker agent. It is the governed buying layer around every agent an enterprise wants to adopt.
+The product is not another worker agent. It is the governed buying and operating layer around every agent an enterprise wants to adopt.
 
 ## Product thesis
 
@@ -15,12 +15,12 @@ Agent IC is that control plane.
 ## How it works
 
 1. **Intake** — capture the buyer mission, vendor agent, contract at risk, success metrics, and allowed scope.
-2. **Bounded spend** — create a Stripe test-mode Checkout envelope for a capped trial budget.
+2. **Bounded spend** — create a governed Checkout envelope or approved ledger envelope for the capped evaluation budget.
 3. **Governed execution** — run the vendor-agent workload against inspectable data under policy.
-4. **Policy enforcement** — allow approved evidence reads and block out-of-policy spend/tool requests with NVIDIA OpenShell when observed, otherwise fail closed or label local policy-gate proof explicitly.
+4. **Policy enforcement** — allow approved evidence reads and block out-of-policy spend/tool requests with OpenShell when observed, otherwise fail closed through Agent IC's local deny-by-default policy gate.
 5. **Evidence and ROI** — compute named-input profitability, waste, risk-adjusted ROI, throughput, vendor claim validation, annualized value, opportunity cost, and time-to-value.
 6. **Procurement decision** — issue continue, revise, or kill recommendations with receipts rather than model opinion alone.
-7. **Renewal ledger** — carry observed evidence into monthly renewal and expansion decisions.
+7. **Renewal ledger** — carry observed evidence into monthly renewal, expansion, downgrade, or cancellation decisions.
 
 ## Enterprise cases
 
@@ -35,17 +35,18 @@ Agent IC is that control plane.
 
 - `/trial` — enterprise trial console
 - `/admin` — operational/admin console
-- `/api/enterprise-trial` — governed trial execution
+- `/api/enterprise-trial` — governed evaluation execution
 - `/api/renewals` — accumulated vendor renewal evidence
 - `/api/proof-report` — masked proof and provider-state audit surface
 
 ## Integration truth model
 
-- **Stripe** is used in test mode for bounded spend-envelope receipts.
+- **Stripe** records bounded spend-envelope receipts. A `cs_test...` receipt is explicitly non-production money movement; a production-money claim requires a production-mode receipt and approval workflow evidence.
 - **NVIDIA Nemotron** is live only when a run records a provider request ID.
 - **NVIDIA OpenShell** is claimed only when a run records observed sandbox/policy enforcement such as an HTTP 403 denial receipt.
 - **Hermes** is live only when a run records a Hermes gateway, sandbox, or CLI receipt.
 - **Public data** is treated as inspectable evidence with source paths, row counts, and hashes.
+- **Local development mode** can provide a local principal and local ledgers; production mode fails closed without authenticated principals and approval evidence.
 
 ## Development
 
@@ -80,13 +81,14 @@ npm run release:check
 Common variables:
 
 ```bash
-STRIPE_SECRET_KEY=sk_test_...
+STRIPE_SECRET_KEY=sk_test_...      # or an approved production-mode key in controlled deployments
 NEMOTRON_API_KEY=nvapi-...
 NEMOTRON_BASE_URL=https://integrate.api.nvidia.com/v1
 NEMOTRON_MODEL=nvidia/nemotron-3-super-120b-a12b
-AGENT_IC_DEMO_MODE=false
+AGENT_IC_LOCAL_MODE=false          # true disables outbound providers for local/offline rehearsals
+AGENT_IC_PRODUCTION_MODE=false     # true requires authenticated principal and spend approval
 ```
 
 ## Production boundary
 
-Agent IC is a working enterprise prototype with substantial local controls and proof gates. Full production deployment still requires deployed SSO/OIDC, production database/object storage, formal migrations, deployed observability, compliance signoff, and production smoke evidence.
+Agent IC is a working enterprise product foundation with governed execution, fail-closed policy behavior, masked provider receipts, local audit/renewal ledgers, production-mode auth checks, signed export support, migrations, security scans, and release manifests. A full enterprise deployment still requires organization-specific SSO/OIDC configuration, production database/object storage, deployed observability, compliance approval, and production smoke evidence in the target environment.

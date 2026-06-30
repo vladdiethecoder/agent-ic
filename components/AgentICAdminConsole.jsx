@@ -6,7 +6,7 @@ import './admin-console.css';
 const DEFAULT_CASE = 'safety-ops-complaint-triage';
 
 export default function AgentICAdminConsole() {
-  const [tenantId, setTenantId] = useState('demo-tenant');
+  const [tenantId, setTenantId] = useState('local-tenant');
   const [tenants, setTenants] = useState([]);
   const [newTenantName, setNewTenantName] = useState('Acme Production Tenant');
   const [token, setToken] = useState('');
@@ -220,8 +220,8 @@ export default function AgentICAdminConsole() {
     }));
   }
 
-  async function simulatePolicy(id) {
-    await mutate('Simulated policy block', () => api('/api/policies', {
+  async function evaluatePolicy(id) {
+    await mutate('Evaluated policy block', () => api('/api/policies', {
       method: 'POST',
       body: JSON.stringify({ action: 'simulate', tenantId, policyId: id, attemptedAction: { name: 'CARFAX vehicle-history report', attemptedAmount: 150 } }),
     }));
@@ -241,7 +241,7 @@ export default function AgentICAdminConsole() {
     }
   }
 
-  const auth = proof?.auth || approvals[0]?.auth || { tenantId, role: token ? 'token-auth' : 'demo owner' };
+  const auth = proof?.auth || approvals[0]?.auth || { tenantId, role: token ? 'token-auth' : 'local owner' };
   const pending = approvals.filter((approval) => approval.status === 'pending');
 
   return (
@@ -259,7 +259,7 @@ export default function AgentICAdminConsole() {
         <Panel title="Auth + tenant context">
           <label>Organization / Tenant</label>
           <select value={tenantId} onChange={(e) => setTenantId(e.target.value)} aria-label="Tenant selector">
-            <option value="demo-tenant">demo-tenant</option>
+            <option value="local-tenant">local-tenant</option>
             {tenants.map((tenant) => <option key={tenant.tenantId} value={tenant.tenantId}>{tenant.name} ({tenant.tenantId})</option>)}
           </select>
           <label>Tenant display name</label>
@@ -282,7 +282,7 @@ export default function AgentICAdminConsole() {
           </div>}
           <div className="fact-list">
             <span>Tenant: {auth.tenantId || tenantId}</span>
-            <span>User: {auth.userId || 'demo/local'}</span>
+            <span>User: {auth.userId || 'local-dev'}</span>
             <span>Role: {auth.role || 'unknown'}</span>
           </div>
         </Panel>
@@ -358,7 +358,7 @@ export default function AgentICAdminConsole() {
                 <small>{policy.policyHash?.slice(0, 12)} · cap ${policy.policy?.spendCap}</small>
               </div>
               <div className="row-actions">
-                <button onClick={() => simulatePolicy(policy.id)} disabled={busy}>Simulate</button>
+                <button onClick={() => evaluatePolicy(policy.id)} disabled={busy}>Evaluate</button>
                 {policy.status !== 'active' && <button onClick={() => activatePolicy(policy.id)} disabled={busy}>Activate</button>}
               </div>
             </div>

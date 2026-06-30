@@ -18,11 +18,11 @@ test('production mode requires authenticated user tenant and role', () => {
   assert.equal(result.response.status, 401);
 });
 
-test('development mode supplies demo principal for local development flow', () => {
+test('development mode supplies local principal for local development flow', () => {
   const req = new NextRequest('http://localhost:3000/api/enterprise-trial', { method: 'POST' });
   const result = principalFromRequest(req, { env: { AGENT_IC_DEPLOYMENT_MODE: 'development' } });
   assert.equal(result.ok, true);
-  assert.equal(result.principal.tenantId, 'demo-tenant');
+  assert.equal(result.principal.tenantId, 'local-tenant');
   assert.equal(result.principal.role, 'owner');
 });
 

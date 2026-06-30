@@ -14,7 +14,7 @@ Agent IC is that control plane.
 
 - Demonstrate an enterprise evaluating an agentic service before expanding spend.
 - Show a governed service trial where the service receives a hard trial envelope, performs real work, hits a policy block, imports evidence, and receives a continue/revise/kill decision.
-- Show Stripe-backed test-mode spend authorization, NVIDIA/Nemotron-backed reasoning or evidence synthesis, Hermes skill/playbook reuse, and OpenShell/NemoHermes receipts only when observed; otherwise label local policy/playbook artifacts explicitly.
+- Show Stripe-backed non-production spend authorization, NVIDIA/Nemotron-backed reasoning or evidence synthesis, Hermes skill/playbook reuse, and OpenShell/NemoHermes receipts only when observed; otherwise label local policy/playbook artifacts explicitly.
 - Make the blocked-action beat visible: at least one out-of-policy tool or spend request is denied before the trial can expand.
 - Produce a clear audit trail: buyer, service under test, mission, envelope, policy, approvals, blocked events, evidence, decision, and next cap.
 - Save the learned service-evaluation procedure as a reusable Hermes playbook.
@@ -34,17 +34,17 @@ Agent IC is that control plane.
 - Security and governance owners who need proof that agentic services can be constrained before they touch production systems.
 - Enterprise evaluators reviewing governed agentic-service purchasing, proof quality, and operational fit.
 
-## 5. Core Demo Scenario
+## 5. Core Product Scenario
 
-The demo operator evaluates an external complaint-triage agentic service:
+The enterprise operator evaluates an external complaint-triage agentic service:
 
-> "Run a governed trial of this complaint-triage agentic service on real public NHTSA ODI complaint rows. Give it a $100 test-mode work envelope, allow public-data reads and evidence generation, block paid enrichment above the cap, and only expand if the run produces measurable routing evidence with zero Agent IC policy incidents."
+> "Run a governed trial of this complaint-triage agentic service on real public NHTSA ODI complaint rows. Give it a $100 non-production work envelope, allow public-data reads and evidence generation, block paid enrichment above the cap, and only expand if the run produces measurable routing evidence with zero Agent IC policy incidents."
 
 Agent IC:
 
 1. Registers the service trial: buyer, vendor/service, mission, success metric, and hard envelope.
 2. Defines the policy envelope: allowed tools, spend cap, merchant/category restrictions, data sensitivity, expiry, and human-review rules.
-3. Creates a Stripe test-mode Checkout Session for the governed trial envelope with proposal metadata and reconciliation fields.
+3. Creates a Stripe Checkout receipt for the governed trial envelope with proposal metadata and reconciliation fields.
 4. Dispatches or hands off the work through Hermes/NemoHermes and records the service receipt.
 5. Lets the worker service import and route real public NHTSA complaint rows.
 6. Blocks one over-cap or unapproved paid enrichment/tool request with HTTP `403`.
@@ -57,7 +57,7 @@ Agent IC:
 
 - Service trial intake showing buyer, service under test, workload, success metric, and spend envelope.
 - Spend envelope card showing mission, cap, approver, expiry, and policy rules.
-- Provider receipt strip showing Hermes/NemoHermes, Nemotron, Stripe test mode, and policy gate states.
+- Provider receipt strip showing Hermes/NemoHermes, Nemotron, Stripe non-production mode, and policy gate states.
 - Live run timeline with worker-agent actions, tool calls, policy checks, blocked events, spend events, and evidence import.
 - Blocked action banner that surfaces denied tool request, attempted amount, cap, and policy invariant.
 - Evidence ledger showing imported source, row counts, hashes, measured runtime, route coverage, human-review queue, and policy incidents.
@@ -69,7 +69,7 @@ Agent IC:
 - Hermes Agent / NemoHermes: dispatch, skills, playbook reuse, and repeatable service evaluation workflow.
 - NVIDIA/Nemotron: reasoning or evidence synthesis over the run receipts.
 - NemoClaw/OpenShell-style governance: policy envelope, tool permissions, blocked-action enforcement, and runtime constraints.
-- Stripe: scoped test-mode spend authorization via Checkout, session reconciliation IDs, metadata, and ledger proof.
+- Stripe: scoped non-production spend authorization via Checkout, session reconciliation IDs, metadata, and ledger proof.
 - Public evidence source: NHTSA ODI complaints API snapshot for the primary workload, with VIN omitted or redacted.
 
 ## 8. Hard Invariants
@@ -78,7 +78,7 @@ Agent IC:
 - Every spend-capable action has a budget, purpose, and audit log entry.
 - At least one out-of-policy action is demonstrably blocked before the service can earn more budget.
 - Decisions must cite run evidence, not just model opinion.
-- The demo must never expose raw keys, cards, tokens, private account data, local ports, or private workspace paths.
+- The product must never expose raw keys, cards, tokens, private account data, local ports, or private workspace paths.
 - The system must fail closed if strict live proof is requested and credentials, policy, payment, or sandbox steps are unavailable.
 
 ## 9. Success Metrics
@@ -86,13 +86,13 @@ Agent IC:
 - A viewer can state the product in one sentence: "Agent IC governs agentic services before enterprises expand spend."
 - The video shows a service trial, a spend envelope, live provider receipts, a blocked action, imported evidence, and a continue/revise/kill decision.
 - The evidence comes from a real, inspectable workload source or an explicitly labeled local rehearsal fixture.
-- The final video passes automated QA, frame-by-frame visual review, and Kimi/vision review when configured.
-- The demo ends with a visible saved Hermes playbook or operating packet that can be reused on another service trial.
+- The product walkthrough passes automated QA, frame-by-frame visual review, and Kimi/vision review when configured.
+- The product flow ends with a visible saved Hermes playbook or operating packet that can be reused on another service trial.
 
 ## 10. Resolved Product Decisions
 
 - Final product name: Agent IC.
 - Primary product framing: enterprise control plane for purchasing and governing agentic services.
 - Primary workload: real public NHTSA ODI complaint rows, used to evaluate a complaint-triage agentic service.
-- Stripe mode: test-mode Checkout Session only; no production money movement.
-- Final video path: strict live proof when recording claims live provider receipts.
+- Stripe mode: Checkout Session only; no production money movement.
+- Live proof path: strict receipts are required whenever the product claims live provider behavior.

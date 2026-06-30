@@ -114,9 +114,9 @@ export async function POST(request) {
   const tenantScope = requireTenantScope(access.principal, tenantFromBody(body));
   if (!tenantScope.ok) return tenantScope.response;
 
-  if (body.reset !== true || body.confirmReset !== 'AGENT_IC_DEMO_RESET') {
+  if (body.reset !== true || body.confirmReset !== 'AGENT_IC_TRACE_RESET') {
     return Response.json(
-      { error: 'reset requires AGENT_IC_DEMO_RESET confirmation' },
+      { error: 'reset requires AGENT_IC_TRACE_RESET confirmation' },
       { status: 403 }
     );
   }

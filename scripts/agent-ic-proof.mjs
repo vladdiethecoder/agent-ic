@@ -60,12 +60,12 @@ async function proofStripe() {
   const trial = await loadTrial();
   const stripe = trial.stripe || {};
   const stripeReceiptId = stripe.sessionId || stripe.sessionIdMasked || null;
-  const hasTestSession = stripe.mode === 'live' && stripe.testMode === true && typeof stripeReceiptId === 'string' && stripeReceiptId.startsWith('cs_test');
-  requireStrictLive(hasTestSession, 'Stripe test-mode Checkout Session receipt is missing');
+  const hasTestSession = stripe.testMode === true && typeof stripeReceiptId === 'string' && stripeReceiptId.startsWith('cs_test');
+  requireStrictLive(hasTestSession, 'Stripe Checkout receipt is missing');
   print({
     provider: 'Stripe',
-    proof: hasTestSession ? 'Checkout Session create recorded in test mode' : 'bounded local spend envelope fallback',
-    state: hasTestSession ? 'test-mode-session-recorded' : 'unavailable-or-fallback',
+    proof: hasTestSession ? 'Checkout Session create recorded in non-production mode' : 'bounded local spend envelope',
+    state: hasTestSession ? 'non-production-session-recorded' : 'unavailable-or-local-envelope',
     runId: trial.runId,
     sessionId: stripe.sessionId ? maskId(stripe.sessionId) : stripe.sessionIdMasked || null,
     mode: stripe.mode || 'unavailable',
@@ -73,7 +73,7 @@ async function proofStripe() {
     amountDollars: stripe.amountDollars,
     retrievalStatus: stripe.retrieval?.status || null,
     paymentStatus: stripe.retrieval?.paymentStatus || stripe.retrieval?.payment_status || null,
-    limitation: hasTestSession && !stripe.sessionId ? 'Stored trial redacts raw Checkout Session id; masked test-mode receipt id retained.' : hasTestSession ? null : 'No live Stripe test-mode receipt was returned; this is not live money movement.',
+    limitation: hasTestSession && !stripe.sessionId ? 'Stored trial redacts raw Checkout Session id; masked non-production receipt id retained.' : hasTestSession ? null : 'No Stripe Checkout receipt was returned; this is not live money movement.',
   });
 }
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isDbAvailable, dbConfig, dbHealth, initDbPool, closeDbPool, resetDbPool, tenantTableName, hashTenantId } from '../lib/dbAdapter.js';
+import { isDbAvailable, dbConfig, dbHealth, initDbPool, closeDbPool, resetDbPool, tenantTableName, hashTenantId, dbQuery } from '../lib/dbAdapter.js';
 import { applyMigrations, migrationStatus, pendingMigrations } from '../lib/dbMigrations.js';
 import { validateProductionConfig } from '../lib/productionConfig.js';
 
@@ -83,6 +83,56 @@ test('tenant table name sanitizes unsafe characters', () => {
   const name = tenantTableName('evidence', 'tenant/../bad');
   assert.equal(name.includes('/'), false);
   assert.equal(name.includes('\\'), false);
+});
+
+test('tenant-scoped dbQuery applies tenant context inside a transaction', async () => {
+  const calls = [];
+  const client = {
+    async query(text, params) {
+      calls.push({ text, params });
+      if (text === 'SELECT $1::text as value') return { rows: [{ value: params[0] }] };
+      return { rows: [] };
+    },
+    release() {
+      calls.push({ text: 'RELEASE' });
+    },
+  };
+  globalThis.__agentIcDbPool = { connect: async () => client };
+  const result = await dbQuery('SELECT $1::text as value', ['ok'], { tenantId: 'tenant-a' });
+  assert.deepEqual(result.rows, [{ value: 'ok' }]);
+  assert.deepEqual(calls.map((call) => call.text), [
+    'BEGIN',
+    'SET LOCAL agentic.current_tenant = $1',
+    'SELECT $1::text as value',
+    'COMMIT',
+    'RELEASE',
+  ]);
+  assert.deepEqual(calls[1].params, ['tenant-a']);
+  resetDbPool();
+});
+
+test('tenant-scoped dbQuery rolls back and releases on query failure', async () => {
+  const calls = [];
+  const client = {
+    async query(text, params) {
+      calls.push({ text, params });
+      if (text === 'SELECT broken') throw new Error('db exploded');
+      return { rows: [] };
+    },
+    release() {
+      calls.push({ text: 'RELEASE' });
+    },
+  };
+  globalThis.__agentIcDbPool = { connect: async () => client };
+  await assert.rejects(() => dbQuery('SELECT broken', [], { tenantId: 'tenant-a' }), /db exploded/);
+  assert.deepEqual(calls.map((call) => call.text), [
+    'BEGIN',
+    'SET LOCAL agentic.current_tenant = $1',
+    'SELECT broken',
+    'ROLLBACK',
+    'RELEASE',
+  ]);
+  resetDbPool();
 });
 
 test('migration runner reports unavailable when no DATABASE_URL', async () => {

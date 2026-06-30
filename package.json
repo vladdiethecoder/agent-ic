@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Agent IC: enterprise control plane for buying agentic services with bounded Stripe test-mode spend, policy gates, workload evidence, and expansion decisions.",
+  "description": "Agent IC: enterprise control plane for buying agentic services with bounded spend envelopes, policy gates, workload evidence, and expansion decisions.",
   "scripts": {
     "dev": "node scripts/safe-next.mjs dev",
     "build": "node scripts/safe-next.mjs build",

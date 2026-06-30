@@ -21,11 +21,10 @@ function main() {
     'Fund the right AI pilots.',
     'Stop the wrong ones.',
     'not the vendor agent',
-    'Stripe test-mode spend envelope',
-    'policy gate receipt',
+    'governed spend envelope',
+    'policy receipt',
     'Bounded trial',
     'evidence-backed procurement decision',
-    'policy gate',
     'Run RouteGuard trial',
     'Vendor Renewals',
   ]) {

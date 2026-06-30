@@ -7,7 +7,7 @@ import { jsonError, readJsonBody } from '../../../lib/validation.js';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
-  const access = await principalFromRequestAsync(request, { allowDemo: false });
+  const access = await principalFromRequestAsync(request, { allowLocalDev: false });
   if (!access.ok) return access.response;
   const token = sessionTokenFromRequest(request);
   const session = token ? getSessionByToken(token) : null;
@@ -21,7 +21,7 @@ export async function GET(request) {
 export async function POST(request) {
   const parsed = await readJsonBody(request);
   if (!parsed.ok) return parsed.response;
-  const access = await principalFromRequestAsync(request, { allowDemo: false });
+  const access = await principalFromRequestAsync(request, { allowLocalDev: false });
   if (!access.ok) return access.response;
   const body = parsed.body || {};
   const principal = access.principal;

@@ -25,7 +25,7 @@ test('renewal ledger is isolated by tenant in tenant store', async () => {
   const caseDef = getCaseById('safety-ops-complaint-triage');
   renewals.clearLedger();
 
-  renewals.seedDemoRenewalHistory(caseDef.id, caseDef, { tenantId: 'tenant_a' });
+  renewals.seedIllustrativeRenewalHistory(caseDef.id, caseDef, { tenantId: 'tenant_a' });
   const tenantA = renewals.getAllVendorRelationships({ tenantId: 'tenant_a' });
   const tenantB = renewals.getAllVendorRelationships({ tenantId: 'tenant_b' });
 

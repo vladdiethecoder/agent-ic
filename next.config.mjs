@@ -5,7 +5,7 @@ const nextConfig = {
   devIndicators: false,
   webpack: (config) => {
     // Next/webpack file-system cache mis-parses this workspace path because the
-    // parent directory contains '#'. Disable cache so the demo builds in-place.
+    // parent directory contains '#'. Disable cache so the local builds in-place.
     config.cache = false;
     return config;
   },

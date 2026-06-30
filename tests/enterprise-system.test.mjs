@@ -136,10 +136,10 @@ test('OpenShell availability does not trust an invalid OPENSHELL_BINARY value', 
 test('provider status labels credentials as configured rather than live receipts', async () => {
   const previousNemotron = process.env.NEMOTRON_API_KEY;
   const previousStripe = process.env.STRIPE_SECRET_KEY;
-  const previousDemo = process.env.AGENT_IC_DEMO_MODE;
+  const previousLocalMode = process.env.AGENT_IC_LOCAL_MODE;
   process.env.NEMOTRON_API_KEY = 'unit-nvidia-configured-key';
   process.env.STRIPE_SECRET_KEY = 'unit-stripe-configured-key';
-  delete process.env.AGENT_IC_DEMO_MODE;
+  delete process.env.AGENT_IC_LOCAL_MODE;
   try {
     const { buildProviderStates } = await import(`../lib/providerStatus.js?configured=${Date.now()}`);
     const states = buildProviderStates();
@@ -154,16 +154,16 @@ test('provider status labels credentials as configured rather than live receipts
     else process.env.NEMOTRON_API_KEY = previousNemotron;
     if (previousStripe === undefined) delete process.env.STRIPE_SECRET_KEY;
     else process.env.STRIPE_SECRET_KEY = previousStripe;
-    if (previousDemo === undefined) delete process.env.AGENT_IC_DEMO_MODE;
-    else process.env.AGENT_IC_DEMO_MODE = previousDemo;
+    if (previousLocalMode === undefined) delete process.env.AGENT_IC_LOCAL_MODE;
+    else process.env.AGENT_IC_LOCAL_MODE = previousLocalMode;
   }
 });
 
 test('provider status exposes explicitly enabled Hermes CLI dispatch without gateway overclaim', async () => {
   const previousCli = process.env.AGENT_IC_HERMES_CLI_LIVE;
-  const previousDemo = process.env.AGENT_IC_DEMO_MODE;
+  const previousLocalMode = process.env.AGENT_IC_LOCAL_MODE;
   process.env.AGENT_IC_HERMES_CLI_LIVE = 'true';
-  delete process.env.AGENT_IC_DEMO_MODE;
+  delete process.env.AGENT_IC_LOCAL_MODE;
   try {
     const { buildProviderStates, isHermesLive } = await import(`../lib/providerStatus.js?hermescli=${Date.now()}`);
     const states = buildProviderStates();
@@ -175,8 +175,8 @@ test('provider status exposes explicitly enabled Hermes CLI dispatch without gat
   } finally {
     if (previousCli === undefined) delete process.env.AGENT_IC_HERMES_CLI_LIVE;
     else process.env.AGENT_IC_HERMES_CLI_LIVE = previousCli;
-    if (previousDemo === undefined) delete process.env.AGENT_IC_DEMO_MODE;
-    else process.env.AGENT_IC_DEMO_MODE = previousDemo;
+    if (previousLocalMode === undefined) delete process.env.AGENT_IC_LOCAL_MODE;
+    else process.env.AGENT_IC_LOCAL_MODE = previousLocalMode;
   }
 });
 
@@ -186,7 +186,7 @@ test('Hermes CLI dispatch adapter records a real CLI-shaped session receipt', as
   const previousGateway = process.env.HERMES_AGENT_URL;
   const previousGatewayAlias = process.env.HERMES_GATEWAY_URL;
   const previousWebhook = process.env.HERMES_WEBHOOK_URL;
-  const previousDemo = process.env.AGENT_IC_DEMO_MODE;
+  const previousLocalMode = process.env.AGENT_IC_LOCAL_MODE;
   const dir = await mkdtemp(path.join(tmpdir(), 'agent-ic-hermes-cli-test-'));
   const fakeHermes = path.join(dir, 'hermes');
   await writeFile(fakeHermes, '#!/usr/bin/env node\nprocess.stdout.write(\'session_id: unit-hermes-cli-session\\n{"ok":true,"selectedSkills":["hermes-agent"],"summary":"Unit Hermes CLI receipt."}\\n\');\n');
@@ -196,7 +196,7 @@ test('Hermes CLI dispatch adapter records a real CLI-shaped session receipt', as
   delete process.env.HERMES_AGENT_URL;
   delete process.env.HERMES_GATEWAY_URL;
   delete process.env.HERMES_WEBHOOK_URL;
-  delete process.env.AGENT_IC_DEMO_MODE;
+  delete process.env.AGENT_IC_LOCAL_MODE;
   try {
     const { dispatchToHermes } = await import(`../lib/hermesClient.js?hermescli=${Date.now()}`);
     const receipt = await dispatchToHermes({
@@ -230,8 +230,8 @@ test('Hermes CLI dispatch adapter records a real CLI-shaped session receipt', as
     else process.env.HERMES_GATEWAY_URL = previousGatewayAlias;
     if (previousWebhook === undefined) delete process.env.HERMES_WEBHOOK_URL;
     else process.env.HERMES_WEBHOOK_URL = previousWebhook;
-    if (previousDemo === undefined) delete process.env.AGENT_IC_DEMO_MODE;
-    else process.env.AGENT_IC_DEMO_MODE = previousDemo;
+    if (previousLocalMode === undefined) delete process.env.AGENT_IC_LOCAL_MODE;
+    else process.env.AGENT_IC_LOCAL_MODE = previousLocalMode;
   }
 });
 
@@ -547,13 +547,13 @@ test('renewal ledger records and retrieves cycles', async () => {
 });
 
 test('seeded renewal history is labeled illustrative and distinct from observed trial cycles', async () => {
-  const { seedDemoRenewalHistory, getRenewalHistory, getAllVendorRelationships, clearLedger } = await import('../lib/renewalLedger.js');
+  const { seedIllustrativeRenewalHistory, getRenewalHistory, getAllVendorRelationships, clearLedger } = await import('../lib/renewalLedger.js');
   const { getCaseById } = await import('../lib/enterpriseCases.js');
   const caseDef = getCaseById('safety-ops-complaint-triage');
   const tenantId = `unit-renewal-seed-${Date.now()}`;
 
   clearLedger({ tenantId });
-  seedDemoRenewalHistory(caseDef.id, caseDef, { tenantId });
+  seedIllustrativeRenewalHistory(caseDef.id, caseDef, { tenantId });
 
   const history = getRenewalHistory(caseDef.id, { tenantId });
   assert.ok(history.cycles.length > 0);
@@ -574,7 +574,7 @@ test('proof report exposes masked audit surface', async () => {
 
   assert.equal(report.ok, true);
   assert.equal(report.proofSurfaces.primaryRoute, '/trial');
-  assert.equal(report.proofSurfaces.spend.includes('Stripe test-mode Checkout Session'), true);
+  assert.equal(report.proofSurfaces.spend.includes('Stripe Checkout receipt'), true);
   assert.ok(report.workloadEvidence.rowCount > 0, 'reports workload row count');
   assert.match(report.workloadEvidence.sha256, /^[a-f0-9]{64}$/);
   assert.equal(report.cases.length, 4);

@@ -15,7 +15,7 @@ export function evaluateContainerRelease({ env = process.env, dockerfileText = r
     check('no_env_copy', !/COPY\s+.*\.env/i.test(dockerfileText), 'Dockerfile does not copy env files explicitly'),
     check('dockerignore_env', /\.env/.test(dockerignoreText), '.dockerignore excludes env files'),
     check('dockerignore_state', /\.agent-ic/.test(dockerignoreText), '.dockerignore excludes local state'),
-    check('dockerignore_demo', /demo-out/.test(dockerignoreText), '.dockerignore excludes rendered demo outputs'),
+    check('dockerignore_demo', /demo-out/.test(dockerignoreText), '.dockerignore excludes rendered media outputs'),
   ];
   const tools = {
     docker: toolResolver('docker') || toolResolver('podman'),

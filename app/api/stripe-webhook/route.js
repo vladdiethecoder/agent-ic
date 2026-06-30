@@ -23,7 +23,7 @@ export async function POST(request) {
   }
 
   const object = event.data?.object || {};
-  const tenantId = object.metadata?.tenant_id || object.metadata?.tenantId || 'demo-tenant';
+  const tenantId = object.metadata?.tenant_id || object.metadata?.tenantId || 'local-tenant';
   const recorded = recordPaymentEvent({ tenantId, event });
   incrementCounter('agent_ic_stripe_webhooks_total', { tenantId, type: event.type, replay: String(recorded.replay) });
   recordEvent({ level: 'info', kind: 'payment', action: 'stripe_webhook_recorded', tenantId, eventId: event.id, type: event.type, replay: recorded.replay });

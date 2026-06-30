@@ -30,7 +30,7 @@ Implementation is gated until the user explicitly approves build work. These PRD
 ## 5. Milestone 4: Live Integrations
 
 - Connect Hermes/Nemotron for one or more reasoning steps.
-- Connect Stripe test-mode or approved live spend/provisioning path.
+- Connect Stripe non-production or approved live spend/provisioning path.
 - Add integration status checks and honest blocked states.
 - Acceptance: a successful rehearsal shows real provider evidence without exposing secrets.
 

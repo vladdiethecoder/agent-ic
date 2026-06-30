@@ -1,52 +1,53 @@
 # Agent IC Product Contract
 
-This document freezes the acceptance criteria for Agent IC as an enterprise product prototype.
+This document defines the acceptance contract for Agent IC as an enterprise procurement control plane for agentic services.
 
-## Scope Boundary
+## Scope boundary
 
-Agent IC is a local-first Next.js product for governing enterprise trials of agentic services. The hardened product must support:
+Agent IC must support:
 
-1. **Agentic-service trial lifecycle**
-   - enterprise buyer and vendor service under test
-   - governed spend envelope
-   - policy envelope and allowed tools
-   - worker-agent run events
-   - blocked action
-   - imported evidence
-   - renewal/expand/revise/kill decision
-   - reusable Hermes-compatible playbook
+1. **Agentic-service evaluation lifecycle**
+   - enterprise buyer and vendor service under evaluation;
+   - governed spend envelope;
+   - policy envelope and allowed tools;
+   - worker-agent run events;
+   - at least one allowed action and one blocked action;
+   - imported evidence;
+   - renew, expand, revise, downgrade, cancel, or kill decision;
+   - reusable Hermes-compatible playbook.
 2. **Budget and spend governance**
-   - trial envelope in USD dollars
-   - Stripe `unit_amount` / `amount_total` in cents internally only
-   - no production-spend claim; Stripe is presented as test-mode Checkout unless production capability is actually proven
-   - primary UI and captions present money in dollars
+   - evaluation envelope in USD dollars;
+   - Stripe `unit_amount` / `amount_total` in cents internally only;
+   - no production-spend claim from `cs_test...` receipts;
+   - production spend requires production-mode credentials, authenticated principal, and approval evidence;
+   - primary UI presents money in dollars.
 3. **Evidence-based service evaluation**
-   - server-owned evidence and decision logic
-   - real or inspectable workload source for the primary proof path
-   - source row count and hash
-   - measured runtime/routing metrics
-   - decisions cite imported evidence, policy receipts, and provider receipts
+   - server-owned evidence and decision logic;
+   - real or inspectable workload source for the primary proof path;
+   - source row count and hash;
+   - measured runtime/routing metrics;
+   - decisions cite imported evidence, policy receipts, and provider receipts.
 4. **Blocked-action governance**
-   - final demo path shows at least one denied action before service expansion
-   - blocked actions append an audit/proof receipt with the invariant that fired
-   - out-of-policy tool requests return HTTP `403`/`409` and fail closed
+   - primary flow shows at least one denied action before service expansion;
+   - blocked actions append an audit/proof receipt with the invariant that fired;
+   - out-of-policy tool requests return HTTP `403`/`409` and fail closed.
 5. **Auditability**
-   - durable local event/proof logs
-   - reset/admin mutation requires explicit confirmation
-   - no secrets or raw provider error dumps in audit/proof rows
+   - durable local event/proof logs;
+   - reset/admin mutation requires explicit confirmation;
+   - no secrets or raw provider error dumps in audit/proof rows.
 6. **UI/product experience**
-   - polished enterprise trial console at `/trial`
-   - explicit loading/error/empty/live states
-   - proof cards instead of raw JSON walls on the primary UI
-   - no local/private URL leakage in the submitted video
+   - polished enterprise console at `/trial`;
+   - explicit loading/error/empty/live states;
+   - live run progress is sourced from server trace events or final receipts, not fabricated counters;
+   - proof cards instead of raw JSON walls on the primary UI.
 7. **Validation**
-   - Node tests for pure decision/evidence/schema/proof logic
-   - route smoke checks for API behavior and failure contracts
-   - smoke test against a running server
-   - browser proof for desktop and mobile rendering
-   - rendered-video QA and frame review for release candidate cuts
+   - Node tests for pure decision/evidence/schema/proof logic;
+   - route smoke checks for API behavior and failure contracts;
+   - smoke test against a running server;
+   - browser proof for desktop and mobile rendering;
+   - security and release checks for public repo hygiene.
 
-## API Contracts
+## API contracts
 
 ### `GET /api/health`
 
@@ -95,7 +96,7 @@ Input:
 Success:
 
 - HTTP 200.
-- Returns the full governed enterprise service-trial payload.
+- Returns the full governed enterprise service-evaluation payload.
 - Includes `stripe`, `workerResult.evidence`, `policyBlock`, `decision`, `playbook`, `governance`, `roiMethodology`, and renewal context.
 - Unknown case id returns HTTP 404 with a structured error.
 - Missing mission and case id returns HTTP 400.
@@ -126,7 +127,7 @@ Returns event-stream trace data for proof/debug surfaces.
 Reset requires explicit confirmation:
 
 ```json
-{ "reset": true, "confirmReset": "AGENT_IC_DEMO_RESET" }
+{ "reset": true, "confirmReset": "AGENT_IC_TRACE_RESET" }
 ```
 
 Missing confirmation returns HTTP 403.
@@ -139,40 +140,38 @@ Success:
 
 - Includes masked request/session identifiers and SHA-256 hashes.
 - Includes evidence source, row count, and hash.
-- Includes honest Stripe test-mode wording.
+- Labels Stripe `cs_test...` sessions as non-production receipts.
 - Includes policy `403` status when recorded.
 - Includes provider states without exposing credentials.
 
-## Edge-Case Matrix
+## Edge-case matrix
 
 | Area | Edge case | Expected behavior | Verification |
 |---|---|---|---|
 | Case lookup | unknown id | 404 structured error, no silent fallback | route smoke |
-| Trial input | missing mission and case id | 400 structured error | route smoke |
+| Evaluation input | missing mission and case id | 400 structured error | route smoke |
 | JSON parsing | malformed JSON | 400 structured error | route smoke |
 | Evidence loader | public workload snapshot | row count/hash computed from source artifact | unit + proof report |
 | Evidence gate | weak route coverage | REVISE/KILL, no expansion | unit test |
 | Audit/proof | secret text | redacted before read/write | unit + proof report |
-| Stripe test mode | configured key | Checkout Session receipt is masked and dollar cap is shown in UI | smoke |
-| Stripe unavailable | no key or demo mode | no production-spend claim; trial stays honestly labeled | proof report |
+| Stripe receipt | configured key | Checkout Session receipt is masked and dollar cap is shown in UI | smoke |
+| Stripe unavailable | no key or local/offline mode | no production-spend claim; evaluation stays honestly labeled | proof report |
 | Nemotron configured | NIM key present | sample classification receipts are recorded; synthesis is claimed only when a synthesis receipt exists | smoke |
 | Nemotron unavailable | no key | strict live-proof claims fail closed or stay explicitly unclaimed | proof report |
 | Governance | out-of-policy tool request | HTTP 403/409 with receipt; spend remains blocked | smoke |
 | UI | initial render | pre-run state visible before click | browser proof |
-| UI | service trial framing | no Atlas/case-study analytics framing in final path | browser proof |
-| Recorder | final video | no local/private text; no raw cents; real workload evidence visible | video QA |
+| UI | service evaluation framing | Agent IC remains the governance layer, not the vendor agent | browser proof |
+| Runtime progress | in-flight status | sourced from live trace events or final receipt, not fabricated proof | browser/unit review |
 
-## Acceptance Gates
+## Acceptance gates
 
-Final product closure requires all gates below:
+Product closure requires all gates below:
 
 1. `npm test` passes.
-2. `npm run build` passes.
-3. `npm run smoke` passes against a running server.
-4. `npm run smoke:api` passes against a running server.
-5. `npm run smoke:browser` passes against a running server.
-6. Static scan/lint finds no hardcoded secrets, `dangerouslySetInnerHTML`, `eval`, shell injection, or raw provider-key leaks in `app`, `components`, `lib`, and `scripts`.
-7. Final video generation and QA pass when preparing a new release cut.
-8. Video QA confirms no local/private text, no raw cents, no Atlas primary-story language, no fake-live markers, and no long silence.
-9. Frame review confirms every sampled frame supports the governed agentic-service trial story.
-10. README, validation checklist, storyboard, and proof contract match observed behavior.
+2. `npm run lint` passes.
+3. `npm run build` passes.
+4. `npm run smoke` passes against a running server.
+5. `npm run smoke:api` passes against a running server.
+6. `npm run smoke:browser` passes against a running server.
+7. Static scan/lint finds no hardcoded secrets, `dangerouslySetInnerHTML`, `eval`, shell injection, or raw provider-key leaks in `app`, `components`, `lib`, and `scripts`.
+8. README, validation checklist, and proof contract match observed behavior.

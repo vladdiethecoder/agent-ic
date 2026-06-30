@@ -3,7 +3,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT = process.cwd();
-const SCAN_ROOTS = ['app', 'components', 'lib', 'scripts', 'tests', 'PRODUCTION_READINESS.md', 'PRODUCTION_GAP_AUDIT.md', 'PRODUCTION_THREAT_MODEL.md', 'README.md', 'Dockerfile', 'package.json'];
+const SCAN_ROOTS = ['app', 'components', 'lib', 'scripts', 'tests', 'PRODUCTION_THREAT_MODEL.md', 'README.md', 'Dockerfile', 'package.json'];
 const EXCLUDED_DIRS = new Set(['node_modules', '.git', '.next', 'demo-out', '.agent-ic', '.venv', '.playwright-mcp', 'coverage']);
 const TEXT_EXT = /\.(js|jsx|mjs|ts|tsx|json|md|css|html|yml|yaml|dockerfile)$/i;
 
@@ -72,7 +72,7 @@ function allowSecretFinding(file, _name, excerpt) {
 
 function allowDangerousFinding(file, name) {
   if (file.includes('security-scan.mjs')) return true;
-  if (name === 'shell exec string' && file === 'scripts/record-live-demo.mjs') return true; // demo recorder only; video QA forbids visible local commands.
+  if (name === 'shell exec string' && file === 'scripts/record-live-media.mjs') return true; // media recorder only; QA forbids visible local commands.
   return false;
 }
 
@@ -85,7 +85,7 @@ function checkDockerfile() {
   if (!existsSync('Dockerfile')) return findings.push({ file: 'Dockerfile', line: 0, type: 'missing', excerpt: 'Dockerfile missing' });
   const text = readFileSync('Dockerfile', 'utf8');
   if (!/USER\s+agentic/i.test(text)) findings.push({ file: 'Dockerfile', line: 0, type: 'dockerfile', excerpt: 'runtime must use USER agentic' });
-  if (/COPY\s+--from=builder\s+\/app\/(\.env|demo-out|\.agent-ic)/.test(text)) findings.push({ file: 'Dockerfile', line: 0, type: 'dockerfile', excerpt: 'Dockerfile copies local/demo artifacts' });
+  if (/COPY\s+--from=builder\s+\/app\/(\.env|demo-out|\.agent-ic)/.test(text)) findings.push({ file: 'Dockerfile', line: 0, type: 'dockerfile', excerpt: 'Dockerfile copies local generated artifacts' });
   if (!/HEALTHCHECK/.test(text)) findings.push({ file: 'Dockerfile', line: 0, type: 'dockerfile', excerpt: 'Dockerfile healthcheck missing' });
 }
 

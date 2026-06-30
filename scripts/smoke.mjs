@@ -16,7 +16,7 @@ async function main() {
   const proof = await json(`${base}/api/proof-report`);
   assert(proof.ok === true, 'proof report ok');
   assert(proof.proofSurfaces?.primaryRoute === '/trial', 'proof report points to primary trial route');
-  assert(proof.proofSurfaces?.spend?.includes('Stripe test-mode Checkout Session'), 'proof report uses honest Stripe test-mode wording');
+  assert(proof.proofSurfaces?.spend?.includes('Stripe Checkout receipt'), 'proof report uses honest Stripe non-production wording');
   assert(proof.workloadEvidence?.rowCount > 0, 'proof report includes workload row count');
   assert(/^[a-f0-9]{64}$/.test(proof.workloadEvidence?.sha256 || ''), 'proof report includes workload hash');
 

@@ -23,7 +23,7 @@
     "SCIM/IdP membership lifecycle sync",
     "tenant isolation",
     "approval workflow",
-    "policy simulation",
+    "policy evaluation",
     "Stripe webhook verification",
     "audit-chain verification",
     "metrics export",

@@ -66,14 +66,14 @@ frameworks and identifies what is implemented vs on the roadmap.
 
 ## Implementation Priority
 
-### Phase 1 (Current prototype)
+### Phase 1 (Current product foundation)
 - Policy enforcement via OpenShell
 - Evidence ledger with hashes
 - RBAC model
 - Health endpoint
 - Fail-closed architecture
 
-### Phase 2 (Post-prototype)
+### Phase 2 (Deployment hardening)
 - SOC 2 Type II audit preparation
 - SSO/SAML integration
 - Immutable audit log (WORM storage)

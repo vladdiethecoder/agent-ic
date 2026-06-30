@@ -40,7 +40,7 @@ async function main() {
   const reset = await json('/api/live-trace', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ reset: true, confirmReset: 'AGENT_IC_DEMO_RESET' }),
+    body: JSON.stringify({ reset: true, confirmReset: 'AGENT_IC_TRACE_RESET' }),
   });
   assert(Array.isArray(reset.trace) && reset.trace.length === 0, 'live trace reset acknowledged');
 
@@ -53,7 +53,7 @@ async function main() {
   const member = await json('/api/memberships', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'upsert', tenantId: 'demo-tenant', userId: 'operator-smoke', role: 'operator', displayName: 'Smoke Operator' }),
+    body: JSON.stringify({ action: 'upsert', tenantId: 'local-tenant', userId: 'operator-smoke', role: 'operator', displayName: 'Smoke Operator' }),
   });
   assert(member.membership?.status === 'active', 'membership upserted');
   const members = await json('/api/memberships');
@@ -62,32 +62,32 @@ async function main() {
   const policyCreate = await json('/api/policies', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'create', tenantId: 'demo-tenant', caseId }),
+    body: JSON.stringify({ action: 'create', tenantId: 'local-tenant', caseId }),
   });
   assert(policyCreate.policy?.status === 'draft', 'policy version created');
   const policyActivate = await json('/api/policies', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'activate', tenantId: 'demo-tenant', policyId: policyCreate.policy.id }),
+    body: JSON.stringify({ action: 'activate', tenantId: 'local-tenant', policyId: policyCreate.policy.id }),
   });
   assert(policyActivate.policy?.status === 'active', 'policy version activated');
   const policySim = await json('/api/policies', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'simulate', tenantId: 'demo-tenant', policyId: policyCreate.policy.id, attemptedAction: { name: 'CARFAX vehicle-history report', attemptedAmount: 150 } }),
+    body: JSON.stringify({ action: 'simulate', tenantId: 'local-tenant', policyId: policyCreate.policy.id, attemptedAction: { name: 'CARFAX vehicle-history report', attemptedAmount: 150 } }),
   });
   assert(policySim.simulation?.blocked === true, 'policy simulator blocks over-cap action');
 
   const approvalRequest = await json('/api/approvals', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'request', tenantId: 'demo-tenant', caseId, spendCap: 100, reason: 'smoke approval' }),
+    body: JSON.stringify({ action: 'request', tenantId: 'local-tenant', caseId, spendCap: 100, reason: 'smoke approval' }),
   });
   assert(approvalRequest.approval?.status === 'pending', 'approval request created');
   const approvalDecision = await json('/api/approvals', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'approve', tenantId: 'demo-tenant', approvalId: approvalRequest.approval.id, reason: 'smoke approved' }),
+    body: JSON.stringify({ action: 'approve', tenantId: 'local-tenant', approvalId: approvalRequest.approval.id, reason: 'smoke approved' }),
   });
   assert(approvalDecision.approval?.status === 'approved', 'approval request approved');
 
@@ -97,7 +97,7 @@ async function main() {
     type: 'checkout.session.completed',
     livemode: false,
     created: Math.floor(Date.now() / 1000),
-    data: { object: { object: 'checkout.session', id: 'cs_test_smoke_1234567890', payment_status: 'paid', status: 'complete', amount_total: 10000, currency: 'usd', metadata: { tenant_id: 'demo-tenant', case_id: caseId } } },
+    data: { object: { object: 'checkout.session', id: 'cs_test_smoke_1234567890', payment_status: 'paid', status: 'complete', amount_total: 10000, currency: 'usd', metadata: { tenant_id: 'local-tenant', case_id: caseId } } },
   });
   const webhookSecret = loadLocalEnv('STRIPE_WEBHOOK_SECRET') || process.env.STRIPE_WEBHOOK_SECRET;
   let webhookChecked = false;
@@ -121,7 +121,7 @@ async function main() {
   const incidentsCreated = await json('/api/incidents', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ action: 'create', tenantId: 'demo-tenant', title: 'API smoke alert drill', severity: 'info', sourceAlertId: 'smoke-drill', runbook: 'docs/runbooks/slo-review.md', drill: true, evidence: { source: 'api-smoke' } }),
+    body: JSON.stringify({ action: 'create', tenantId: 'local-tenant', title: 'API smoke alert drill', severity: 'info', sourceAlertId: 'smoke-drill', runbook: 'docs/runbooks/slo-review.md', drill: true, evidence: { source: 'api-smoke' } }),
   });
   assert(incidentsCreated.incident?.status === 'drill_completed', 'incident drill recorded');
   const incidents = await json('/api/incidents');
@@ -147,7 +147,7 @@ async function main() {
   const proof = await json('/api/proof-report');
   assert(proof.ok === true, 'proof report ok');
   assert(proof.proofSurfaces.primaryRoute === '/trial', 'proof report primary route');
-  assert(proof.proofSurfaces.spend.includes('Stripe test-mode Checkout Session'), 'honest Stripe test-mode wording');
+  assert(proof.proofSurfaces.spend.includes('Stripe Checkout receipt'), 'honest Stripe non-production wording');
   assert(/^[a-f0-9]{64}$/.test(proof.workloadEvidence.sha256), 'proof report has SHA-256 workload hash');
   assert(proof.auditChain?.ok === true, 'proof report audit chain verifies');
   assert(!JSON.stringify(proof).includes('sk_test_'), 'proof report masks Stripe keys');

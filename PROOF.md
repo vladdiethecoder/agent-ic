@@ -1,42 +1,42 @@
-# Agent IC Proof Contract
+# Agent IC Runtime Proof Contract
 
-Agent IC is submitted as an enterprise agentic-service governance demo. The final video must show the product operating from `/trial` and must not expose local URLs, private workspace paths, raw keys, or full provider identifiers.
+Agent IC's product claim is specific: it governs a purchased or evaluated agentic service by issuing a spend envelope, enforcing tool policy, observing work, recording receipts, quantifying results, and deciding whether the service earns more budget or production access.
 
-The product claim is specific: Agent IC governs a purchased or trialed agentic service by issuing a spend envelope, enforcing tool policy, observing real work, recording receipts, quantifying results, and deciding whether the service earns more budget.
+This file is a runtime proof contract for the product. It is not a marketing checklist and it does not allow provider claims without matching run evidence.
 
-## Claim Scope
+## Claim scope
 
-- NVIDIA Nemotron is live only when the `/api/enterprise-trial` response includes a NIM request id from that run.
-- Stripe is a real API integration in **test mode** when the receipt includes a `cs_test...` Checkout Session plus retrieve/status metadata. It is not production money movement.
-- NemoHermes/OpenShell is external live proof only when the run records an external sandbox or OpenShell 403 receipt. The local policy gate is valid fallback proof of fail-closed policy logic, but it must be labeled as policy-gate proof rather than external sandbox proof.
-- Hermes orchestration is claimed only when either `HERMES_AGENT_URL` returns a task id or `AGENT_IC_HERMES_NEMOHERMES_LIVE=true` dispatches a Hermes one-shot inside the configured NemoHermes sandbox and records a sandbox session id. Without one of those receipts, the product honestly shows a Hermes-compatible `SKILL.md` handoff package.
-- Workload evidence is real or inspectable only when the run cites source artifact names, row counts, hashes, and source metadata. Pre-baked Atlas-style productivity numbers are not acceptable for the release candidate claim.
+- NVIDIA Nemotron is live only when `/api/enterprise-trial` records a NIM request id from that run.
+- Stripe is a real API integration when the run records a Checkout Session receipt plus retrieve/status metadata. `cs_test...` sessions are safe non-production receipts and must never be described as live money movement.
+- OpenShell is external sandbox proof only when the run records an OpenShell sandbox or HTTP 403 denial receipt. If OpenShell is unavailable, Agent IC may still enforce through the local deny-by-default policy gate, but the receipt must say policy-gate rather than sandbox enforcement.
+- Hermes orchestration is live only when the run records a Hermes gateway, sandbox, or CLI receipt. Without that receipt, the product keeps a Hermes-compatible `SKILL.md` handoff package and labels it as a package.
+- Workload evidence is valid only when the run cites source artifact names, row counts, hashes, and source metadata.
+- Missing, malformed, unavailable, or unverified evidence must not silently produce an approved or proven result.
 
-## Audit Surface
+## Audit surface
 
 ```bash
-curl -s https://agent-ic.demo/api/proof-report
+curl -s http://localhost:<port>/api/proof-report
 ```
 
-Local validation uses the same endpoint while masking host details in the video:
+Local validation uses the same proof surfaces while masking host details in screenshots or walkthroughs:
 
 ```bash
 npm test
 npm run build
-npm run smoke
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:api
+AGENT_IC_BASE_URL=http://localhost:<port> npm run smoke:browser
 ```
 
-The proof report returns masked request/session ids, sha256 hashes, evidence artifact row counts, Stripe test-mode session metadata, policy 403 status, and the Hermes dispatch or `SKILL.md` package hash. Stripe unit conversion remains an internal adapter check; the submitted UI presents the governed envelope in dollars.
+The proof report returns masked request/session ids, SHA-256 hashes, evidence artifact row counts, spend-envelope receipt state, policy status, and the Hermes dispatch or `SKILL.md` package hash. Stripe unit conversion remains an internal adapter check; the UI presents the governed envelope in dollars.
 
-## Final Video Requirements
+## Product proof requirements
 
-- A visible cursor clicks `Run service trial`.
-- Provider states must be truthful: `READY`, `LIVE`, `TEST MODE`, `LOCAL PROOF`, or `HANDOFF READY`.
-- `STRIPE LIVE` must not appear for `cs_test...` sessions.
-- `HERMES_AGENT_URL not configured`, `[mock]`, `[fallback]`, `SIMULATED`, `localhost`, and private paths must not appear.
-- The video must visibly frame the run as an enterprise evaluation of an agentic service, not a standalone analytics demo.
-- The video must show imported workload source, row count, hash, service metrics, and policy result.
-- Raw cents language must not appear in captions or primary UI.
-- Atlas Freight may appear only in legacy docs/tests, not as the primary final video proof.
-- The primary public product demo video must fit the concise product-demo window; the short strict-proof walkthrough may remain 60-90 seconds.
-- The video is not complete until automated QA and frame review both pass.
+- A governed run must show a buyer mission, vendor agent, contract at risk, spend envelope, allowed evidence read, denied action, evidence package, ROI formula, procurement decision, and renewal effect.
+- Provider states must be truthful: `LIVE`, `RECORDED`, `NON-PRODUCTION RECEIPT`, `LOCAL POLICY`, `HANDOFF PACKAGE`, or `UNAVAILABLE`.
+- A `cs_test...` Stripe object must remain labeled as non-production money movement.
+- A local policy denial must not be called OpenShell sandbox proof.
+- Deterministic classification or synthesis must stay labeled as deterministic, never as Nemotron reasoning.
+- Public snapshots, checked-in fixtures, and illustrative renewal history must remain visually and programmatically distinguishable from observed trial evidence.
+- Raw keys, full provider IDs, local workspace paths, and private account data must never appear in API responses or screenshots.

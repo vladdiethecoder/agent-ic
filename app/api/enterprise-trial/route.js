@@ -127,7 +127,7 @@ export async function POST(request) {
           microPilot: { envelopeDollars: cap },
         }, { spendEnvelope: { cap } });
 
-        if (result?.mode === 'live' && result?.checkout?.id) {
+        if (result?.checkout?.id) {
           try {
             result.retrieval = await retrieveCheckoutSession(result.checkout.id);
           } catch {}

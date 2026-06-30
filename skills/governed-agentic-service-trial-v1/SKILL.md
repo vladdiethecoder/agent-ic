@@ -32,7 +32,7 @@ Encode the procedure Agent IC used to evaluate a third-party agentic service bef
 
 1. Load proposal and assert validity.
 2. Score service viability, governance fit, and evidence quality.
-3. Create a bounded spend envelope and Stripe test-mode authorization.
+3. Create a bounded spend envelope and Stripe Checkout authorization receipt.
 4. Run the worker service under the configured policy gate; when NemoHermes/OpenShell is live, capture that broker receipt.
 5. Block any spend or tool call that breaches the envelope.
 6. Import and measure workload evidence.

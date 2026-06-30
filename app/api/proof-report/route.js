@@ -34,7 +34,7 @@ export async function GET(request) {
       'Agent IC governs agentic-service procurement through bounded spend, policy enforcement, workload evidence, and evidence-backed renewal decisions.',
     proofSurfaces: {
       primaryRoute: '/trial',
-      spend: 'Stripe test-mode Checkout Session for a bounded dollar envelope',
+      spend: 'Stripe Checkout receipt for a bounded dollar envelope',
       policy: 'Per-run enforcement receipt: OpenShell only when the trial records an observed sandbox denial; otherwise the response labels the local deny-by-default policy gate',
       model: providers.nemotron.state === 'configured'
         ? 'NVIDIA Nemotron configured; sample classification is live only when the trial records request IDs; synthesis is claimed only with a synthesis receipt'
