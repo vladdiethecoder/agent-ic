@@ -1,0 +1,54 @@
+{
+  "name": "agent-ic",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Agent IC: enterprise control plane for buying agentic services with bounded spend envelopes, policy gates, workload evidence, and expansion decisions.",
+  "scripts": {
+    "dev": "node scripts/safe-next.mjs dev",
+    "build": "node scripts/safe-next.mjs build",
+    "start": "node scripts/safe-next.mjs start",
+    "dev:local": "next dev",
+    "build:local": "next build",
+    "start:local": "next start",
+    "lint": "eslint \"**/*.{js,mjs,jsx}\"",
+    "test": "AGENT_IC_AUDIT_FILE=.agent-ic/test-audit-log.jsonl node --test tests/*.test.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "smoke:api": "node scripts/api-edge-smoke.mjs",
+    "smoke:browser": "node scripts/browser-smoke.mjs",
+    "proof:hermes": "node scripts/agent-ic-proof.mjs proof hermes",
+    "proof:stripe": "node scripts/agent-ic-proof.mjs proof stripe",
+    "proof:nemotron": "node scripts/agent-ic-proof.mjs proof nemotron",
+    "proof:policy": "node scripts/agent-ic-proof.mjs proof policy",
+    "proof:production-access": "node scripts/agent-ic-proof.mjs proof production-access",
+    "proof:playbook": "node scripts/agent-ic-proof.mjs proof playbook",
+    "proof:rerun": "node scripts/agent-ic-proof.mjs proof rerun",
+    "proof:gpu": "node scripts/agent-ic-proof.mjs proof gpu",
+    "prod:check": "node scripts/production-readiness-check.mjs",
+    "security:scan": "node scripts/security-scan.mjs",
+    "release:check": "npm run lint && npm test && npm run openapi:check && npm run migrate:apply && npm run migrate:check && npm run build && npm run prod:check && npm run security:scan && npm run security:audit && npm run container:check && npm run release:manifest",
+    "release:manifest": "node scripts/release-manifest.mjs",
+    "security:audit": "node scripts/dependency-audit.mjs",
+    "store:backup": "node scripts/store-backup.mjs",
+    "migrate:apply": "node scripts/migrate-store.mjs apply",
+    "migrate:check": "node scripts/migrate-store.mjs check",
+    "container:check": "node scripts/container-release-check.mjs",
+    "openapi:check": "node scripts/openapi-check.mjs"
+  },
+  "dependencies": {
+    "next": "^15.5.19",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "zod": "^4.4.3"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@playwright/test": "^1.61.0",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^15.5.19",
+    "tesseract.js": "^7.0.0"
+  }
+}

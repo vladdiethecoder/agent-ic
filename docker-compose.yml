@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  agent-ic:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NEMOTRON_BASE_URL=${NEMOTRON_BASE_URL:-https://integrate.api.nvidia.com/v1}
+      - NEMOTRON_API_KEY=${NEMOTRON_API_KEY}
+      - NEMOTRON_MODEL=${NEMOTRON_MODEL:-nvidia/nemotron-3-super-120b-a12b}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - NODE_ENV=production
+    volumes:
+      - agent-ic-ledger:/app/.agent-ic
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  agent-ic-ledger:
+    driver: local
